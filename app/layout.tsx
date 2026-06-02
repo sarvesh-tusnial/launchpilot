@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Mentogram — AI-Native PM MBA',
-  description: 'Become a Product Manager through doing real PM work.',
+  title: 'LaunchPilot School',
+  description: 'From idea to first revenue. Pick your launch pathway and build your business — step by step.',
 }
 
 export default function RootLayout({
