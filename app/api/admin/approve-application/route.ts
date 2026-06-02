@@ -19,7 +19,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
-    // Approve — create auth user
+    // Get pathway from application BEFORE creating user
+    const { data: app } = await supabase
+      .from('applications')
+      .select('motivation')
+      .eq('id', applicationId)
+      .single()
+
+    const motivationText = app?.motivation || ''
+    const firstLine = motivationText.split('\n')[0].trim()
+    const pathwayCode = firstLine.replace('Pathway:', '').trim()
+
+    // Create auth user
     const password = generatePassword()
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email: email.trim().toLowerCase(),
@@ -31,21 +42,17 @@ export async function POST(req: NextRequest) {
 
     const userId = authData.user.id
 
-    // Update profile with job title and status
+    // Update profile
     await supabase.from('profiles').update({
       full_name: fullName || null,
       job_title: jobTitle || null,
       status: 'active',
+      selected_pathway: pathwayCode || null,
     }).eq('id', userId)
 
-    // Get the pathway from the application motivation field
-    const { data: app } = await supabase.from('applications').select('motivation').eq('id', applicationId).single()
-    const pathwayLine = (app?.motivation || '').split('\n')[0]
-    const pathwayCode = pathwayLine.replace('Pathway: ', '').trim()
-
-    // Assign the selected pathway
+    // Assign pathway if valid
     if (pathwayCode && CLIENT.pathways.find((p: any) => p.code === pathwayCode)) {
-      await supabase.from('student_competencies').insert({
+      const { error: compError } = await supabase.from('student_competencies').insert({
         student_id: userId,
         competency_code: pathwayCode,
         is_unlocked: true,
@@ -53,15 +60,17 @@ export async function POST(req: NextRequest) {
         status: 'active',
         unlocked_at: new Date().toISOString(),
       })
-
-      // Update profile with selected pathway
-      await supabase.from('profiles').update({ selected_pathway: pathwayCode }).eq('id', userId)
+      if (compError) {
+        return NextResponse.json({ error: `Pathway assign failed: ${compError.message}`, pathwayCode }, { status: 500 })
+      }
+    } else {
+      return NextResponse.json({ error: `Invalid pathway code: "${pathwayCode}"`, motivationText }, { status: 500 })
     }
 
-    // Mark application as approved
+    // Mark application approved
     await supabase.from('applications').update({ status: 'approved' }).eq('id', applicationId)
 
-    return NextResponse.json({ ok: true, password, email })
+    return NextResponse.json({ ok: true, password, email, pathwayCode })
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 })
   }
