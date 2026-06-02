@@ -27,8 +27,8 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         position: 'fixed', top: 0, bottom: 0, left: 0,
       }}>
         <div style={{ marginBottom: '32px', padding: '0 8px' }}>
-          <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text)' }}>
-            Deca<span style={{ color: 'var(--accent)' }}>thlon</span>
+          <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text)' }}>
+            Launch<span style={{ color: 'var(--accent)' }}>Pilot</span>
           </div>
           <div style={{ fontSize: '11px', fontFamily: 'DM Mono, monospace', color: 'var(--text3)', marginTop: '3px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             Admin Panel
