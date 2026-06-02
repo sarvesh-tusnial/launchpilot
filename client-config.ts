@@ -5,7 +5,7 @@ export const CLIENT = {
   accentColor: '#8B6FFF',
   logoPath: '/logo.png',
   faviconPath: '/favicon.ico',
-  domain: 'https://launchpilot-school.vercel.app',
+  domain: 'https://launchpilot-phi.vercel.app',
 
   pathways: [
     { code: 'P01', name: 'Launch an AI Tech Business',         emoji: '🤖', tagline: 'Build and sell an AI-powered product',          school: 'launchpilot' },
