@@ -132,7 +132,7 @@ export default function HomePage() {
           <p className="fade-up d3" style={{ fontSize: '18px', color: '#777', lineHeight: '1.75', maxWidth: '520px', margin: '0 auto 48px', fontWeight: '400' }}>
             25 structured steps for each launch pathway, taking you from idea to first revenue — built for working professionals who are serious about building a business on the side.
           </p>
-          <div className="fade-up d3" className='hero-btns' style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '64px' }}>
+          <div className="fade-up d3 hero-btns" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '64px' }}>
             <Link href="/apply" className="cta" style={{ padding: '15px 40px', borderRadius: '10px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>Apply for a spot →</Link>
             <Link href="/auth/login" className="ghost" style={{ padding: '15px 32px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#AAA', textDecoration: 'none', fontSize: '16px', fontWeight: '500' }}>Sign In</Link>
           </div>
