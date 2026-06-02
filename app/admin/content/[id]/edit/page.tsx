@@ -1,0 +1,44 @@
+import { requireAdmin } from '@/lib/auth/admin'
+import ContentForm from '@/components/admin/ContentForm'
+import { CLIENT } from '@/client-config'
+import { redirect } from 'next/navigation'
+
+interface Props { params: Promise<{ id: string }> }
+
+const ALL_COMPETENCIES = CLIENT.pathways
+const DECATHLON_CODES = CLIENT.pathways.map(c => c.code)
+export default async function EditContentPage({ params }: Props) {
+  const { id } = await params
+  const { supabase } = await requireAdmin()
+
+  const [contentRes, biz, fin, ai, mfg, gen] = await Promise.all([
+    supabase.from('content_library').select('*').eq('id', id).single(),
+    supabase.from('concepts').select('id, title, sequence, competency_code').eq('school', 'business').order('competency_code').order('sequence'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').eq('school', 'finance').order('competency_code').order('sequence'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').eq('school', 'ai').order('competency_code').order('sequence'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').eq('school', 'manufacturing').order('competency_code').order('sequence'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').eq('school', 'generic').order('competency_code').order('sequence'),
+  ])
+
+  if (!contentRes.data) redirect('/admin/content')
+
+  const allConcepts = [
+    ...(biz.data || []),
+    ...(fin.data || []),
+    ...(ai.data || []),
+    ...(mfg.data || []),
+    ...(gen.data || []),
+  ].filter(c => c.competency_code)
+
+  return (
+    <div style={{ maxWidth: '680px' }}>
+      <div style={{ marginBottom: '36px' }}>
+        <div style={{ fontSize: '12px', fontFamily: 'DM Mono, monospace', color: 'var(--text3)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+          Admin · Content Library
+        </div>
+        <h1 style={{ fontSize: '28px', fontWeight: '600', letterSpacing: '-0.02em' }}>Edit Content</h1>
+      </div>
+      <ContentForm competencies={ALL_COMPETENCIES} concepts={allConcepts} content={contentRes.data} />
+    </div>
+  )
+}
