@@ -80,22 +80,45 @@ export default function HomePage() {
         .cta { transition: all 0.15s; }
         .ghost:hover { background: rgba(255,255,255,0.06) !important; }
         .ghost { transition: background 0.15s; }
+        
+        /* MOBILE */
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile-btn { display: flex !important; }
+          .hero-stats { gap: 20px !important; flex-wrap: wrap !important; }
+          .hero-stats > div { min-width: 80px !important; }
+          .hero-btns { flex-direction: column !important; align-items: stretch !important; }
+          .hero-btns a { text-align: center !important; justify-content: center !important; }
+          .pw-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .journey-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .journey-grid-reverse { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .journey-grid-reverse > div:first-child { order: 2; }
+          .journey-grid-reverse > div:last-child { order: 1; }
+          .roi-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .roi-stats { grid-template-columns: 1fr 1fr !important; }
+          .footer-inner { flex-direction: column !important; gap: 16px !important; align-items: center !important; text-align: center !important; }
+          .section-pad { padding: 60px 16px !important; }
+          .hero-section { padding: 100px 16px 60px !important; }
+          .nav-pad { padding: 0 16px !important; }
+          .screenshot-hide { display: none !important; }
+        }
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 48px', background: 'rgba(5,3,9,0.88)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 48px', background: 'rgba(5,3,9,0.88)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.05)' }} className="nav-pad">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div className="serif" style={{ fontSize: '20px', fontWeight: '700', letterSpacing: '-0.02em' }}>Launch<span style={{ color: '#6C47FF' }}>Pilot</span></div>
           <span className="mono" style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '2px' }}>School</span>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="nav-desktop" style={{ display: 'flex', gap: '10px' }}>
           <Link href="/auth/login" className="ghost" style={{ padding: '8px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#AAA', textDecoration: 'none', fontSize: '13px', fontWeight: '500' }}>Sign In</Link>
           <Link href="/apply" className="cta" style={{ padding: '9px 22px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
         </div>
+        <Link href="/apply" className="nav-mobile-btn cta" style={{ display: 'none', padding: '9px 18px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply →</Link>
       </nav>
 
       {/* HERO */}
-      <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 60px', position: 'relative' }}>
+      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 60px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(108,71,255,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', maxWidth: '860px' }}>
@@ -109,11 +132,11 @@ export default function HomePage() {
           <p className="fade-up d3" style={{ fontSize: '18px', color: '#777', lineHeight: '1.75', maxWidth: '520px', margin: '0 auto 48px', fontWeight: '400' }}>
             25 structured steps for each launch pathway, taking you from idea to first revenue — built for working professionals who are serious about building a business on the side.
           </p>
-          <div className="fade-up d3" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '64px' }}>
+          <div className="fade-up d3" className='hero-btns' style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '64px' }}>
             <Link href="/apply" className="cta" style={{ padding: '15px 40px', borderRadius: '10px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>Apply for a spot →</Link>
             <Link href="/auth/login" className="ghost" style={{ padding: '15px 32px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#AAA', textDecoration: 'none', fontSize: '16px', fontWeight: '500' }}>Sign In</Link>
           </div>
-          <div style={{ display: 'flex', gap: '48px', justifyContent: 'center', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <div className='hero-stats' style={{ display: 'flex', gap: '48px', justifyContent: 'center', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             {[{ n: '10', l: 'Launch Pathways' }, { n: '24/7', l: 'Available AI Coach' }, { n: '6 wks', l: 'Avg. time to revenue' }, { n: '94%', l: 'Completion rate' }].map(s => (
               <div key={s.l} style={{ textAlign: 'center' }}>
                 <div className="serif" style={{ fontSize: '26px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>{s.n}</div>
@@ -125,7 +148,7 @@ export default function HomePage() {
       </section>
 
       {/* PATHWAYS — right below hero */}
-      <section style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section className='section-pad' style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <div className="mono" style={{ fontSize: '10px', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>Pick your pathway</div>
@@ -133,7 +156,7 @@ export default function HomePage() {
               What do you want to build?
             </h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
+          <div className='pw-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
             {PATHWAYS.map(p => (
               <div key={p.code} className="pw-card" style={{ padding: '18px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', cursor: 'pointer' }}>
                 <div style={{ fontSize: '26px', marginBottom: '10px' }}>{p.emoji}</div>
@@ -160,7 +183,7 @@ export default function HomePage() {
       </section>
 
       {/* JOURNEY FLOW */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section className='section-pad' style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '72px' }}>
             <div className="mono" style={{ fontSize: '10px', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>The journey</div>
@@ -173,7 +196,7 @@ export default function HomePage() {
           </div>
 
           {/* Phase 1 — Idea & Validation */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
+          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(108,71,255,0.15)', border: '1px solid rgba(108,71,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -234,7 +257,7 @@ export default function HomePage() {
           </div>
 
           {/* Phase 2 — Build & Launch */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
+          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
             {/* Screenshot first */}
             <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,111,255,0.1)' }}>
               <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -292,7 +315,7 @@ export default function HomePage() {
           </div>
 
           {/* Phase 3 — Growth */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
+          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -356,7 +379,7 @@ export default function HomePage() {
           </div>
 
           {/* Phase 4 — Revenue & Scale */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
             {/* Progress screenshot */}
             <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(196,181,253,0.06)' }}>
               <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -420,9 +443,9 @@ export default function HomePage() {
       </section>
 
       {/* ROI */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section className='section-pad' style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
             <div>
               <div className="mono" style={{ fontSize: '10px', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '16px' }}>Why it works</div>
               <h2 className="serif" style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: '700', letterSpacing: '-0.03em', lineHeight: '1.1', marginBottom: '24px' }}>
@@ -469,7 +492,7 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: '24px 48px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <footer style={{ padding: '24px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className='footer-inner'>
         <div className="serif" style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>
           Launch<span style={{ color: '#6C47FF' }}>Pilot</span>
           <span className="mono" style={{ fontSize: '8px', color: '#333', marginLeft: '8px', letterSpacing: '0.2em', textTransform: 'uppercase', verticalAlign: 'middle' }}>School</span>
