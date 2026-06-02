@@ -126,108 +126,103 @@ export default function BubblerPage() {
     <div style={{ minHeight: '100vh', background: '#07040F', display: 'flex', fontFamily: 'DM Sans, sans-serif' }}>
       
       {/* LEFT PANEL */}
-      <div style={{ flex: 1, padding: '60px 56px', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: '480px' }}>
+      <div style={{ flex: 1, padding: '64px 72px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ maxWidth: '520px' }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px' }}>
-            <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg, #6C47FF, #A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' }}>🫧</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '56px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'linear-gradient(135deg, #6C47FF, #A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '14px', height: '14px', borderRadius: '50%', background: 'rgba(255,255,255,0.9)' }} />
+            </div>
             <div>
-              <div style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6' }}>Bubbler Co-Pilot</div>
-              <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: '#444', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Powered by LaunchPilot</div>
+              <div style={{ fontSize: '15px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em' }}>Bubbler Co-Pilot</div>
+              <div style={{ fontSize: '9px', fontFamily: 'DM Mono, monospace', color: '#333', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Powered by LaunchPilot</div>
             </div>
           </div>
 
           {/* Welcome */}
-          <h1 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: '800', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.1', marginBottom: '16px' }}>
+          <h1 style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: '800', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '20px' }}>
             Hey Karthik,<br /><span style={{ color: '#6C47FF' }}>welcome.</span>
           </h1>
-          <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.8', marginBottom: '40px' }}>
-            This is your personal AI co-pilot built specifically for Bubbler — designed to take you from 0 to 1 with a sharp focus on revenue, scale, and fundraising.
+          <p style={{ fontSize: '15px', color: '#555', lineHeight: '1.8', marginBottom: '48px', maxWidth: '440px' }}>
+            Your personal AI co-pilot built specifically for Bubbler — designed to take you from 0 to 1 with a sharp focus on revenue, scale, and fundraising.
           </p>
 
           {/* 4 tracks */}
-          <div style={{ fontSize: '11px', fontFamily: 'DM Mono, monospace', color: '#444', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>
+          <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: '#333', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '14px' }}>
             Your 4 tracks
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '48px' }}>
             {[
-              { emoji: '🧱', code: 'B01', name: 'Business Fundamentals', desc: '30 concepts — ICP, PMF, product, marketing, team', color: '#6C47FF' },
-              { emoji: '💰', code: 'B02', name: 'Revenue',               desc: '8 concepts — demo to close, pricing, MRR growth',   color: '#00C851' },
-              { emoji: '📈', code: 'B03', name: 'Scale',                 desc: '8 concepts — city expansion, sales team, ops',       color: '#F59E0B' },
-              { emoji: '🚀', code: 'B04', name: 'Fundraising',           desc: '8 concepts — seed prep, metrics, pitch, term sheet', color: '#F97066' },
-            ].map(t => (
-              <div key={t.code} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', padding: '14px 16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                <span style={{ fontSize: '20px', flexShrink: 0, marginTop: '1px' }}>{t.emoji}</span>
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0', marginBottom: '2px' }}>{t.name}</div>
-                  <div style={{ fontSize: '11px', color: '#555', lineHeight: '1.5' }}>{t.desc}</div>
+              { code: 'B01', name: 'Business Fundamentals', desc: '30 concepts — ICP, PMF, product, marketing, team', color: '#6C47FF' },
+              { code: 'B02', name: 'Revenue',               desc: '8 concepts — pricing, sales process, MRR growth',  color: '#00C851' },
+              { code: 'B03', name: 'Scale',                 desc: '8 concepts — city expansion, sales team, ops',     color: '#F59E0B' },
+              { code: 'B04', name: 'Fundraising',           desc: '8 concepts — seed prep, metrics, pitch deck',      color: '#F97066' },
+            ].map((t, i) => (
+              <div key={t.code} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: `${t.color}15`, border: `1px solid ${t.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '11px', fontFamily: 'DM Mono, monospace', fontWeight: '700', color: t.color }}>{String(i + 1).padStart(2, '0')}</span>
                 </div>
-                <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
-                  <span style={{ fontSize: '9px', fontFamily: 'DM Mono, monospace', color: t.color, background: `${t.color}15`, border: `1px solid ${t.color}30`, padding: '3px 8px', borderRadius: '4px' }}>{t.code}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#D4D0CC', marginBottom: '2px' }}>{t.name}</div>
+                  <div style={{ fontSize: '11px', color: '#444' }}>{t.desc}</div>
                 </div>
+                <span style={{ fontSize: '9px', fontFamily: 'DM Mono, monospace', color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25`, padding: '3px 8px', borderRadius: '4px', flexShrink: 0 }}>{t.code}</span>
               </div>
             ))}
           </div>
 
           {/* How it works */}
-          <div style={{ fontSize: '11px', fontFamily: 'DM Mono, monospace', color: '#444', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '14px' }}>
+          <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: '#333', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '14px' }}>
             How it works
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
-              { n: '01', text: 'Pick a track and Maya teaches you the concept with real Bubbler scenarios' },
-              { n: '02', text: 'Every session follows 8 stages — hook, teach, quiz, task, action step' },
-              { n: '03', text: 'Each session ends with one specific action to execute before the next' },
-            ].map(s => (
-              <div key={s.n} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#6C47FF', fontWeight: '700', flexShrink: 0, marginTop: '1px' }}>{s.n}</span>
-                <span style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>{s.text}</span>
+              'Pick a track — Maya teaches each concept with real Bubbler scenarios',
+              'Every session follows 8 stages — hook, teach, quiz, task, and action step',
+              'Each session ends with one specific commitment to execute before the next',
+            ].map((s, i) => (
+              <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6C47FF', fontWeight: '700', flexShrink: 0, marginTop: '3px', width: '16px' }}>0{i + 1}</span>
+                <span style={{ fontSize: '13px', color: '#555', lineHeight: '1.6' }}>{s}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
+      {/* DIVIDER */}
+      <div style={{ width: '1px', background: 'rgba(255,255,255,0.05)', flexShrink: 0 }} />
+
       {/* RIGHT PANEL — login */}
-      <div style={{ width: '420px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 40px' }}>
+      <div style={{ width: '440px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '64px 56px' }}>
         <div style={{ width: '100%' }}>
-          <div style={{ marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '6px' }}>Sign in to continue</h2>
-            <p style={{ fontSize: '13px', color: '#555' }}>Your session is private and secure.</p>
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ fontSize: '26px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '8px' }}>Sign in</h2>
+            <p style={{ fontSize: '13px', color: '#444', lineHeight: '1.6' }}>Enter your credentials to access your co-pilot session.</p>
           </div>
 
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', color: '#555', marginBottom: '6px', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="founder@bubbler.app" required
-                style={{ width: '100%', padding: '13px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
+              <label style={{ display: 'block', fontSize: '11px', color: '#444', marginBottom: '8px', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" required
+                style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const, transition: 'border-color 0.15s' }} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '11px', color: '#555', marginBottom: '6px', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Password</label>
+              <label style={{ display: 'block', fontSize: '11px', color: '#444', marginBottom: '8px', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required
-                style={{ width: '100%', padding: '13px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
+                style={{ width: '100%', padding: '14px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
             </div>
-            {loginError && <div style={{ padding: '10px 14px', background: 'rgba(249,112,102,0.1)', border: '1px solid rgba(249,112,102,0.2)', borderRadius: '8px', fontSize: '13px', color: '#F97066' }}>{loginError}</div>}
-            <button type="submit" style={{ width: '100%', padding: '14px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #6C47FF, #8B6FFF)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit', marginTop: '4px' }}>
+            {loginError && (
+              <div style={{ padding: '12px 16px', background: 'rgba(249,112,102,0.08)', border: '1px solid rgba(249,112,102,0.2)', borderRadius: '8px', fontSize: '13px', color: '#F97066' }}>{loginError}</div>
+            )}
+            <button type="submit" style={{ width: '100%', padding: '15px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg, #6C47FF, #8B6FFF)', color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit', marginTop: '6px', letterSpacing: '-0.01em' }}>
               Enter →
             </button>
           </form>
 
-          <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(108,71,255,0.05)', border: '1px solid rgba(108,71,255,0.12)', borderRadius: '10px' }}>
-            <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Your credentials</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <span style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Mono, monospace', width: '60px' }}>Email</span>
-                <span style={{ fontSize: '12px', color: '#888' }}>founder@bubbler.app</span>
-              </div>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <span style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Mono, monospace', width: '60px' }}>Password</span>
-                <span style={{ fontSize: '12px', color: '#888', fontFamily: 'DM Mono, monospace' }}>Bubbler2025!</span>
-              </div>
-            </div>
+          <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: '#2a2a2a', fontFamily: 'DM Mono, monospace', letterSpacing: '0.06em' }}>Private session · Not for sharing</div>
           </div>
-
-          <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '11px', color: '#333', fontFamily: 'DM Mono, monospace' }}>Private session · Not for sharing</div>
         </div>
       </div>
     </div>
