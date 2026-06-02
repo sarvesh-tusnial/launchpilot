@@ -44,9 +44,14 @@ export default function HomePage() {
           Pick your pathway. Maya guides you through 25 steps — from idea validation to first revenue. Built for working professionals who are serious about launching.
         </p>
 
-        <Link href="/auth/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 40px', borderRadius: '10px', background: 'var(--accent)', color: '#fff', fontSize: '16px', fontWeight: '700', textDecoration: 'none', marginBottom: '72px' }}>
-          Start your launch →
-        </Link>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '72px' }}>
+          <Link href="/apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 40px', borderRadius: '10px', background: 'var(--accent)', color: '#fff', fontSize: '16px', fontWeight: '700', textDecoration: 'none' }}>
+            Apply Now →
+          </Link>
+          <Link href="/auth/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '10px', background: 'transparent', color: 'var(--text2)', fontSize: '16px', fontWeight: '600', textDecoration: 'none', border: '1px solid var(--border)' }}>
+            Sign In
+          </Link>
+        </div>
 
         {/* Pathways grid */}
         <div style={{ textAlign: 'left', marginBottom: '24px' }}>
