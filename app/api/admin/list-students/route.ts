@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 
     const { data: students, error } = await supabase
       .from('profiles')
-      .select('id, email, full_name, status, job_title, department, created_at')
+      .select('id, email, full_name, status, job_title, created_at')
       .eq('is_admin', false)
       .order('created_at', { ascending: false })
 
