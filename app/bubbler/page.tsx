@@ -253,7 +253,6 @@ export default function BubblerPage() {
               chatHistory={chatHistory}
               currentConceptId={currentConcept?.id}
               currentStage={currentStage}
-              apiRoute="/api/bubbler-maya"
             />
           )}
         </main>
