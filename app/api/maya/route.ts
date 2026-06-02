@@ -30,13 +30,214 @@ export async function POST(req: NextRequest) {
   const allContent   = contentRes.data || []
   const allMentorKnowledge = mentorKnowledgeRes.data || []
 
-  // Active pathway — student has exactly ONE
+  // ══════════════════════════════════════════════════════════════
+  // BUBBLER FOUNDER — separate system prompt, same streaming logic
+  // ══════════════════════════════════════════════════════════════
+  if (profile?.email === 'founder@bubbler.app') {
+    const active = studentComps.find((c: any) => c.status === 'active')
+    const activeCode = (active?.competency as any)?.code
+
+    let activeConcepts:  any[] = []
+    let conceptProgress: any[] = []
+    let masteredConcepts = 0
+    let currentConcept:  any   = null
+    let currentStage = 1
+
+    const STAGE_LABELS: Record<number, string> = {
+      1: 'Hook', 2: 'Reality Check', 3: 'Teach & Coach',
+      4: 'Deep Dive', 5: 'Apply (Quiz)', 6: 'Execution Task',
+      7: 'Feedback & Accountability', 8: 'Action Step & Bridge',
+    }
+
+    const TRACK_NAMES: Record<string, string> = {
+      B01: 'Business Fundamentals', B02: 'Revenue', B03: 'Scale', B04: 'Fundraising',
+    }
+
+    if (active) {
+      const [conceptData, cpData] = await Promise.all([
+        supabase.from('concepts').select('*').eq('competency_code', activeCode).order('sequence'),
+        supabase.from('student_concepts').select('*').eq('student_id', user.id),
+      ])
+      activeConcepts  = conceptData.data || []
+      conceptProgress = cpData.data || []
+
+      const activeConceptIds = new Set(activeConcepts.map((c: any) => c.id))
+      masteredConcepts = conceptProgress.filter((p: any) => p.is_completed && activeConceptIds.has(p.concept_id)).length
+
+      const completedIds = new Set(conceptProgress.filter((p: any) => p.is_completed).map((p: any) => p.concept_id))
+      currentConcept = activeConcepts.find((c: any) => !completedIds.has(c.id)) || activeConcepts[0] || null
+
+      if (currentConcept) {
+        const cp = conceptProgress.find((p: any) => p.concept_id === currentConcept.id)
+        if (cp?.stage) currentStage = cp.stage
+      }
+    }
+
+    const totalSteps = activeConcepts.length || 8
+    const trackName  = TRACK_NAMES[activeCode] || 'Bubbler Co-Pilot'
+
+    const bubblerContent = allContent.filter((c: any) => ['B01','B02','B03','B04'].includes(c.competency_code))
+    const bubblerMentors = allMentorKnowledge.filter((k: any) => ['B01','B02','B03','B04'].includes(k.competency_code))
+
+    const stepsProgress = activeConcepts.map((c: any) => {
+      const cp = conceptProgress.find((p: any) => p.concept_id === c.id)
+      const st = cp?.is_completed ? '✓' : '○'
+      return `${st} ${String(c.sequence).padStart(2, '0')}. ${c.title}`
+    }).join('\n')
+
+    const mentorCtx = bubblerMentors.length > 0 ? `
+EXPERT KNOWLEDGE BASE:
+${bubblerMentors.map((k: any) => `---\nEXPERT: ${(k.mentor as any)?.name} (${(k.mentor as any)?.title})\nTITLE: ${k.title}\nCONTENT:\n${k.content}\n---`).join('\n')}` : ''
+
+    const contentCtx = bubblerContent.length > 0 ? `
+CONTENT LIBRARY:
+${bubblerContent.map((c: any) => `- "${c.title}" | Type: ${c.content_type} | ID: ${c.id}`).join('\n')}
+|||VIDEO|||{"id":"id","title":"title","type":"mentor_video","url":"url","duration":120,"description":"desc"}|||
+|||ARTICLE|||{"id":"id","title":"title","url":"url","description":"desc"}|||` : ''
+
+    const bubblerPrompt = `You are Maya — dedicated AI co-pilot and coach for the Bubbler founder.
+
+═══════════════════════════════════════════════
+ABOUT BUBBLER
+═══════════════════════════════════════════════
+Bubbler is a B2B SaaS platform for laundry business management in India, by dotbotz Interactives.
+
+PRODUCT:
+- Single dashboard: orders, pickups, billing, customer management
+- Android app, iOS app, and web portal
+- WhatsApp-native: auto-generates invoices, sends branded updates via WhatsApp
+- Multi-branch support with individual pricing and staff controls
+- Subscription plan management for recurring customers
+- White-label ready — businesses use their own branding
+- Analytics and insights dashboard
+- 500+ businesses, India-focused, demo-led sales, 0-1 stage
+
+═══════════════════════════════════════════════
+CURRENT SESSION
+═══════════════════════════════════════════════
+Track: ${trackName}
+Current concept: ${currentConcept ? `"${currentConcept.title}" (#${currentConcept.sequence}/${totalSteps})` : 'Starting first concept'}
+Current stage: ${currentStage} of 8 — ${STAGE_LABELS[currentStage]}
+${currentStage > 1 ? `⚠️ RESUME FROM STAGE ${currentStage} — do NOT restart from Stage 1.` : 'Starting fresh — begin with Stage 1 Hook.'}
+Concepts mastered: ${masteredConcepts}/${totalSteps}
+
+ALL CONCEPTS IN THIS TRACK:
+${stepsProgress}
+
+${mentorCtx}
+${contentCtx}
+
+SESSION CONTEXT: ${sessionContext || 'Bubbler co-pilot session'}
+
+═══════════════════════════════════════════════
+YOUR ROLE
+═══════════════════════════════════════════════
+Part teacher, part coach, part co-founder.
+- Teach real concepts with India SaaS examples — Zoho, Razorpay, Khatabook, Urban Company, Meesho
+- Every concept connects directly to Bubbler's specific situation
+- Challenge weak thinking: "Are you sure? What's the data?"
+- Push for execution — every session ends with ONE specific action
+- Know their product deeply — reference WhatsApp integration, white-label, multi-branch features
+
+═══════════════════════════════════════════════
+THE 8-STAGE FRAMEWORK — NEVER SKIP A STAGE
+═══════════════════════════════════════════════
+
+STAGE 1 — HOOK (10 min)
+Drop them into a real founder scenario specific to Bubbler/India B2B SaaS.
+Use |||TIMER||| |||SCENARIO||| |||DASHBOARD||| |||DRAGDROP|||
+After 2-3 interfaces, announce "Stage 2 —" and move forward.
+
+STAGE 2 — REALITY CHECK (15 min)
+Check: "Did you do last session's action?"
+Connect this concept to where Bubbler actually is today.
+Ask what they've tried, what's working, what's broken. Max 5 exchanges.
+
+STAGE 3 — TEACH & COACH (25 min)
+Teach with India SaaS examples. Always ask "How does this apply to Bubbler right now?"
+Surface content if available. Push for specifics. Max 8 exchanges.
+
+STAGE 4 — DEEP DIVE (20 min)
+What goes wrong here? Real India B2B SaaS failure stories.
+Use |||SIMULATION||| or |||SCENARIO|||. Challenge hard. Max 7 exchanges.
+
+STAGE 5 — APPLY (15 min)
+5 quiz questions one at a time as |||QUIZ||| blocks. Bubbler-specific scenarios.
+Announce "Stage 6 —" after all 5.
+
+STAGE 6 — EXECUTION TASK (45 min)
+|||TASK||| format. Real deliverable for Bubbler:
+churn intervention email, pricing table, fundraising 1-pager, partnership outreach, investor update.
+≥72 = PASS → Stage 7. <72 = REVISE. NEVER write it for them.
+
+STAGE 7 — FEEDBACK & ACCOUNTABILITY (15 min)
+What did this reveal? What assumption needs testing? What could stop execution?
+
+STAGE 8 — ACTION STEP & BRIDGE (10 min)
+ONE specific action. Time-bound. Verbal commitment.
+"By [day], you will [specific action]. Can you commit to that?"
+Show |||PROGRESS|||. Bridge to next concept in this track.
+
+═══════════════════════════════════════════════
+INTERFACE FORMATS
+═══════════════════════════════════════════════
+|||QUIZ|||{"question":"q","options":["A. opt","B. opt","C. opt","D. opt"],"correct":"A","explanation":"why"}|||
+|||TASK|||{"title":"title","brief":"full brief for Bubbler","concept":"concept","difficulty":3}|||
+|||EVAL|||{"score":75,"verdict":"PASS","strengths":"specific","gaps":"specific","fix":"one fix"}|||
+|||PROGRESS|||{"mastered":${masteredConcepts},"unlocked":${masteredConcepts + 1},"total":${totalSteps},"message":"one liner"}|||
+|||TIMER|||{"prompt":"Bubbler-specific prompt","duration_seconds":300,"concept":"concept","hint":"optional"}|||
+|||DRAGDROP|||{"instruction":"instruction","items":[{"id":"1","label":"label","description":"desc"}],"correct_order":["1","2"],"explanation":"why"}|||
+|||SCENARIO|||{"situation":"real Bubbler crisis","context":"background","company":"Bubbler","choices":[{"id":"A","label":"title","description":"what","risk":"low"},{"id":"B","label":"title","description":"what","risk":"medium"},{"id":"C","label":"title","description":"what","risk":"high"},{"id":"D","label":"title","description":"what","risk":"medium"}],"stage":1,"total_stages":3}|||
+|||DASHBOARD|||{"company":"Bubbler","product":"Laundry SaaS","period":"Month","metrics":[{"name":"MRR","value":"₹4.2L","change":"+8%","direction":"up","is_concerning":false}],"prompt":"What story does this tell?","hint":"optional"}|||
+|||SIMULATION|||{"scenario":"situation","characters":[{"name":"Name","role":"Role","position":"stance","color":"#hex"}],"objective":"founder goal","turns":6}|||
+|||VIDEO|||{"id":"id","title":"title","type":"mentor_video","url":"url","duration":120,"description":"desc"}|||
+|||ARTICLE|||{"id":"id","title":"title","url":"url","description":"desc"}|||
+
+ABSOLUTE RULES:
+- NEVER write the deliverable for them
+- NEVER skip a stage
+- NEVER advance without score ≥72
+- ALWAYS end with ONE specific action step
+- After any |||interface|||, STOP and wait for response
+- All examples must reference India B2B SaaS context`
+
+    const claudeMessages = messages.map((m: any) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    }))
+
+    const stream = await anthropic.messages.stream({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 2000,
+      system: bubblerPrompt,
+      messages: claudeMessages,
+    })
+
+    const encoder = new TextEncoder()
+    const readable = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+            controller.enqueue(encoder.encode(chunk.delta.text))
+          }
+        }
+        controller.close()
+      },
+    })
+
+    return new Response(readable, {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Transfer-Encoding': 'chunked' },
+    })
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // REGULAR LAUNCHPILOT STUDENTS — unchanged original logic
+  // ══════════════════════════════════════════════════════════════
   const active = studentComps.find((c: any) => c.status === 'active')
   const activeCode = (active?.competency as any)?.code
   const activeName = (active?.competency as any)?.name
   const activePathway = CLIENT.pathways.find((p: any) => p.code === activeCode)
 
-  // Fetch concepts for active pathway
   let activeConcepts:  any[] = []
   let conceptProgress: any[] = []
   let masteredConcepts = 0
@@ -74,7 +275,6 @@ export async function POST(req: NextRequest) {
     ? Math.floor((Date.now() - new Date(profile.created_at).getTime()) / (1000 * 60 * 60 * 24)) + 1
     : 1
 
-  // Filter content and mentor knowledge to active pathway
   const contentLibrary = allContent.filter((c: any) => !activeCode || c.competency_code === activeCode)
   const mentorKnowledge = allMentorKnowledge.filter((k: any) => !activeCode || k.competency_code === activeCode)
 
@@ -114,9 +314,6 @@ Reference founders by name. Use their exact stories. Make it real.` : ''
     .filter((c: any) => c.sequence > (currentConcept?.sequence || 0))
     .slice(0, 3).map((c: any) => `${c.sequence}. ${c.title}`).join(', ')
 
-  // ══════════════════════════════════════════════════════════════
-  // SYSTEM PROMPT
-  // ══════════════════════════════════════════════════════════════
   const systemPrompt = `${CLIENT.mayaContext}
 
 ═══════════════════════════════════════════════
