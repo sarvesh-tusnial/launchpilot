@@ -13,13 +13,6 @@ const PATHWAYS = [
   { code: 'P10', emoji: '💻', name: 'Freelancing',           students: 2341, avgRevenue: '$5.2K',  timeToRevenue: '3 weeks' },
 ]
 
-const OUTCOMES = [
-  { name: 'Priya S.', role: 'Product Manager → Consultant', pathway: '💼 Consulting', result: 'First $8K client in 5 weeks', img: null },
-  { name: 'James T.', role: 'Engineer → Course Creator', pathway: '🎓 Course Business', result: '$12K launch in first cohort', img: null },
-  { name: 'Aisha M.', role: 'Marketing Lead → Freelancer', pathway: '💻 Freelancing', result: 'Replaced salary in 7 weeks', img: null },
-  { name: 'Rahul K.', role: 'MBA Student → Founder', pathway: '🤖 AI Tech', result: '40 paying users, $2K MRR', img: null },
-]
-
 export default function HomePage() {
   return (
     <div style={{
@@ -252,41 +245,6 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* OUTCOMES */}
-      <section style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <div className="mono" style={{ fontSize: '10px', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '16px' }}>Real outcomes</div>
-            <h2 className="serif" style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: '700', letterSpacing: '-0.03em' }}>
-              They launched.<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>You're next.</span>
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-            {OUTCOMES.map((o, i) => (
-              <div key={i} className="outcome-card" style={{ padding: '28px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(108,71,255,0.1)', border: '1px solid rgba(108,71,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: '700', color: '#8B6FFF', flexShrink: 0 }}>
-                    {o.name[0]}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6' }}>{o.name}</div>
-                    <div style={{ fontSize: '12px', color: '#555', marginTop: '2px' }}>{o.role}</div>
-                  </div>
-                </div>
-                <div style={{ padding: '14px', background: 'rgba(0,200,81,0.04)', border: '1px solid rgba(0,200,81,0.12)', borderRadius: '10px', marginBottom: '16px' }}>
-                  <div className="serif" style={{ fontSize: '18px', fontWeight: '700', color: '#00C851', letterSpacing: '-0.01em' }}>{o.result}</div>
-                </div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', background: 'rgba(108,71,255,0.08)', border: '1px solid rgba(108,71,255,0.15)', borderRadius: '100px' }}>
-                  <span style={{ fontSize: '11px' }}>{o.pathway.split(' ')[0]}</span>
-                  <span className="mono" style={{ fontSize: '9px', color: '#8B6FFF', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{o.pathway.split(' ').slice(1).join(' ')}</span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
