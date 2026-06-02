@@ -1,38 +1,25 @@
 export const CLIENT = {
-  // ============================================
-  // BRANDING
-  // ============================================
   name: 'LaunchPilot School',
   shortName: 'LaunchPilot',
-  primaryColor: '#6C47FF',   // Purple
+  primaryColor: '#6C47FF',
   accentColor: '#8B6FFF',
   logoPath: '/logo.png',
   faviconPath: '/favicon.ico',
+  domain: 'https://launchpilot-school.vercel.app',
 
-  // ============================================
-  // DOMAIN
-  // ============================================
-  domain: 'https://launchpilot.vercel.app',
-
-  // ============================================
-  // PATHWAYS (student picks ONE on signup)
-  // ============================================
   pathways: [
-    { code: 'P01', name: 'Launch an AI Tech Business',         emoji: '🤖', tagline: 'Build and sell an AI-powered product' },
-    { code: 'P02', name: 'Launch a Course Business',           emoji: '🎓', tagline: 'Package your knowledge and sell it online' },
-    { code: 'P03', name: 'Launch a Consulting Business',       emoji: '💼', tagline: 'Get paid for what you already know' },
-    { code: 'P04', name: 'Launch a Marketplace',               emoji: '🏪', tagline: 'Build a platform that connects buyers and sellers' },
-    { code: 'P05', name: 'Launch an E-commerce Business',      emoji: '📦', tagline: 'Sell physical or digital products online' },
-    { code: 'P06', name: 'Launch a Fashion D2C Brand',         emoji: '👗', tagline: 'Build a brand people wear and believe in' },
-    { code: 'P07', name: 'Launch an EdTech Business',          emoji: '📚', tagline: 'Build a learning product that scales' },
-    { code: 'P08', name: 'Build a Community Business',         emoji: '🌐', tagline: 'Turn an audience into a paying community' },
-    { code: 'P09', name: 'Launch a Content Creation Business', emoji: '🎬', tagline: 'Monetise your content and build an audience' },
-    { code: 'P10', name: 'Launch a Freelancing Business',      emoji: '💻', tagline: 'Go independent and build a client base' },
+    { code: 'P01', name: 'Launch an AI Tech Business',         emoji: '🤖', tagline: 'Build and sell an AI-powered product',          school: 'launchpilot' },
+    { code: 'P02', name: 'Launch a Course Business',           emoji: '🎓', tagline: 'Package your knowledge and sell it online',      school: 'launchpilot' },
+    { code: 'P03', name: 'Launch a Consulting Business',       emoji: '💼', tagline: 'Get paid for what you already know',             school: 'launchpilot' },
+    { code: 'P04', name: 'Launch a Marketplace',               emoji: '🏪', tagline: 'Build a platform that connects buyers and sellers', school: 'launchpilot' },
+    { code: 'P05', name: 'Launch an E-commerce Business',      emoji: '📦', tagline: 'Sell physical or digital products online',       school: 'launchpilot' },
+    { code: 'P06', name: 'Launch a Fashion D2C Brand',         emoji: '👗', tagline: 'Build a brand people wear and believe in',       school: 'launchpilot' },
+    { code: 'P07', name: 'Launch an EdTech Business',          emoji: '📚', tagline: 'Build a learning product that scales',           school: 'launchpilot' },
+    { code: 'P08', name: 'Build a Community Business',         emoji: '🌐', tagline: 'Turn an audience into a paying community',       school: 'launchpilot' },
+    { code: 'P09', name: 'Launch a Content Creation Business', emoji: '🎬', tagline: 'Monetise your content and build an audience',    school: 'launchpilot' },
+    { code: 'P10', name: 'Launch a Freelancing Business',      emoji: '💻', tagline: 'Go independent and build a client base',        school: 'launchpilot' },
   ],
 
-  // ============================================
-  // MAYA CONTEXT
-  // ============================================
   mayaContext: `
 You are Maya, the AI launch coach at LaunchPilot School.
 
@@ -61,11 +48,8 @@ What NOT to do:
 The LaunchPilot promise: Every student goes from idea to first revenue. Not someday. This cohort.
 `,
 
-  // ============================================
-  // ADMIN
-  // ============================================
   adminEmail: 'admin@launchpilotschool.com',
 
-  // Alias — shared components use CLIENT.competencies
+  // Alias so shared components work
   get competencies() { return this.pathways },
 }
