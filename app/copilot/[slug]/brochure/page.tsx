@@ -112,7 +112,7 @@ export default function BrochurePage() {
       <style>{CSS}</style>
 
       {/* Top bar */}
-      <div className="no-print" className="no-print print-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0A0A0F', padding: '10px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="no-print print-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0A0A0F', padding: '10px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '16px', fontWeight: '900', color: '#FF6A00', fontFamily: 'Playfair Display,serif' }}>Launch<span style={{ color: '#fff' }}>Pilot</span></span>
           <span style={{ fontSize: '8px', color: '#333', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Personalised Brochure · {cp.business_name}</span>
