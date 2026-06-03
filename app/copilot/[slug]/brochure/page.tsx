@@ -359,7 +359,7 @@ export default function BrochurePage() {
           <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em' }}>6 Monthly Sprints — Most Relevant to You</div>
           <div style={{ fontSize: '8px', color: '#888', fontFamily: 'DM Mono,monospace', background: '#F0F0F0', padding: '3px 10px', borderRadius: '100px' }}>4 weeks each</div>
         </div>
-        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {(bc.sprints || []).map((s: any, i: number) => (
             <div key={i} style={{ border: '1px solid #EEEEEE', borderRadius: '8px', overflow: 'hidden', borderTop: `3px solid ${i % 2 === 0 ? '#FF6A00' : '#0A0A0F'}` }}>
               <div style={{ padding: '10px 12px', background: i % 2 === 0 ? '#FFF8F3' : '#F8F8F8' }}>
@@ -419,7 +419,7 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="Our Community" title="Founders who started where you are" />
         <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.7', marginBottom: '20px' }}>These founders came in with an idea — many had doubts, no revenue, no team. They followed the program. Here is what happened.</p>
-        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {PAST_STUDENTS.map((s, i) => (
             <div key={i} style={{ display: 'flex', gap: '10px', padding: '10px 12px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px', borderLeft: `3px solid ${s.col}` }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${s.col}30`, flexShrink: 0, background: `${s.col}10`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -538,7 +538,7 @@ export default function BrochurePage() {
 
                 {/* What happens */}
         <div style={{ fontSize: '8px', color: '#1D9E75', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>What happens at immersion</div>
-        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {[
             ['🤝', 'Investor Roundtables', 'Pitch your business to active investors in the room. Get term sheets, not just feedback.'],
             ['🎤', 'Mentor Dinners', 'Closed dinners with 2-3 senior mentors. Real conversations, not presentations.'],
