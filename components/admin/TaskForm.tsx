@@ -66,9 +66,7 @@ export default function TaskForm({ competencies, concepts, task }: Props) {
   const total = Object.values(weights).reduce((a, b) => a + b, 0)
 
   // Group competencies by school using code prefix — guaranteed to work
-  const grouped: Record<string, Competency[]> = {
-    business: [], finance: [], ai: [], manufacturing: [], generic: [],
-  }
+  const grouped: Record<string, Competency[]> = {}
   for (const comp of competencies) {
     if (!comp || !comp.code || typeof comp.code !== 'string') continue
     const school = schoolFromCode(comp.code)
@@ -80,7 +78,7 @@ export default function TaskForm({ competencies, concepts, task }: Props) {
     .filter(c => c && c.competency_code === selectedCompCode)
     .sort((a, b) => (a.sequence || 0) - (b.sequence || 0))
 
-  const selectedCol  = SCHOOL_COLS[schoolFromCode(selectedCompCode)] || '#888'
+  const selectedCol  = schoolColor(schoolFromCode(selectedCompCode)) || '#888'
   const selectedComp = competencies.find(c => c.code === selectedCompCode)
 
   const handleSave = async () => {
@@ -130,11 +128,11 @@ export default function TaskForm({ competencies, concepts, task }: Props) {
         {SCHOOL_ORDER.map(school => {
           const comps = grouped[school]
           if (!comps || comps.length === 0) return null
-          const col = SCHOOL_COLS[school]
+          const col = schoolColor(school)
           return (
             <div key={school} style={{ marginBottom: '20px' }}>
               <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: col, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
-                {SCHOOL_LABELS[school]}
+                {schoolLabel(school)}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
                 {comps.map(comp => {

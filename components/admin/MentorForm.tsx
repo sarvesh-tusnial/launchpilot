@@ -11,24 +11,34 @@ interface Props {
   mentor?: any
 }
 
-const SCHOOL_COLS: Record<string, string> = {
-  business: '#FF6A00', finance: '#1D4ED8', ai: '#7C3AED', manufacturing: '#0D9488', generic: '#16A34A',
-}
-const SCHOOL_LABELS: Record<string, string> = {
-  business: 'School of Business', finance: 'School of Finance', ai: 'School of AI & Technology',
-  manufacturing: 'School of Manufacturing', generic: 'Generic — All Schools',
-}
-const SCHOOL_ORDER = ['business', 'finance', 'ai', 'manufacturing', 'generic']
+
+const PATHWAYS_PREFIX = 'P'
+const BUBBLER_CODES   = new Set(['B01', 'B02', 'B03', 'B04'])
 
 function schoolFromCode(code: string): string {
   if (!code) return 'generic'
-  const c = code[0].toUpperCase()
-  if (c === 'B') return 'business'
-  if (c === 'F') return 'finance'
-  if (c === 'A') return 'ai'
-  if (c === 'M') return 'manufacturing'
+  if (code.startsWith(PATHWAYS_PREFIX) && code.length === 3) return 'launchpilot'
+  if (BUBBLER_CODES.has(code)) return 'bubbler'
+  if (code.includes('_')) return code.replace(/_\d+$/, '')
   return 'generic'
 }
+
+function schoolLabel(school: string): string {
+  if (school === 'launchpilot') return 'LaunchPilot Pathways'
+  if (school === 'bubbler') return 'Bubbler Co-Pilot'
+  if (school === 'generic') return 'Generic'
+  return `Co-Pilot: ${school.charAt(0).toUpperCase() + school.slice(1)}`
+}
+
+function schoolColor(school: string): string {
+  if (school === 'launchpilot') return '#6C47FF'
+  if (school === 'bubbler') return '#7F77DD'
+  const colors = ['#1D9E75', '#BA7517', '#D85A30', '#D4537E', '#378ADD', '#639922']
+  let hash = 0
+  for (let i = 0; i < school.length; i++) hash = school.charCodeAt(i) + ((hash << 5) - hash)
+  return colors[Math.abs(hash) % colors.length]
+}
+
 
 export default function MentorForm({ competencies, concepts, mentor }: Props) {
   const router = useRouter()
@@ -44,9 +54,7 @@ export default function MentorForm({ competencies, concepts, mentor }: Props) {
   const [expandedComp,     setExpandedComp]     = useState<string>('')
 
   // Group competencies by school
-  const grouped: Record<string, Competency[]> = {
-    business: [], finance: [], ai: [], manufacturing: [], generic: [],
-  }
+  const grouped: Record<string, Competency[]> = {}
   for (const comp of competencies) {
     if (!comp?.code) continue
     const school = schoolFromCode(comp.code)
@@ -95,7 +103,7 @@ export default function MentorForm({ competencies, concepts, mentor }: Props) {
     }
   }
 
-  const expandedCol = SCHOOL_COLS[schoolFromCode(expandedComp)] || '#888'
+  const expandedCol = schoolColor(schoolFromCode(expandedComp)) || '#888'
   const expandedCompName = competencies.find(c => c.code === expandedComp)?.name || ''
 
   return (
@@ -152,7 +160,7 @@ export default function MentorForm({ competencies, concepts, mentor }: Props) {
             {selectedConcepts.map(id => {
               const concept = concepts.find(c => c.id === id)
               if (!concept) return null
-              const col = SCHOOL_COLS[schoolFromCode(concept.competency_code)] || '#888'
+              const col = schoolColor(schoolFromCode(concept.competency_code)) || '#888'
               return (
                 <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '100px', background: `${col}12`, border: `1px solid ${col}30`, fontSize: '11px', color: col }}>
                   <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px' }}>{concept.competency_code}·{String(concept.sequence).padStart(2,'0')}</span>
@@ -168,11 +176,11 @@ export default function MentorForm({ competencies, concepts, mentor }: Props) {
         {SCHOOL_ORDER.map(school => {
           const comps = grouped[school]
           if (!comps || comps.length === 0) return null
-          const col = SCHOOL_COLS[school]
+          const col = schoolColor(school)
           return (
             <div key={school} style={{ marginBottom: '16px' }}>
               <div style={{ fontSize: '10px', fontFamily: 'DM Mono, monospace', color: col, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>
-                {SCHOOL_LABELS[school]}
+                {schoolLabel(school)}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
                 {comps.map(comp => {
