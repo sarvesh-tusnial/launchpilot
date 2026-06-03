@@ -11,6 +11,7 @@ const NAV = [
   { href: '/admin/content',       label: 'Content Library',  icon: '▶' },
   { href: '/admin/tasks',         label: 'Task Library',     icon: '◈' },
   { href: '/admin/concepts',      label: 'Curriculum',       icon: '▦' },
+  { href: '/admin/copilots', label: 'Co-Pilots', icon: '◈' },
   { href: '/admin/submissions',   label: 'Submissions',      icon: '◷' },
 ]
 
