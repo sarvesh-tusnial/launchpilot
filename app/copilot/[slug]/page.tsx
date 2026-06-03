@@ -256,14 +256,14 @@ export default function CopilotPage() {
               <span style={{ color: '#9B94F0', fontStyle: 'italic' }}>your program is ready.</span>
             </h1>
             <p style={{ fontSize: '15px', color: '#AAA', lineHeight: '1.8', maxWidth: '500px' }}>
-              Built specifically for <strong style={{ color: '#E8E6E0' }}>{copilotProfile.business_name}</strong> — your mentors, sessions, sprints and milestones are all tailored to your stage and idea.
+              Built specifically for <strong style={{ color: '#E8E6E0' }}>{copilotProfile.business_name}</strong> — your mentors, focus areas, sprints and milestones are all tailored to your stage and idea.
             </p>
           </div>
 
           {/* ── TRACKS ── */}
           <div style={{ marginBottom: '56px' }}>
-            <div className="section-label" style={{ color: '#9B94F0' }}>Your curriculum</div>
-            <div className="section-title">3 tracks built for {copilotProfile.business_name}</div>
+            <div className="section-label" style={{ color: '#9B94F0' }}>AI Co-Pilot Focus Areas</div>
+            <div className="section-title">Your 3 main focus areas</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {tracks.map((t, i) => (
                 <div key={t.code} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
@@ -272,7 +272,7 @@ export default function CopilotPage() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0' }}>{t.name}</div>
-                    <div className="mono" style={{ fontSize: '9px', color: '#666', marginTop: '2px' }}>8 concepts — AI + real world sessions</div>
+                    <div className="mono" style={{ fontSize: '9px', color: '#666', marginTop: '2px' }}>8 custom concepts · AI + real world</div>
                   </div>
                 </div>
               ))}
@@ -310,14 +310,19 @@ export default function CopilotPage() {
           {content?.sprints && (
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#BA7517' }}>Monthly sprints</div>
-              <div className="section-title">3-day live intensives relevant to your business</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div className="section-title">6 sprints lined up for you — 3-day live intensives</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {content.sprints.map((s: any, i: number) => (
-                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0', marginBottom: '5px' }}>{s.name}</div>
-                    <div style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.6', marginBottom: '6px' }}>{s.description}</div>
-                    <div style={{ fontSize: '11px', color: '#BA7517', lineHeight: '1.5' }}>
-                      Why this for you: {s.relevance}
+                  <div key={i} style={{ padding: '16px 18px', background: i % 2 === 0 ? 'rgba(186,117,23,0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTop: `2px solid ${i % 2 === 0 ? 'rgba(186,117,23,0.4)' : 'rgba(155,148,240,0.3)'}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i % 2 === 0 ? 'rgba(186,117,23,0.15)' : 'rgba(155,148,240,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <span className="mono" style={{ fontSize: '8px', fontWeight: '700', color: i % 2 === 0 ? '#BA7517' : '#9B94F0' }}>{String(i + 1).padStart(2, '0')}</span>
+                      </div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', lineHeight: '1.3' }}>{s.name}</div>
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.6', marginBottom: '8px' }}>{s.description}</div>
+                    <div style={{ fontSize: '11px', color: '#BA7517', lineHeight: '1.5', padding: '6px 10px', background: 'rgba(186,117,23,0.06)', borderRadius: '6px' }}>
+                      For {copilotProfile.business_name}: {s.relevance}
                     </div>
                   </div>
                 ))}
@@ -329,13 +334,18 @@ export default function CopilotPage() {
           {content?.sunday_sessions && (
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#6C47FF' }}>Experiential sessions</div>
-              <div className="section-title">Live online sessions every Sunday</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {content.sunday_sessions.map((s: any, i: number) => (
-                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0', marginBottom: '5px' }}>{s.theme}</div>
-                    <div style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.6', marginBottom: '5px' }}>{s.description}</div>
-                    <div style={{ fontSize: '11px', color: '#8B6FFF', lineHeight: '1.5' }}>Why this: {s.relevance}</div>
+              <div className="section-title">We run live sessions every Sunday — these 5 are most useful for you</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {content.sunday_sessions.slice(0, 5).map((s: any, i: number) => (
+                  <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(108,71,255,0.12)', border: '1px solid rgba(108,71,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <span className="mono" style={{ fontSize: '9px', fontWeight: '700', color: '#8B6FFF' }}>{String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '3px' }}>{s.theme}</div>
+                      <div style={{ fontSize: '12px', color: '#888', lineHeight: '1.55', marginBottom: '4px' }}>{s.description}</div>
+                      <div style={{ fontSize: '11px', color: '#8B6FFF' }}>Why: {s.relevance}</div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -362,26 +372,45 @@ export default function CopilotPage() {
             </div>
           </div>
 
-          {/* ── 6-MONTH TIMELINE ── */}
+          {/* ── 6-MONTH NORTHSTAR ── */}
           {content?.timeline && (
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#AAA' }}>Your 6-month northstar</div>
-              <div className="section-title">Where {copilotProfile.business_name} should be, month by month</div>
-              <div style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', left: '19px', top: '24px', bottom: '24px', width: '1px', background: 'rgba(255,255,255,0.08)' }} />
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {content.timeline.map((t: any, i: number) => (
-                    <div key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(155,148,240,0.1)', border: '1px solid rgba(155,148,240,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>
-                        <span className="mono" style={{ fontSize: '8px', color: '#9B94F0', fontWeight: '700' }}>M{i + 1}</span>
-                      </div>
-                      <div style={{ flex: 1, paddingTop: '8px' }}>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0', marginBottom: '3px' }}>{t.milestone}</div>
-                        <div style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.6' }}>{t.description}</div>
+              <div className="section-title">The journey for {copilotProfile.business_name}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
+                {content.timeline.map((t: any, i: number) => {
+                  const colors = ['#9B94F0','#8B6FFF','#7A6FFF','#1D9E75','#17876A','#117055']
+                  const col = colors[i] || '#9B94F0'
+                  const isLast = i === content.timeline.length - 1
+                  const isEndOfRow = (i + 1) % 3 === 0
+                  return (
+                    <div key={i} style={{ position: 'relative' }}>
+                      {/* Arrow connector */}
+                      {!isLast && !isEndOfRow && (
+                        <div style={{ position: 'absolute', right: '-1px', top: '24px', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.2)' }}>›</div>
+                      )}
+                      {/* Down arrow at end of row 1 */}
+                      {i === 2 && (
+                        <div style={{ position: 'absolute', bottom: '-18px', right: '50%', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.2)', transform: 'rotate(90deg)' }}>›</div>
+                      )}
+                      <div style={{ margin: '0 4px 8px', padding: '16px 14px', background: `${col}08`, border: `1px solid ${col}20`, borderRadius: '12px', borderTop: `2px solid ${col}` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: `${col}18`, border: `1px solid ${col}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span className="mono" style={{ fontSize: '8px', fontWeight: '700', color: col }}>M{i + 1}</span>
+                          </div>
+                          <span className="mono" style={{ fontSize: '8px', color: col, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t.month}</span>
+                        </div>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#F0EDE6', marginBottom: '5px', lineHeight: '1.3' }}>{t.milestone}</div>
+                        <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.55' }}>{t.description}</div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )
+                })}
+              </div>
+              {/* Journey arrow */}
+              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: 'rgba(29,158,117,0.05)', border: '1px solid rgba(29,158,117,0.15)', borderRadius: '8px' }}>
+                <span style={{ fontSize: '12px', color: '#1D9E75' }}>→</span>
+                <span style={{ fontSize: '12px', color: '#AAA' }}>Complete this journey and {copilotProfile.business_name} will have traction, revenue, and a clear path to scale.</span>
               </div>
             </div>
           )}

@@ -84,10 +84,10 @@ TRACKS: ${track1Name}, ${track2Name}, ${track3Name}
 AVAILABLE MENTORS (pick 5 most relevant):
 ${ALL_MENTORS.map(m => `- ${m.key}: ${m.name} (${m.role}, ${m.company}) — expertise: ${m.expertise.join(', ')}`).join('\n')}
 
-AVAILABLE SPRINTS (pick 3 most relevant):
+AVAILABLE SPRINTS (pick 6 most relevant):
 ${ALL_SPRINTS.map(s => `- ${s.name} (${s.month}): ${s.description} — tags: ${s.tags.join(', ')}`).join('\n')}
 
-AVAILABLE SUNDAY SESSIONS (pick 3 most relevant):
+AVAILABLE SUNDAY SESSIONS (pick 5 most relevant):
 ${SUNDAY_SESSIONS.map(s => `- ${s.city}: ${s.theme} — ${s.description}`).join('\n')}
 
 Generate a personalised program overview. Return ONLY valid JSON, no markdown, no explanation:
@@ -108,10 +108,15 @@ Generate a personalised program overview. Return ONLY valid JSON, no markdown, n
   "sprints": [
     { "name": "sprint name from list", "description": "original description", "relevance": "1 sentence why relevant to ${businessName}" },
     { "name": "...", "description": "...", "relevance": "..." },
+    { "name": "...", "description": "...", "relevance": "..." },
+    { "name": "...", "description": "...", "relevance": "..." },
+    { "name": "...", "description": "...", "relevance": "..." },
     { "name": "...", "description": "...", "relevance": "..." }
   ],
   "sunday_sessions": [
     { "theme": "theme", "description": "original description", "relevance": "1 sentence why" },
+    { "theme": "...", "description": "...", "relevance": "..." },
+    { "theme": "...", "description": "...", "relevance": "..." },
     { "theme": "...", "description": "...", "relevance": "..." },
     { "theme": "...", "description": "...", "relevance": "..." }
   ],
