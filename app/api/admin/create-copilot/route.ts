@@ -98,6 +98,7 @@ Generate a personalised program overview. Return ONLY valid JSON, no markdown, n
     { "question": "..." },
     { "question": "..." }
   ],
+  "track_descriptions": ["1 sentence on what the founder will learn in track 1 — specific to their business", "1 sentence for track 2", "1 sentence for track 3"],
   "mentors": [
     { "key": "mentor_key_from_list", "reason": "1 sentence on what the founder will learn from this mentor in real world sessions" },
     { "key": "...", "reason": "..." },
@@ -106,7 +107,7 @@ Generate a personalised program overview. Return ONLY valid JSON, no markdown, n
     { "key": "...", "reason": "..." }
   ],
   "sprints": [
-    { "name": "sprint name from list", "description": "original description", "relevance": "1 sentence why relevant to ${businessName}" },
+    { "name": "sprint name without any month or parentheses — just the name", "description": "original description", "relevance": "1 sentence why relevant to ${businessName}" },
     { "name": "...", "description": "...", "relevance": "..." },
     { "name": "...", "description": "...", "relevance": "..." },
     { "name": "...", "description": "...", "relevance": "..." },
@@ -114,7 +115,7 @@ Generate a personalised program overview. Return ONLY valid JSON, no markdown, n
     { "name": "...", "description": "...", "relevance": "..." }
   ],
   "sunday_sessions": [
-    { "theme": "theme", "description": "original description", "relevance": "1 sentence why" },
+    { "theme": "theme name only — no city prefix, no location", "description": "original description", "relevance": "1 sentence why" },
     { "theme": "...", "description": "...", "relevance": "..." },
     { "theme": "...", "description": "...", "relevance": "..." },
     { "theme": "...", "description": "...", "relevance": "..." },

@@ -272,7 +272,7 @@ export default function CopilotPage() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0' }}>{t.name}</div>
-                    <div className="mono" style={{ fontSize: '9px', color: '#666', marginTop: '2px' }}>8 custom concepts · AI + real world</div>
+                    <div style={{ fontSize: '11px', color: '#888', marginTop: '3px', lineHeight: '1.4' }}>{content?.track_descriptions?.[i] || '8 custom concepts tailored to your business'}</div>
                   </div>
                 </div>
               ))}
@@ -310,7 +310,7 @@ export default function CopilotPage() {
           {content?.sprints && (
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#BA7517' }}>Monthly sprints</div>
-              <div className="section-title">6 sprints lined up for you — 3-day live intensives</div>
+              <div className="section-title">6 sprints lined up for you — 4 weeks each</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {content.sprints.map((s: any, i: number) => (
                   <div key={i} style={{ padding: '16px 18px', background: i % 2 === 0 ? 'rgba(186,117,23,0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTop: `2px solid ${i % 2 === 0 ? 'rgba(186,117,23,0.4)' : 'rgba(155,148,240,0.3)'}` }}>
@@ -318,7 +318,7 @@ export default function CopilotPage() {
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i % 2 === 0 ? 'rgba(186,117,23,0.15)' : 'rgba(155,148,240,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <span className="mono" style={{ fontSize: '8px', fontWeight: '700', color: i % 2 === 0 ? '#BA7517' : '#9B94F0' }}>{String(i + 1).padStart(2, '0')}</span>
                       </div>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', lineHeight: '1.3' }}>{s.name}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', lineHeight: '1.3' }}>{s.name.replace(/\s*\([^)]*\)/g, '').trim()}</div>
                     </div>
                     <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.6', marginBottom: '8px' }}>{s.description}</div>
                     <div style={{ fontSize: '11px', color: '#BA7517', lineHeight: '1.5', padding: '6px 10px', background: 'rgba(186,117,23,0.06)', borderRadius: '6px' }}>
@@ -342,7 +342,7 @@ export default function CopilotPage() {
                       <span className="mono" style={{ fontSize: '9px', fontWeight: '700', color: '#8B6FFF' }}>{String(i + 1).padStart(2, '0')}</span>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '3px' }}>{s.theme}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '3px' }}>{s.theme.replace(/^[A-Za-z\s]+[:\-–—]\s*/g, '').trim()}</div>
                       <div style={{ fontSize: '12px', color: '#888', lineHeight: '1.55', marginBottom: '4px' }}>{s.description}</div>
                       <div style={{ fontSize: '11px', color: '#8B6FFF' }}>Why: {s.relevance}</div>
                     </div>
