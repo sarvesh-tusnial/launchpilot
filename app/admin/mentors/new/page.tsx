@@ -1,18 +1,17 @@
 import { requireAdmin } from '@/lib/auth/admin'
 import MentorForm from '@/components/admin/MentorForm'
-import { CLIENT } from '@/client-config'
-
-const ALL_COMPETENCIES = CLIENT.pathways
-const DECATHLON_CODES = CLIENT.pathways.map(c => c.code)
 
 export default async function NewMentorPage() {
   const { supabase } = await requireAdmin()
 
-  const { data: allConcepts } = await supabase
-    .from('concepts')
-    .select('id, title, sequence, competency_code')
-    .in('competency_code', DECATHLON_CODES)
-    .order('competency_code').order('sequence')
+  const [competenciesRes, conceptsRes] = await Promise.all([
+    supabase.from('competencies').select('code, name').order('order_index'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').order('competency_code').order('sequence'),
+  ])
+
+  const allCompetencies = (competenciesRes.data || []).map(c => ({
+    code: c.code, name: c.name, school: 'launchpilot',
+  }))
 
   return (
     <div style={{ maxWidth: '680px' }}>
@@ -22,10 +21,10 @@ export default async function NewMentorPage() {
         </div>
         <h1 style={{ fontSize: '28px', fontWeight: '600', letterSpacing: '-0.02em' }}>Add Mentor</h1>
         <p style={{ color: 'var(--text2)', fontSize: '14px', marginTop: '4px' }}>
-          Add an internal Decathlon expert. Maya will reference their knowledge when teaching.
+          Maya will reference their knowledge when teaching linked concepts.
         </p>
       </div>
-      <MentorForm competencies={ALL_COMPETENCIES} concepts={allConcepts || []} />
+      <MentorForm competencies={allCompetencies} concepts={conceptsRes.data || []} />
     </div>
   )
 }

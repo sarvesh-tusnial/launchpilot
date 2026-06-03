@@ -1,18 +1,20 @@
 import { requireAdmin } from '@/lib/auth/admin'
 import ContentForm from '@/components/admin/ContentForm'
-import { CLIENT } from '@/client-config'
-
-const ALL_COMPETENCIES = CLIENT.pathways
-const DECATHLON_CODES = CLIENT.pathways.map(c => c.code)
 
 export default async function NewContentPage() {
   const { supabase } = await requireAdmin()
 
-  const { data: allConcepts } = await supabase
-    .from('concepts')
-    .select('id, title, sequence, competency_code')
-    .in('competency_code', DECATHLON_CODES)
-    .order('competency_code').order('sequence')
+  // Fetch ALL competencies from DB — pathways + copilot tracks
+  const [competenciesRes, conceptsRes] = await Promise.all([
+    supabase.from('competencies').select('code, name').order('order_index'),
+    supabase.from('concepts').select('id, title, sequence, competency_code').order('competency_code').order('sequence'),
+  ])
+
+  const allCompetencies = (competenciesRes.data || []).map(c => ({
+    code: c.code,
+    name: c.name,
+    school: 'launchpilot',
+  }))
 
   return (
     <div style={{ maxWidth: '680px' }}>
@@ -25,7 +27,7 @@ export default async function NewContentPage() {
           Maya will surface this automatically when teaching the linked concept.
         </p>
       </div>
-      <ContentForm competencies={ALL_COMPETENCIES} concepts={allConcepts || []} />
+      <ContentForm competencies={allCompetencies} concepts={conceptsRes.data || []} />
     </div>
   )
 }
