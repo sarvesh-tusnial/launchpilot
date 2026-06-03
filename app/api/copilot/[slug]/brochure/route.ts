@@ -537,7 +537,7 @@ print("OK")
     })
 
     const filename = `${cp.business_name.replace(/[^a-z0-9]/gi, '-')}-LaunchPilot-Program.pdf`
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
