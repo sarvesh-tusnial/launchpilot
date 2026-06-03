@@ -562,53 +562,72 @@ export default function BrochurePage() {
 
       {/* ── PAGE 8: WOOLF + MBA ── */}
       <PageWrapper>
-        <SectionHeader label="Academic Accreditation" title="Plan B — if the startup doesn't work out" color="#3B82F6" />
+        {/* Header */}
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{ fontSize: '8px', color: '#3B82F6', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '6px' }}>Academic Accreditation · Woolf University</div>
+          <div style={{ fontSize: '28px', fontWeight: '900', color: '#111', fontFamily: 'Playfair Display,serif', letterSpacing: '-0.02em', lineHeight: '1.1', marginBottom: '10px' }}>
+            Most programs give you nothing<br />when the startup fails.
+          </div>
+          <p style={{ fontSize: '13px', color: '#555', lineHeight: '1.8', maxWidth: '560px' }}>
+            LaunchPilot is accredited with <strong style={{ color: '#111' }}>Woolf University</strong> — a globally recognised institution. Complete the program and you qualify for a Woolf MBA. A real credential, regardless of how the startup goes.
+          </p>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '28px', alignItems: 'start' }}>
-          <div>
-            <p style={{ fontSize: '12px', color: '#333', lineHeight: '1.85', marginBottom: '14px' }}>LaunchPilot is accredited with <strong>Woolf University</strong> — a globally recognised institution. Every founder who completes the program is eligible to convert their experience into a Woolf MBA.</p>
-            <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.8', marginBottom: '14px' }}>Most accelerators give you nothing when the startup fails. We give you a credential that opens doors — at high-growth startups, VC firms and operator roles that only hire people who have actually tried to build something.</p>
-            <div style={{ padding: '14px 16px', background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.15)', borderRadius: '9px' }}>
-              <div style={{ fontSize: '7px', color: '#3B82F6', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '6px' }}>Woolf University · MBA</div>
-              <div style={{ fontSize: '13px', fontWeight: '800', color: '#111', fontFamily: 'Playfair Display,serif', marginBottom: '6px', lineHeight: '1.2' }}>Globally recognised. Respected by startups and VCs.</div>
-              <div style={{ fontSize: '9px', color: '#666', lineHeight: '1.5' }}>Woolf is a Bologna-compliant institution with members across Europe and Asia. The MBA is taken seriously by employers who know what it takes to build something.</div>
+        {/* Two paths — clean visual */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
+          <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #EEEEEE' }}>
+            <div style={{ background: '#1D9E75', padding: '14px 18px' }}>
+              <div style={{ fontSize: '9px', fontFamily: 'DM Mono,monospace', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '4px' }}>Path A</div>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', fontFamily: 'Playfair Display,serif' }}>Startup works 🚀</div>
+            </div>
+            <div style={{ padding: '14px 18px', background: '#F0FBF7' }}>
+              <p style={{ fontSize: '11px', color: '#444', lineHeight: '1.7', margin: 0 }}>You have revenue, a team, traction. LaunchPilot was your launchpad. The MBA is a bonus credential on top of a real business.</p>
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ fontSize: '8px', color: '#3B82F6', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '4px' }}>What the MBA opens up</div>
-            {[
-              ['🚀', 'Operator roles at high-growth startups', 'COO, VP Product, Head of Growth — companies that want founders who tried'],
-              ['💼', 'VC and investor roles', 'Scouts, analysts and principals at seed and Series A funds hiring for judgment'],
-              ['🌍', 'Global mobility', 'Recognised credential for visa applications and employer sponsorships internationally'],
-              ['🎓', 'Further education', 'Pathway to doctoral programs and specialist executive education at partner institutions'],
-              ['🤝', 'Executive network', 'Woolf alumni network across 30+ countries — operators, founders and investors'],
-            ].map(([icon, title, desc]) => (
-              <div key={title as string} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', padding: '10px 12px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '7px' }}>
-                <span style={{ fontSize: '14px', flexShrink: 0 }}>{icon}</span>
-                <div>
-                  <div style={{ fontSize: '10px', fontWeight: '700', color: '#111', marginBottom: '1px' }}>{title}</div>
-                  <div style={{ fontSize: '9px', color: '#888', lineHeight: '1.4' }}>{desc}</div>
-                </div>
-              </div>
+          <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #EEEEEE' }}>
+            <div style={{ background: '#1D3A8A', padding: '14px 18px' }}>
+              <div style={{ fontSize: '9px', fontFamily: 'DM Mono,monospace', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '4px' }}>Path B</div>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', fontFamily: 'Playfair Display,serif' }}>Startup doesn't 🎓</div>
+            </div>
+            <div style={{ padding: '14px 18px', background: '#F0F4FF' }}>
+              <p style={{ fontSize: '11px', color: '#444', lineHeight: '1.7', margin: 0 }}>The Woolf MBA opens doors at high-growth startups, VC firms and operator roles. Companies that specifically want people who tried to build something.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Woolf credential strip */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 18px', background: '#F8F9FF', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '10px', marginBottom: '24px' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#1D3A8A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ fontSize: '18px' }}>🎓</span>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '12px', fontWeight: '700', color: '#111', marginBottom: '2px' }}>Woolf University · EU Accredited MBA</div>
+            <div style={{ fontSize: '10px', color: '#666' }}>Bologna-compliant · ECTS recognised · Globally accepted · Blockchain-verified credential</div>
+          </div>
+          <div style={{ display: 'flex', gap: '5px', flexShrink: 0 }}>
+            {['EU Accredited', 'ECTS', 'Globally Valid'].map(t => (
+              <span key={t} style={{ fontSize: '7px', color: '#3B82F6', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.2)', padding: '3px 7px', borderRadius: '100px', fontFamily: 'DM Mono,monospace', whiteSpace: 'nowrap' as const }}>{t}</span>
             ))}
           </div>
         </div>
 
-        <div style={{ background: '#0A0A0F', borderRadius: '10px', padding: '16px 20px' }}>
-          <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>The two paths from LaunchPilot</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '16px', alignItems: 'center' }}>
-            <div style={{ padding: '14px', background: 'rgba(29,158,117,0.1)', border: '1px solid rgba(29,158,117,0.2)', borderRadius: '8px' }}>
-              <div style={{ fontSize: '16px', marginBottom: '6px' }}>🚀</div>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#4ADE80', marginBottom: '4px', fontFamily: 'Playfair Display,serif' }}>Path A — Startup works</div>
-              <div style={{ fontSize: '9px', color: '#AAA', lineHeight: '1.5' }}>Revenue, team, traction. You have a real business. LaunchPilot was the launchpad.</div>
+        {/* What it opens — 2 col clean */}
+        <div style={{ fontSize: '8px', color: '#3B82F6', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>What the Woolf MBA opens up</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          {[
+            { icon: '🚀', title: 'Operator roles at high-growth startups', desc: 'COO, VP Product, Head of Growth — companies that want founders who tried' },
+            { icon: '💼', title: 'VC and investor roles', desc: 'Scouts, analysts and principals at seed and Series A funds hiring for judgment' },
+            { icon: '🌍', title: 'Global mobility', desc: 'Recognised credential for visa applications and employer sponsorships internationally' },
+            { icon: '🤝', title: 'Executive alumni network', desc: 'Woolf alumni across 30+ countries — operators, founders and investors' },
+          ].map((item) => (
+            <div key={item.title} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', padding: '12px 14px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '8px' }}>
+              <span style={{ fontSize: '16px', flexShrink: 0 }}>{item.icon}</span>
+              <div>
+                <div style={{ fontSize: '10px', fontWeight: '700', color: '#111', marginBottom: '2px', lineHeight: '1.3' }}>{item.title}</div>
+                <div style={{ fontSize: '9px', color: '#888', lineHeight: '1.4' }}>{item.desc}</div>
+              </div>
             </div>
-            <div style={{ fontSize: '20px', color: '#333', textAlign: 'center' }}>or</div>
-            <div style={{ padding: '14px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: '8px' }}>
-              <div style={{ fontSize: '16px', marginBottom: '6px' }}>🎓</div>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#60A5FA', marginBottom: '4px', fontFamily: 'Playfair Display,serif' }}>Path B — Startup doesn't</div>
-              <div style={{ fontSize: '9px', color: '#AAA', lineHeight: '1.5' }}>Woolf MBA opens doors. You join a high-growth startup as a senior operator with real founder credibility.</div>
-            </div>
-          </div>
+          ))}
         </div>
       </PageWrapper>
 
