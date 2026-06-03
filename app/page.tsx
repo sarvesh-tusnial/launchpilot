@@ -1,4 +1,6 @@
+'use client'
 import Link from 'next/link'
+import { useState, useRef, useEffect } from 'react'
 
 const PATHWAYS = [
   { code: 'P01', emoji: '🤖', name: 'AI Tech Business',     avgRevenue: '$4.2K', timeToRevenue: '6 wks' },
@@ -62,7 +64,489 @@ const JOURNEY = [
   },
 ]
 
+
+// ── Chat types & data ──────────────────────────────────────────────────
+type ChatStep = 'name' | 'idea' | 'category' | 'biz_name' | 'challenges' | 'stage' | 'generating' | 'plan'
+
+const CATEGORIES = [
+  { id: 'saas', label: 'SaaS / Software' },
+  { id: 'marketplace', label: 'Marketplace' },
+  { id: 'd2c', label: 'D2C / E-commerce' },
+  { id: 'edtech', label: 'EdTech' },
+  { id: 'fintech', label: 'FinTech' },
+  { id: 'consulting', label: 'Consulting / Agency' },
+  { id: 'community', label: 'Community / Content' },
+  { id: 'other', label: 'Something else' },
+]
+
+const CHALLENGES = [
+  { id: 'validation', label: 'Validating my idea' },
+  { id: 'pmf', label: 'Finding product-market fit' },
+  { id: 'revenue', label: 'Getting first revenue' },
+  { id: 'marketing', label: 'Marketing & distribution' },
+  { id: 'fundraising', label: 'Fundraising / investors' },
+  { id: 'team', label: 'Building a team' },
+  { id: 'product', label: 'Building the product' },
+  { id: 'scale', label: 'Scaling what\'s working' },
+]
+
+const STAGES = [
+  { id: '0-1', label: 'Just an idea — haven\'t started yet' },
+  { id: '1-10', label: 'Early stage — some customers / revenue' },
+  { id: '10-100', label: 'Growing — proven model, scaling now' },
+]
+
+const TRACK_NAMES: Record<string, string> = {
+  validation: 'Idea Validation & PMF', pmf: 'Product-Market Fit',
+  revenue: 'Revenue & Sales', marketing: 'Marketing & Growth',
+  fundraising: 'Fundraising & Investors', team: 'Team Building',
+  product: 'Product & Tech', scale: 'Scale & Operations',
+}
+
+const PLAN_MENTORS = [
+  { name: 'Prantik Mazumdar', role: 'President, TiE Singapore', company: 'Exited Entrepreneur', img: '/images/mentors/prantik-mazumdar.jpg', tags: ['entrepreneurship','sales','GTM','startups'] },
+  { name: 'Jason Kraus', role: 'Founder, Prepare4VC', company: 'Partner, EQx Fund', img: '/images/mentors/jason-kraus.jpg', tags: ['fundraising','VC','finance'] },
+  { name: 'Renuka Belwalkar', role: 'Investor', company: 'Forbes Under 30 Scholar', img: '/images/mentors/renuka-belwalkar.jpg', tags: ['D2C','brand','marketing'] },
+  { name: 'Yash Shah', role: 'GenAI Head India & SEA', company: 'Amazon Web Services', img: '/images/mentors/yash-shah.jpg', tags: ['AI','SaaS','product','tech'] },
+  { name: 'Andrew Chow', role: 'Co-Founder', company: 'Asia Pro Ventures', img: '/images/mentors/andrew-chow.jpg', tags: ['marketplace','consumer','growth'] },
+  { name: 'Daniel Ling', role: 'ex-VP Design', company: 'DBS & Lazada', img: '/images/mentors/daniel-ling.jpg', tags: ['product','growth','retention'] },
+  { name: 'Rajesh Setty', role: '19x Author', company: 'Founder Institute', img: '/images/mentors/rajesh-shetty.jpg', tags: ['entrepreneurship','B2B','leadership'] },
+  { name: 'Sarvash Malani', role: 'DeepTech VC', company: 'Temasek', img: '/images/mentors/sarvash-malani.jpg', tags: ['fundraising','SaaS','AI','seed'] },
+  { name: 'Justin Strackany', role: 'LP at GTMFund', company: '3 exits (Vista)', img: '/images/mentors/justin-strackany.jpg', tags: ['GTM','sales','B2B'] },
+  { name: 'Gaurav Thakkar', role: 'Principal VC', company: 'Silicon Road', img: '/images/mentors/gaurav-thakkar.jpg', tags: ['VC','India','consumer'] },
+  { name: 'John Lim', role: 'Partner', company: 'Meet Ventures SG', img: '/images/mentors/john-lim.jpg', tags: ['brand','D2C','marketing'] },
+  { name: 'Sarvesh Tusnial', role: 'Co-Founder, LaunchPilot', company: 'ex-EY', img: '/images/mentors/sarvesh-tusnial.jpg', tags: ['edtech','sales','revenue'] },
+]
+
+const PLAN_SPRINTS = [
+  { name: 'Design Thinking', desc: 'Customer empathy, problem framing, rapid prototyping.', tags: ['validation','pmf','product'] },
+  { name: 'Product Sprint', desc: 'From idea to MVP — roadmap, prioritisation, launch planning.', tags: ['product','pmf','validation'] },
+  { name: 'Marketing Sprint', desc: 'Positioning, content, paid and organic channels.', tags: ['marketing','revenue','scale'] },
+  { name: 'Sales Sprint', desc: 'B2B and B2C sales frameworks, outreach, closing techniques.', tags: ['revenue','marketing'] },
+  { name: 'Fundraising Sprint', desc: 'Investor narrative, pitch deck, seed round mechanics.', tags: ['fundraising'] },
+  { name: 'Leadership Sprint', desc: 'Hiring, culture, managing a founding team.', tags: ['team','scale'] },
+  { name: 'AI Tools Sprint', desc: 'Automate your business with AI tools and workflows.', tags: ['product','scale'] },
+  { name: 'Growth Hacking', desc: 'Referral loops, SEO, viral mechanics, compounding growth.', tags: ['marketing','scale','revenue'] },
+]
+
+const PLAN_SESSIONS = [
+  { theme: 'Investor Roundtable', desc: 'Pitch to active seed investors and get live feedback on your narrative.' },
+  { theme: 'Founder Fireside', desc: 'Closed-room with founders who crossed ₹1Cr ARR — unfiltered stories.' },
+  { theme: 'GTM Masterclass', desc: 'Go-to-market workshop with founders who launched across India and SEA.' },
+  { theme: 'PMF Lab', desc: 'Validate your PMF hypothesis with real customer interviews, facilitated live.' },
+  { theme: 'Sales Simulation Day', desc: 'Role-play 10 real sales scenarios — cold calls, demos, objection handling.' },
+]
+
+async function generateRoadmapPlan(userData: { name: string; idea: string; category: string; bizName: string; challenges: string[]; stage: string }) {
+  const trackNames = userData.challenges.slice(0, 3).map(c => TRACK_NAMES[c] || c)
+  const mentors = PLAN_MENTORS.filter(m => userData.challenges.some(c => m.tags.some(t => t.includes(c) || c.includes(t)))).slice(0, 5)
+  const finalMentors = mentors.length >= 3 ? mentors : PLAN_MENTORS.slice(0, 5)
+  const sprints = PLAN_SPRINTS.filter(s => userData.challenges.some(c => s.tags.includes(c))).slice(0, 6)
+  const finalSprints = sprints.length >= 3 ? sprints : PLAN_SPRINTS.slice(0, 6)
+
+  const prompt = `You are a startup advisor. Generate a personalised program plan for this founder.
+FOUNDER: ${userData.name}
+BUSINESS: ${userData.bizName}
+CATEGORY: ${userData.category}
+IDEA: ${userData.idea}
+STAGE: ${userData.stage}
+TOP CHALLENGES: ${userData.challenges.slice(0, 3).join(', ')}
+TRACKS: ${trackNames.join(', ')}
+Return ONLY valid JSON:
+{
+  "headline": "one powerful line about what this founder can achieve — specific to their business, max 12 words",
+  "track_descriptions": ["1 sentence on what they learn in track 1 specific to ${userData.bizName}", "track 2", "track 3"],
+  "critical_questions": ["sharp question max 10 words", "question 2", "question 3", "question 4"],
+  "timeline": [
+    { "month": "Month 1", "milestone": "short title", "description": "specific to ${userData.bizName}" },
+    { "month": "Month 2", "milestone": "...", "description": "..." },
+    { "month": "Month 3", "milestone": "...", "description": "..." },
+    { "month": "Month 4", "milestone": "...", "description": "..." },
+    { "month": "Month 5", "milestone": "...", "description": "..." },
+    { "month": "Month 6", "milestone": "...", "description": "..." }
+  ],
+  "tools_highlight": "1 sentence on the most useful tools for ${userData.bizName} from our 500+ deals platform"
+}`
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] }),
+  })
+  const data = await res.json()
+  const text = data.content?.[0]?.text || '{}'
+  const parsed = JSON.parse(text.replace(/```json|```/g, '').trim())
+  return {
+    ...parsed,
+    tracks: trackNames.map((name, i) => ({ name, description: parsed.track_descriptions?.[i] || '' })),
+    mentors: finalMentors,
+    sprints: finalSprints,
+    sessions: PLAN_SESSIONS,
+  }
+}
+
+// ── Maya Chat Widget ───────────────────────────────────────────────────
+function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, userData: any) => void }) {
+  const [step, setStep] = useState<ChatStep>('name')
+  const [name, setName] = useState('')
+  const [idea, setIdea] = useState('')
+  const [category, setCategory] = useState('')
+  const [bizName, setBizName] = useState('')
+  const [challenges, setChallenges] = useState<string[]>([])
+  const [inputVal, setInputVal] = useState('')
+  const [messages, setMessages] = useState<{ role: 'maya' | 'user'; text: string }[]>([
+    { role: 'maya', text: "Hey! I'm Maya. Answer 6 quick questions and I'll build your personalised launch roadmap — mentors, milestones, sprints, all tailored to your idea. What's your name?" }
+  ])
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, step])
+
+  const addMsg = (role: 'maya' | 'user', text: string) => setMessages(m => [...m, { role, text }])
+
+  const handleSend = () => {
+    const val = inputVal.trim()
+    if (!val) return
+    setInputVal('')
+    if (step === 'name') {
+      setName(val); addMsg('user', val)
+      addMsg('maya', `Great to meet you, ${val.split(' ')[0]}! What\'s your business idea — what are you building?`)
+      setStep('idea')
+    } else if (step === 'idea') {
+      setIdea(val); addMsg('user', val)
+      addMsg('maya', 'Love it. What type of business is this?')
+      setStep('category')
+    } else if (step === 'biz_name') {
+      const bn = val === 'skip' ? 'My Business' : val
+      setBizName(bn); addMsg('user', val === 'skip' ? 'No name yet' : val)
+      addMsg('maya', "Got it. What are your 3 biggest challenges right now? Pick up to 3 — these become your tracks.")
+      setStep('challenges')
+    }
+  }
+
+  const handleCategory = (cat: typeof CATEGORIES[0]) => {
+    setCategory(cat.label); addMsg('user', cat.label)
+    addMsg('maya', 'Perfect. Does your business have a name yet?')
+    setStep('biz_name')
+  }
+
+  const toggleChallenge = (id: string) => {
+    setChallenges(prev => prev.includes(id) ? prev.filter(c => c !== id) : prev.length < 3 ? [...prev, id] : prev)
+  }
+
+  const handleChallengesDone = () => {
+    if (challenges.length === 0) return
+    addMsg('user', challenges.map(c => CHALLENGES.find(ch => ch.id === c)?.label || c).join(', '))
+    addMsg('maya', 'These become your 3 learning tracks. Last question — what stage are you at?')
+    setStep('stage')
+  }
+
+  const handleStage = async (s: typeof STAGES[0]) => {
+    addMsg('user', s.label)
+    addMsg('maya', 'Building your personalised roadmap now...')
+    setStep('generating')
+    try {
+      const result = await generateRoadmapPlan({ name, idea, category, bizName, challenges, stage: s.id })
+      onPlanGenerated(result, { name, bizName })
+    } catch {
+      addMsg('maya', 'Something went wrong. Please try again.')
+      setStep('stage')
+    }
+  }
+
+  const stepsList: ChatStep[] = ['name','idea','category','biz_name','challenges','stage']
+  const currentStepIdx = stepsList.indexOf(step)
+
+  return (
+    <div style={{ width: '100%', maxWidth: '640px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.4)' }}>
+      {/* Header */}
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(108,71,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#fff', fontFamily: 'Fraunces,serif' }}>M</div>
+        <div>
+          <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>Maya · LaunchPilot AI</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#4ADE80', display: 'inline-block', animation: 'pulse 2s infinite' }} />
+            <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Building your roadmap</span>
+          </div>
+        </div>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
+          {stepsList.map((_, i) => (
+            <div key={i} style={{ width: i === currentStepIdx ? '16px' : '6px', height: '6px', borderRadius: '3px', background: i < currentStepIdx ? '#6C47FF' : i === currentStepIdx ? '#8B6FFF' : 'rgba(255,255,255,0.1)', transition: 'all 0.3s' }} />
+          ))}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div style={{ height: '260px', overflowY: 'auto', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {messages.map((m, i) => (
+          <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-end' }}>
+            {m.role === 'maya' && (
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: '700', color: '#fff', flexShrink: 0 }}>M</div>
+            )}
+            <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? 'rgba(108,71,255,0.15)' : 'rgba(255,255,255,0.05)', border: m.role === 'user' ? '1px solid rgba(108,71,255,0.25)' : '1px solid rgba(255,255,255,0.08)', fontSize: '13px', color: '#D4D0CC', lineHeight: '1.65' }}>
+              {m.text}
+            </div>
+          </div>
+        ))}
+        {step === 'generating' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#fff' }}>M</div>
+            <div style={{ display: 'flex', gap: '4px', padding: '10px 14px', borderRadius: '4px 14px 14px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              {[0,1,2].map(d => <div key={d} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6C47FF', animation: `pulse 1.2s ${d * 0.2}s infinite` }} />)}
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '12px 14px' }}>
+        {step === 'category' && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+            {CATEGORIES.map(c => (
+              <button key={c.id} onClick={() => handleCategory(c)} style={{ padding: '9px 14px', borderRadius: '8px', background: 'rgba(108,71,255,0.08)', border: '1px solid rgba(108,71,255,0.2)', color: '#C8C4BC', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{c.label}</button>
+            ))}
+          </div>
+        )}
+        {step === 'challenges' && (
+          <div>
+            <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#555', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '8px' }}>Pick up to 3 — these become your tracks</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '10px' }}>
+              {CHALLENGES.map(c => {
+                const sel = challenges.includes(c.id)
+                return (
+                  <button key={c.id} onClick={() => toggleChallenge(c.id)} style={{ padding: '9px 12px', borderRadius: '8px', background: sel ? 'rgba(108,71,255,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${sel ? 'rgba(108,71,255,0.4)' : 'rgba(255,255,255,0.08)'}`, color: sel ? '#C8C4BC' : '#777', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                    <span style={{ width: '13px', height: '13px', borderRadius: '3px', border: sel ? '2px solid #8B6FFF' : '1px solid rgba(255,255,255,0.2)', background: sel ? '#6C47FF' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: '#fff' }}>{sel ? '✓' : ''}</span>
+                    {c.label}
+                  </button>
+                )
+              })}
+            </div>
+            <button onClick={handleChallengesDone} disabled={challenges.length === 0} style={{ width: '100%', padding: '11px', borderRadius: '10px', border: 'none', background: challenges.length > 0 ? '#6C47FF' : 'rgba(108,71,255,0.2)', color: challenges.length > 0 ? '#fff' : 'rgba(255,255,255,0.3)', fontFamily: 'inherit', fontWeight: '700', fontSize: '14px', cursor: challenges.length > 0 ? 'pointer' : 'default' }}>
+              {challenges.length === 0 ? 'Select your challenges' : `Continue with ${challenges.length} challenge${challenges.length > 1 ? 's' : ''} →`}
+            </button>
+          </div>
+        )}
+        {step === 'stage' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {STAGES.map(s => (
+              <button key={s.id} onClick={() => handleStage(s)} style={{ padding: '11px 16px', borderRadius: '10px', background: 'rgba(108,71,255,0.08)', border: '1px solid rgba(108,71,255,0.2)', color: '#C8C4BC', fontSize: '13px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{s.label}</button>
+            ))}
+          </div>
+        )}
+        {(step === 'name' || step === 'idea' || step === 'biz_name') && (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input value={inputVal} onChange={e => setInputVal(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()}
+              placeholder={step === 'name' ? 'Your first name...' : step === 'idea' ? 'Describe your idea...' : 'Business name...'}
+              autoFocus style={{ flex: 1, padding: '11px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }} />
+            {step === 'biz_name' && (
+              <button onClick={() => { setInputVal('skip'); setTimeout(handleSend, 0) }} style={{ padding: '11px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888', fontSize: '11px', cursor: 'pointer', fontFamily: 'DM Mono,monospace', whiteSpace: 'nowrap' as const }}>No name yet</button>
+            )}
+            <button onClick={handleSend} disabled={!inputVal.trim()} style={{ width: '42px', height: '42px', borderRadius: '10px', border: 'none', background: inputVal.trim() ? '#6C47FF' : 'rgba(108,71,255,0.3)', color: '#fff', fontSize: '16px', cursor: inputVal.trim() ? 'pointer' : 'default', flexShrink: 0 }}>→</button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── Plan page (full screen overlay) ───────────────────────────────────
+function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: string; bizName: string; onBack: () => void }) {
+  const firstName = name.split(' ')[0]
+  return (
+    <div style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans',system-ui,sans-serif", color: '#E8E6E0' }}>
+      <style>{`
+        .plan-serif{font-family:'Fraunces',Georgia,serif}
+        .plan-mono{font-family:'DM Mono',monospace}
+        @keyframes planFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .plan-fade{animation:planFadeUp 0.5s ease both}
+        .p-d1{animation-delay:0.1s}.p-d2{animation-delay:0.2s}.p-d3{animation-delay:0.3s}
+        ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+        .plan-sprints{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .plan-timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+        @media(max-width:768px){.plan-sprints{grid-template-columns:1fr!important}.plan-timeline{grid-template-columns:1fr 1fr!important}.plan-pad{padding:32px 20px 80px!important}.plan-hbar{padding:14px 20px!important}}
+        @media(max-width:480px){.plan-timeline{grid-template-columns:1fr!important}}
+      `}</style>
+
+      {/* Top bar */}
+      <div className="plan-hbar" style={{ position: 'sticky', top: 0, zIndex: 100, padding: '14px 48px', background: 'rgba(5,3,9,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(108,71,255,0.2)', border: '1px solid rgba(108,71,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#8B6FFF' }} />
+          </div>
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>{bizName === 'My Business' ? 'Your' : bizName} Roadmap</div>
+            <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '8px', color: '#444', textTransform: 'uppercase' as const, letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={onBack} style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Mono,monospace' }}>← Start over</button>
+          <Link href="/apply" style={{ padding: '9px 20px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
+        </div>
+      </div>
+
+      <div className="plan-pad" style={{ maxWidth: '780px', margin: '0 auto', padding: '52px 48px 100px' }}>
+
+        {/* Hero */}
+        <div className="plan-fade" style={{ marginBottom: '56px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#6C47FF', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
+          <h1 className="plan-serif" style={{ fontSize: 'clamp(30px,5vw,50px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '14px' }}>
+            Hey {firstName},<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>{plan.headline || 'your launch roadmap is ready.'}</span>
+          </h1>
+          <p style={{ fontSize: '15px', color: '#AAA', lineHeight: '1.8', maxWidth: '520px' }}>
+            Based on your idea and challenges — here's exactly what LaunchPilot will help you build, tailored to {bizName === 'My Business' ? 'your business' : bizName}.
+          </p>
+        </div>
+
+        {/* Tracks */}
+        <div className="plan-fade p-d1" style={{ marginBottom: '48px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#8B6FFF', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Your 3 focus areas</div>
+          <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>Built around your biggest challenges</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {plan.tracks?.map((t: any, i: number) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(108,71,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '10px', fontWeight: '700', color: '#8B6FFF' }}>0{i+1}</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6', marginBottom: '2px' }}>{t.name}</div>
+                  <div style={{ fontSize: '12px', color: '#888', lineHeight: '1.5' }}>{t.description}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mentors */}
+        <div className="plan-fade p-d1" style={{ marginBottom: '48px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#1D9E75', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Your mentors</div>
+          <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>From 100+ mentors, shortlisted for {bizName === 'My Business' ? 'you' : bizName}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
+            {plan.mentors?.slice(0, 5).map((m: any, i: number) => (
+              <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '9px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(29,158,117,0.25)', flexShrink: 0, background: 'rgba(29,158,117,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {m.img ? <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} onError={e => { (e.target as HTMLImageElement).style.display='none' }} />
+                    : <span style={{ fontSize: '13px', fontWeight: '700', color: '#1D9E75' }}>{m.name?.[0]}</span>}
+                </div>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>{m.name}</div>
+                  <div style={{ fontSize: '11px', color: '#888' }}>{m.role} · {m.company}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sprints */}
+        <div className="plan-fade p-d2" style={{ marginBottom: '48px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#BA7517', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Monthly sprints</div>
+          <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>6 sprints lined up — 4 weeks each</div>
+          <div className="plan-sprints">
+            {plan.sprints?.slice(0, 6).map((s: any, i: number) => (
+              <div key={i} style={{ padding: '13px 15px', background: i%2===0 ? 'rgba(186,117,23,0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px', borderTop: `2px solid ${i%2===0 ? 'rgba(186,117,23,0.4)' : 'rgba(108,71,255,0.3)'}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '5px' }}>
+                  <div style={{ width: '17px', height: '17px', borderRadius: '50%', background: i%2===0 ? 'rgba(186,117,23,0.15)' : 'rgba(108,71,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '7px', fontWeight: '700', color: i%2===0 ? '#BA7517' : '#8B6FFF' }}>{String(i+1).padStart(2,'0')}</span>
+                  </div>
+                  <div style={{ fontSize: '12px', fontWeight: '600', color: '#F0EDE6' }}>{s.name}</div>
+                </div>
+                <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.55' }}>{s.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Sessions */}
+        <div className="plan-fade p-d2" style={{ marginBottom: '48px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#6C47FF', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Experiential sessions</div>
+          <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>Live sessions every Sunday — these 5 are most useful for you</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {plan.sessions?.slice(0, 5).map((s: any, i: number) => (
+              <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '9px' }}>
+                <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(108,71,255,0.12)', border: '1px solid rgba(108,71,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '8px', fontWeight: '700', color: '#8B6FFF' }}>{String(i+1).padStart(2,'0')}</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '2px' }}>{s.theme}</div>
+                  <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.5' }}>{s.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tools */}
+        <div className="plan-fade p-d2" style={{ marginBottom: '48px' }}>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#60A5FA', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Tools & deals</div>
+          <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>500+ tools — free or heavily discounted</div>
+          <div style={{ padding: '16px 18px', background: 'rgba(96,165,250,0.05)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '12px' }}>
+            <p style={{ fontSize: '13px', color: '#AAA', lineHeight: '1.7' }}>{plan.tools_highlight || `As a LaunchPilot member you get access to 500+ tools and software deals — everything you need to build, launch and grow.`}</p>
+          </div>
+        </div>
+
+        {/* Timeline */}
+        {plan.timeline && (
+          <div className="plan-fade p-d3" style={{ marginBottom: '48px' }}>
+            <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#AAA', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Your 6-month northstar</div>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>The journey ahead</div>
+            <div className="plan-timeline">
+              {plan.timeline.map((t: any, i: number) => {
+                const cols = ['#8B6FFF','#7A6FFF','#6C47FF','#1D9E75','#17876A','#117055']
+                const col = cols[i] || '#8B6FFF'
+                return (
+                  <div key={i} style={{ margin: '0 3px 6px', padding: '13px 12px', background: `${col}08`, border: `1px solid ${col}20`, borderRadius: '9px', borderTop: `2px solid ${col}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '6px' }}>
+                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: `${col}18`, border: `1px solid ${col}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '7px', fontWeight: '700', color: col }}>M{i+1}</span>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#F0EDE6', marginBottom: '3px', lineHeight: '1.3' }}>{t.milestone}</div>
+                    <div style={{ fontSize: '10px', color: '#888', lineHeight: '1.5' }}>{t.description}</div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Critical questions */}
+        {plan.critical_questions && (
+          <div className="plan-fade p-d3" style={{ marginBottom: '56px' }}>
+            <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#D85A30', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Before you begin</div>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>Questions your business must answer</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {plan.critical_questions.map((q: string, i: number) => (
+                <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '12px 14px', background: 'rgba(216,90,48,0.04)', border: '1px solid rgba(216,90,48,0.12)', borderRadius: '9px' }}>
+                  <span style={{ fontSize: '15px', color: '#D85A30', flexShrink: 0 }}>?</span>
+                  <span style={{ fontSize: '13px', color: '#E8E6E0', fontWeight: '500' }}>{q}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* CTA */}
+        <div style={{ padding: '40px', background: 'rgba(108,71,255,0.06)', border: '1px solid rgba(108,71,255,0.18)', borderRadius: '20px', textAlign: 'center' }}>
+          <div className="plan-serif" style={{ fontSize: 'clamp(22px,4vw,34px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '10px' }}>This roadmap is waiting for you.</div>
+          <p style={{ fontSize: '14px', color: '#888', lineHeight: '1.7', maxWidth: '400px', margin: '0 auto 24px' }}>Apply for a spot on LaunchPilot — we review every application within 24 hours.</p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 36px', borderRadius: '10px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '15px', fontWeight: '700' }}>Apply for a spot →</Link>
+            <button onClick={onBack} style={{ padding: '14px 24px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#AAA', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>Start over</button>
+          </div>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '10px', color: '#333', marginTop: '14px', letterSpacing: '0.06em' }}>Rolling admissions · Review within 24 hours</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
+  const [roadmapPlan, setRoadmapPlan] = useState<any>(null)
+  const [planUserData, setPlanUserData] = useState<{ name: string; bizName: string } | null>(null)
+
+  if (roadmapPlan && planUserData) {
+    return <RoadmapPlanPage plan={roadmapPlan} name={planUserData.name} bizName={planUserData.bizName} onBack={() => { setRoadmapPlan(null); setPlanUserData(null) }} />
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#F0EDE6', overflowX: 'hidden' }}>
       <style>{`
@@ -126,15 +610,14 @@ export default function HomePage() {
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#6C47FF', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             <span className="mono" style={{ fontSize: '10px', color: '#8B6FFF', textTransform: 'uppercase', letterSpacing: '0.16em' }}>10 pathways · idea to first revenue</span>
           </div>
-          <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(52px, 7.5vw, 92px)', fontWeight: '900', lineHeight: '1.01', letterSpacing: '-0.03em', marginBottom: '24px' }}>
-            Stop planning.<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>Start launching with personalised pathways.</span>
+          <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(44px, 7vw, 84px)', fontWeight: '900', lineHeight: '1.01', letterSpacing: '-0.03em', marginBottom: '16px' }}>
+            Stop planning.<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>Start launching.</span>
           </h1>
-          <p className="fade-up d3" style={{ fontSize: '18px', color: '#777', lineHeight: '1.75', maxWidth: '520px', margin: '0 auto 48px', fontWeight: '400' }}>
-            25 structured steps for each launch pathway, taking you from idea to first revenue — built for working professionals who are serious about building a business on the side.
+          <p className="fade-up d3" style={{ fontSize: '17px', color: '#777', lineHeight: '1.75', maxWidth: '480px', margin: '0 auto 36px', fontWeight: '400' }}>
+            Answer 6 questions — Maya builds your personalised launch roadmap in seconds.
           </p>
-          <div className="fade-up d3 hero-btns" style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '64px' }}>
-            <Link href="/apply" className="cta" style={{ padding: '15px 40px', borderRadius: '10px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>Apply for a spot →</Link>
-            <Link href="/auth/login" className="ghost" style={{ padding: '15px 32px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#AAA', textDecoration: 'none', fontSize: '16px', fontWeight: '500' }}>Sign In</Link>
+          <div className="fade-up d3" style={{ display: 'flex', justifyContent: 'center', marginBottom: '48px' }}>
+            <MayaChatWidget onPlanGenerated={(plan, userData) => { setRoadmapPlan(plan); setPlanUserData(userData) }} />
           </div>
           <div className='hero-stats' style={{ display: 'flex', gap: '48px', justifyContent: 'center', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             {[{ n: '10', l: 'Launch Pathways' }, { n: '24/7', l: 'Available AI Coach' }, { n: '6 wks', l: 'Avg. time to revenue' }, { n: '94%', l: 'Completion rate' }].map(s => (
