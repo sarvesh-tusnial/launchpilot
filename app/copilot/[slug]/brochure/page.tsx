@@ -112,7 +112,7 @@ export default function BrochurePage() {
       <style>{CSS}</style>
 
       {/* Top bar */}
-      <div className="no-print" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0A0A0F', padding: '10px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="no-print" className="no-print print-bar" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: '#0A0A0F', padding: '10px 36px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '16px', fontWeight: '900', color: '#FF6A00', fontFamily: 'Playfair Display,serif' }}>Launch<span style={{ color: '#fff' }}>Pilot</span></span>
           <span style={{ fontSize: '8px', color: '#333', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Personalised Brochure · {cp.business_name}</span>
@@ -139,14 +139,14 @@ export default function BrochurePage() {
           </div>
           <div style={{ position: 'relative' }}>
             <div style={{ fontSize: '9px', color: '#FF8C00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '10px' }}>LaunchPilot's Personalised Program for</div>
-            <div style={{ fontSize: '56px', fontWeight: '900', color: '#fff', fontFamily: 'Playfair Display,serif', lineHeight: '1.0', letterSpacing: '-0.03em', marginBottom: '16px' }}>{cp.business_name}</div>
+            <div className="cover-biz" style={{ fontSize: '56px', fontWeight: '900', color: '#fff', fontFamily: 'Playfair Display,serif', lineHeight: '1.0', letterSpacing: '-0.03em', marginBottom: '16px' }}>{cp.business_name}</div>
             <div style={{ width: '60px', height: '4px', background: '#FF6A00', borderRadius: '2px', marginBottom: '16px' }} />
             <div style={{ fontSize: '17px', color: '#FF8C00', fontFamily: 'Playfair Display,serif', fontStyle: 'italic', lineHeight: '1.3', maxWidth: '460px' }}>{bc.tagline}</div>
           </div>
         </div>
 
         {/* Meta */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', borderBottom: '1px solid #F0F0F0' }}>
+        <div className="meta-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', borderBottom: '1px solid #F0F0F0' }}>
           {[['Founder', cp.founder_name], ['Business', cp.business_name], ['Category', cp.business_category], ['Stage', cp.business_stage], ['Country', cp.country]].map(([l, v]) => (
             <div key={l} style={{ padding: '11px 16px', borderRight: '1px solid #F0F0F0' }}>
               <div style={{ fontSize: '7px', color: '#AAA', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '3px' }}>{l}</div>
@@ -237,7 +237,7 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="LaunchPilot AI" title={`How our AI works for ${cp.business_name}`} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
+        <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
           {/* Screenshot 1 — Hook */}
           <div style={{ border: '1px solid #E0E0E0', borderRadius: '10px', overflow: 'hidden' }}>
             <div style={{ background: '#0A0A0F', padding: '7px 12px', display: 'flex', alignItems: 'center', gap: '7px' }}>
@@ -319,7 +319,7 @@ export default function BrochurePage() {
         {/* What AI does differently */}
         <div style={{ background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px', padding: '16px 20px' }}>
           <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>What makes our AI different</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+          <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               ['Knows your business', `Built specifically for ${cp.business_name} — not generic advice`],
               ['Full memory', 'Remembers every session and every commitment you made'],
@@ -344,7 +344,7 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="Your Mentor Network" title={`Every mentor — their relevance to ${cp.business_name}`} />
         <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.7', marginBottom: '16px' }}>Our 100+ mentor network spans founders, VCs, operators and domain experts across India, Singapore, US and SEA. Every mentor below teaches inside the program through weekly live sessions. Here is why each one matters to {cp.business_name}.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+        <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           {allMentors.map((m: any, i: number) => (
             <MentorRow key={i} m={m} relevance={bc.mentor_relevance?.[m.name]} />
           ))}
@@ -359,7 +359,7 @@ export default function BrochurePage() {
           <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em' }}>6 Monthly Sprints — Most Relevant to You</div>
           <div style={{ fontSize: '8px', color: '#888', fontFamily: 'DM Mono,monospace', background: '#F0F0F0', padding: '3px 10px', borderRadius: '100px' }}>4 weeks each</div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {(bc.sprints || []).map((s: any, i: number) => (
             <div key={i} style={{ border: '1px solid #EEEEEE', borderRadius: '8px', overflow: 'hidden', borderTop: `3px solid ${i % 2 === 0 ? '#FF6A00' : '#0A0A0F'}` }}>
               <div style={{ padding: '10px 12px', background: i % 2 === 0 ? '#FFF8F3' : '#F8F8F8' }}>
@@ -392,13 +392,34 @@ export default function BrochurePage() {
             </div>
           ))}
         </div>
+
+        {/* Tools & Deals */}
+        <div style={{ marginTop: '20px', padding: '16px 18px', background: '#0A0A0F', borderRadius: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div>
+              <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '3px' }}>Tools & Deals Platform</div>
+              <div style={{ fontSize: '14px', fontWeight: '800', color: '#fff', fontFamily: 'Playfair Display,serif' }}>500+ tools — free or heavily discounted</div>
+            </div>
+            <div style={{ padding: '6px 14px', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', borderRadius: '100px' }}>
+              <span style={{ fontSize: '10px', fontWeight: '700', color: '#FF6A00', fontFamily: 'DM Mono,monospace' }}>Member Access</span>
+            </div>
+          </div>
+          <p style={{ fontSize: '10px', color: '#AAA', lineHeight: '1.65', marginBottom: '12px' }}>{bc.tools_highlight || `As a LaunchPilot member, you get access to 500+ tools and software deals — everything ${cp.business_name} needs to build, launch and grow without the full price tag.`}</p>
+          {bc.tools && bc.tools.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+              {bc.tools.map((tool: string, i: number) => (
+                <span key={i} style={{ fontSize: '9px', color: '#FF8C00', background: 'rgba(255,106,0,0.1)', border: '1px solid rgba(255,106,0,0.2)', padding: '3px 10px', borderRadius: '100px', fontFamily: 'DM Mono,monospace' }}>{tool}</span>
+              ))}
+            </div>
+          )}
+        </div>
       </PageWrapper>
 
       {/* ── PAGE 6: PAST STUDENTS ── */}
       <PageWrapper>
         <SectionHeader label="Our Community" title="Founders who started where you are" />
         <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.7', marginBottom: '20px' }}>These founders came in with an idea — many had doubts, no revenue, no team. They followed the program. Here is what happened.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {PAST_STUDENTS.map((s, i) => (
             <div key={i} style={{ display: 'flex', gap: '10px', padding: '10px 12px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px', borderLeft: `3px solid ${s.col}` }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${s.col}30`, flexShrink: 0, background: `${s.col}10`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -496,7 +517,7 @@ export default function BrochurePage() {
 
         {/* Real immersion photos */}
         <div style={{ fontSize: '7px', color: '#1D9E75', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '8px' }}>Real moments from our immersions</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', marginBottom: '20px' }}>
+        <div className="grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', marginBottom: '20px' }}>
           {[
             { src: '/images/immersions/singapore-1.jpg', city: 'Singapore', label: 'Jan 2025' },
             { src: '/images/immersions/dubai-1.jpg',     city: 'Dubai',     label: 'Feb 2025' },
@@ -517,7 +538,7 @@ export default function BrochurePage() {
 
                 {/* What happens */}
         <div style={{ fontSize: '8px', color: '#1D9E75', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>What happens at immersion</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
+        <div className="grid-2col" className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {[
             ['🤝', 'Investor Roundtables', 'Pitch your business to active investors in the room. Get term sheets, not just feedback.'],
             ['🎤', 'Mentor Dinners', 'Closed dinners with 2-3 senior mentors. Real conversations, not presentations.'],
@@ -538,7 +559,7 @@ export default function BrochurePage() {
         {timeline.length > 0 && (
           <>
             <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>Your 6-Month Northstar for {cp.business_name}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px' }}>
+            <div className="grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px' }}>
               {timeline.map((t: any, i: number) => {
                 const cols = ['#FF6A00', '#FF8C00', '#FFAA00', '#1D9E75', '#17876A', '#117055']
                 const col = cols[i] || '#FF6A00'
@@ -574,7 +595,7 @@ export default function BrochurePage() {
         </div>
 
         {/* Two paths — clean visual */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
+        <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '28px' }}>
           <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #EEEEEE' }}>
             <div style={{ background: '#1D9E75', padding: '14px 18px' }}>
               <div style={{ fontSize: '9px', fontFamily: 'DM Mono,monospace', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '4px' }}>Path A</div>
@@ -613,7 +634,7 @@ export default function BrochurePage() {
 
         {/* What it opens — 2 col clean */}
         <div style={{ fontSize: '8px', color: '#3B82F6', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>What the Woolf MBA opens up</div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+        <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           {[
             { icon: '🚀', title: 'Operator roles at high-growth startups', desc: 'COO, VP Product, Head of Growth — companies that want founders who tried' },
             { icon: '💼', title: 'VC and investor roles', desc: 'Scouts, analysts and principals at seed and Series A funds hiring for judgment' },
