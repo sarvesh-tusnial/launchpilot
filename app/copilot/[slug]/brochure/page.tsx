@@ -19,16 +19,7 @@ const PAST_STUDENTS = [
   { img: '/images/students/sumana.jpg',   name: 'Sumana Mandal',       before: 'Software Engineer',               after: 'Founder',                              program: 'PM MBA',                city: 'Kochi',         outcome: 'Complete career change',    col: '#4ADE80' },
 ]
 
-const STAGES = [
-  { n: '01', title: 'Hook',            desc: 'Real challenge. No lectures. Dropped into your business context immediately.' },
-  { n: '02', title: 'Reality Check',  desc: 'Accountability on last session\'s commitment. The AI never lets you skip.' },
-  { n: '03', title: 'Teach & Coach',  desc: 'Core concept through Socratic dialogue with examples from your industry.' },
-  { n: '04', title: 'Deep Dive',      desc: 'Edge cases, failure modes, pushback on your assumptions. Uncomfortable on purpose.' },
-  { n: '05', title: 'Quiz Gate',      desc: '5 scenario-based questions. Fail means re-teach — not move on.' },
-  { n: '06', title: 'Execution Task', desc: 'Real deliverable scored on 6 dimensions. Cold emails, pitch slides, pricing models.' },
-  { n: '07', title: 'Feedback Loop',  desc: 'What did this reveal? What assumption needs testing this week?' },
-  { n: '08', title: 'Action & Bridge', desc: 'One specific, time-bound commitment. Then bridged to the next concept.' },
-]
+
 
 function PageWrapper({ children, minH = false }: { children: React.ReactNode; minH?: boolean }) {
   return (
@@ -186,17 +177,7 @@ export default function BrochurePage() {
         <SectionHeader label="Your Program Structure" title={`AI Co-Pilot + Focus Areas for ${cp.business_name}`} />
         <p style={{ fontSize: '11px', color: '#555', lineHeight: '1.8', marginBottom: '20px' }}>{bc.ai_system_desc}</p>
 
-        {/* 8 stage strip */}
-        <div style={{ fontSize: '7px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '8px' }}>LaunchPilot AI — 8-Stage Session Framework</div>
-        <div style={{ display: 'flex', marginBottom: '24px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #E8E8E8' }}>
-          {STAGES.map((s, i) => (
-            <div key={s.n} style={{ flex: 1, background: i % 2 === 0 ? '#0A0A0F' : '#FF6A00', padding: '10px 6px', textAlign: 'center', borderRight: i < 7 ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
-              <div style={{ fontSize: '8px', fontWeight: '800', color: i % 2 === 0 ? '#FF6A00' : '#fff', fontFamily: 'DM Mono,monospace', marginBottom: '3px' }}>{s.n}</div>
-              <div style={{ fontSize: '8px', fontWeight: '700', color: '#fff', lineHeight: '1.2', marginBottom: '2px' }}>{s.title}</div>
-              <div style={{ fontSize: '7px', color: i % 2 === 0 ? '#666' : 'rgba(255,255,255,0.7)', lineHeight: '1.3' }}>{s.desc}</div>
-            </div>
-          ))}
-        </div>
+
 
         {/* Tracks */}
         <div style={{ fontSize: '7px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>Your 3 Focus Areas — Built for {cp.business_name}</div>
@@ -374,16 +355,21 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="Live Learning" title={`Sprints & Sunday Sessions for ${cp.business_name}`} />
 
-        <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>6 Monthly Sprints — Most Relevant to You</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <div style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em' }}>6 Monthly Sprints — Most Relevant to You</div>
+          <div style={{ fontSize: '8px', color: '#888', fontFamily: 'DM Mono,monospace', background: '#F0F0F0', padding: '3px 10px', borderRadius: '100px' }}>4 weeks each</div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {(bc.sprints || []).map((s: any, i: number) => (
-            <div key={i} style={{ display: 'flex', gap: '0', border: '1px solid #EEEEEE', borderRadius: '8px', overflow: 'hidden' }}>
-              <div style={{ width: '32px', background: '#0A0A0F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ fontSize: '9px', fontWeight: '800', color: '#FF6A00', fontFamily: 'DM Mono,monospace', writingMode: 'vertical-rl' as const, transform: 'rotate(180deg)' }}>S{String(i + 1).padStart(2, '0')}</span>
-              </div>
-              <div style={{ padding: '9px 14px', flex: 1 }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', color: '#111', marginBottom: '2px' }}>{s.name}</div>
-                <div style={{ fontSize: '9px', color: '#FF8C00', fontStyle: 'italic' }}>Why for {cp.business_name}: {s.why}</div>
+            <div key={i} style={{ border: '1px solid #EEEEEE', borderRadius: '8px', overflow: 'hidden', borderTop: `3px solid ${i % 2 === 0 ? '#FF6A00' : '#0A0A0F'}` }}>
+              <div style={{ padding: '10px 12px', background: i % 2 === 0 ? '#FFF8F3' : '#F8F8F8' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '5px' }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '5px', background: i % 2 === 0 ? '#FF6A00' : '#0A0A0F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: '8px', fontWeight: '800', color: '#fff', fontFamily: 'DM Mono,monospace' }}>S{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: '#111' }}>{s.name}</div>
+                </div>
+                <div style={{ fontSize: '9px', color: '#FF8C00', fontStyle: 'italic', lineHeight: '1.5' }}>For {cp.business_name}: {s.why}</div>
               </div>
             </div>
           ))}
@@ -519,8 +505,8 @@ export default function BrochurePage() {
             { src: '/images/immersions/bali-1.jpg',      city: 'Bali',      label: 'Apr 2025' },
             { src: '/images/immersions/singapore-2.jpg', city: 'Singapore', label: 'Aug 2025 · Capstone Day' },
           ].map((item, i) => (
-            <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', position: 'relative', height: '80px', background: '#F0F0F0' }}>
-              <img src={item.src} alt={item.city} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.background = '#E8E8E8' }} />
+            <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', position: 'relative', height: '96px', background: '#F0F0F0' }}>
+              <img src={item.src} alt={item.city} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block' }} onError={(e) => { const el = e.target as HTMLImageElement; el.style.display='none' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '4px 8px', background: 'linear-gradient(transparent,rgba(0,0,0,0.7))' }}>
                 <div style={{ fontSize: '8px', fontWeight: '700', color: '#fff' }}>{item.city}</div>
                 <div style={{ fontSize: '7px', color: 'rgba(255,255,255,0.6)', fontFamily: 'DM Mono,monospace' }}>{item.label}</div>
