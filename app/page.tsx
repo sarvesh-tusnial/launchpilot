@@ -66,7 +66,7 @@ const JOURNEY = [
 
 
 // ── Chat types & data ──────────────────────────────────────────────────
-type ChatStep = 'name' | 'idea' | 'category' | 'biz_name' | 'challenges' | 'stage' | 'generating' | 'done' | 'plan'
+type ChatStep = 'name' | 'category' | 'idea' | 'biz_name' | 'challenges' | 'stage' | 'generating' | 'done' | 'plan'
 
 const CATEGORIES = [
   { id: 'saas', label: 'SaaS / Software' },
@@ -191,12 +191,12 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
     setInputVal('')
     if (step === 'name') {
       setName(val); addMsg('user', val)
-      addMsg('maya', `Great to meet you, ${val.split(' ')[0]}! What\'s your business idea — what are you building?`)
-      setStep('idea')
+      addMsg('maya', `Great to meet you, ${val.split(' ')[0]}! What type of business are you building?`)
+      setStep('category')
     } else if (step === 'idea') {
       setIdea(val); addMsg('user', val)
-      addMsg('maya', 'Love it. What type of business is this?')
-      setStep('category')
+      addMsg('maya', "Got it. Does your business have a name yet?")
+      setStep('biz_name')
     } else if (step === 'biz_name') {
       const bn = val === 'skip' ? 'My Business' : val
       setBizName(bn); addMsg('user', val === 'skip' ? 'No name yet' : val)
@@ -207,8 +207,8 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
 
   const handleCategory = (cat: typeof CATEGORIES[0]) => {
     setCategory(cat.label); addMsg('user', cat.label)
-    addMsg('maya', 'Perfect. Does your business have a name yet?')
-    setStep('biz_name')
+    addMsg('maya', 'Perfect. Give me a one-liner — what is your business idea?')
+    setStep('idea')
   }
 
   const toggleChallenge = (id: string) => {
@@ -239,7 +239,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
     }
   }
 
-  const stepsList: ChatStep[] = ['name','idea','category','biz_name','challenges','stage','done']
+  const stepsList: ChatStep[] = ['name','category','idea','biz_name','challenges','stage','done']
   const currentStepIdx = stepsList.indexOf(step)
 
   return (
@@ -262,7 +262,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
       </div>
 
       {/* Messages */}
-      <div ref={messagesContainerRef} style={{ height: '256px', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div ref={messagesContainerRef} style={{ height: '220px', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-start', width: '100%' }}>
             {m.role === 'maya' && (
@@ -327,7 +327,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
         {(step === 'name' || step === 'idea' || step === 'biz_name') && (
           <div style={{ display: 'flex', gap: '8px' }}>
             <input value={inputVal} onChange={e => setInputVal(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()}
-              placeholder={step === 'name' ? 'Your first name...' : step === 'idea' ? 'Describe your idea...' : 'Business name...'}
+              placeholder={step === 'name' ? 'Your first name...' : step === 'idea' ? 'One-liner — what are you building?' : 'Business name...'}
               autoFocus style={{ flex: 1, padding: '11px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', outline: 'none', fontFamily: 'inherit' }} />
             {step === 'biz_name' && (
               <button onClick={() => { setInputVal('skip'); setTimeout(handleSend, 0) }} style={{ padding: '11px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888', fontSize: '11px', cursor: 'pointer', fontFamily: 'DM Mono,monospace', whiteSpace: 'nowrap' as const }}>No name yet</button>
@@ -573,7 +573,7 @@ export default function HomePage() {
           .roi-stats { grid-template-columns: 1fr 1fr !important; }
           .footer-inner { flex-direction: column !important; gap: 16px !important; align-items: center !important; text-align: center !important; }
           .section-pad { padding: 60px 16px !important; }
-          .hero-section { padding: 110px 16px 60px !important; }
+          .hero-section { padding: 80px 16px 40px !important; }
           .nav-pad { padding: 0 16px !important; }
           .screenshot-hide { display: none !important; }
         }
@@ -593,7 +593,7 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', textAlign: 'center', padding: '140px 24px 80px', position: 'relative' }}>
+      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', textAlign: 'center', padding: '100px 24px 60px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(255,106,0,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', maxWidth: '860px' }}>
@@ -601,10 +601,10 @@ export default function HomePage() {
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FF6A00', display: 'inline-block', animation: 'pulse 2s infinite' }} />
             <span className="mono" style={{ fontSize: '10px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.16em' }}>10 pathways · idea to first revenue</span>
           </div>
-          <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(44px, 7vw, 84px)', fontWeight: '900', lineHeight: '1.01', letterSpacing: '-0.03em', marginBottom: '16px' }}>
+          <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(36px, 5.5vw, 68px)', fontWeight: '900', lineHeight: '1.04', letterSpacing: '-0.03em', marginBottom: '16px' }}>
             Stop planning.<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>Start launching.</span>
           </h1>
-          <p className="fade-up d3" style={{ fontSize: '17px', color: '#777', lineHeight: '1.75', maxWidth: '480px', margin: '0 auto 36px', fontWeight: '400' }}>
+          <p className="fade-up d3" style={{ fontSize: '16px', color: '#777', lineHeight: '1.7', maxWidth: '480px', margin: '0 auto 24px', fontWeight: '400' }}>
             Answer 6 questions — Maya builds your personalised launch roadmap in seconds.
           </p>
           <div className="fade-up d3" style={{ display: 'flex', justifyContent: 'center', width: '100%', marginBottom: '48px' }}>
