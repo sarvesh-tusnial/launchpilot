@@ -477,7 +477,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const pdfBytes = await pdfDoc.save()
     const filename = `${cp.business_name.replace(/[^a-z0-9]/gi, '-')}-LaunchPilot-Program.pdf`
 
-    return new NextResponse(pdfBytes, {
+    return new NextResponse(Buffer.from(pdfBytes), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
