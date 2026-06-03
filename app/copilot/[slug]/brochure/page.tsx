@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 
 const PAST_STUDENTS = [
-  { name: 'Reyo Hashimoto',  business: 'Foliages',      category: 'D2C Plants · Singapore',  outcome: 'Launched in Singapore. First 50 orders in 3 weeks after validating with 12 real customers.', revenue: 'Rs. 2.1L / month', flag: '🇸🇬' },
-  { name: 'Karthik Menon',   business: 'Bubbler',       category: 'India SaaS',               outcome: 'Found 3 paying B2B clients in 6 weeks without building a single feature first.', revenue: '$2,800 MRR', flag: '🇮🇳' },
-  { name: 'Guliz Akar',      business: 'StyleStack',    category: 'Fashion D2C',              outcome: 'Pre-sold 120 units before the product existed. Validated price, demand and channel.', revenue: '$4,200 in pre-orders', flag: '🇹🇷' },
-  { name: 'Swarit Agarwal',  business: 'HealthDesk',    category: 'HealthTech · India',       outcome: 'Pivoted twice in 8 weeks, found real PMF, and closed a seed round from a Singapore VC.', revenue: 'Seed funded', flag: '🇮🇳' },
-  { name: 'Priya Nair',      business: 'MindfulMoms',   category: 'Community · India',        outcome: 'Built 800-member paid community in 10 weeks. No ads — pure word of mouth and referrals.', revenue: '$1,900 / month', flag: '🇮🇳' },
-  { name: 'James Okafor',    business: 'BuildrAI',      category: 'AI SaaS · Nigeria',        outcome: 'Shipped MVP in 4 weeks, landed first enterprise POC, hired 2 people with revenue.', revenue: '$6,000 / month', flag: '🇳🇬' },
+  { img: '/images/students/reyo.jpg',     name: 'Reyo Augustine',      before: 'Indian Airforce Pilot',            after: 'Founder at Foliages',                  program: 'PM MBA',                city: 'Bengaluru',     outcome: 'Profitable in 2 months',    col: '#FF6A00' },
+  { img: '/images/students/swarit.jpg',   name: 'Swarit Bharadwaj',    before: 'Undergraduate Student',            after: 'CTO at Influenzo',                     program: 'PM MBA',                city: 'Hyderabad',     outcome: 'Profitable',                col: '#F59E0B' },
+  { img: '/images/students/guliz.jpg',    name: 'Guliz Y',             before: 'Student at NUS Singapore',        after: 'Growth at Kavak.ai',                   program: 'PM MBA',                city: 'Bangalore',     outcome: 'Placed in 3 months',        col: '#4ADE80' },
+  { img: '/images/students/ananth.jpg',   name: 'Dr Ananth Srinivas',  before: 'Managing Director, Hathar',       after: 'Founder at Cartmed',                   program: 'PM MBA',                city: 'Singapore',     outcome: 'Revenue Generating',        col: '#60A5FA' },
+  { img: '/images/students/abhijith.jpg', name: 'Abhijith Jajio',      before: 'Lawyer',                          after: 'Founders Office, Series A Startup',    program: 'PM MBA',                city: 'Bengaluru',     outcome: 'Career Switch',             col: '#A78BFA' },
+  { img: '/images/students/alex.jpg',     name: 'Alex Hernandex',      before: 'Product Manager',                 after: 'Digital Transformation Lead, Meta',    program: 'Growth MBA',            city: 'Spain',         outcome: '2x salary in 6 months',     col: '#FB7185' },
+  { img: '/images/students/suraj.jpg',    name: 'Suraj Reddy',         before: 'Student at NYU Stern',            after: 'Medtech Founder',                      program: 'AI Agents MBA',         city: 'Dubai',         outcome: 'Family Business Expansion', col: '#2DD4BF' },
+  { img: '/images/students/rakesh.jpg',   name: 'Rakesh Palyam',       before: 'Associate Director at Zeta',      after: 'Director, Ascendion',                  program: 'Strategy & Leadership', city: 'Chennai',       outcome: '3x Salary in 5 months',     col: '#A78BFA' },
+  { img: '/images/students/charles.jpg',  name: 'Charles Bohannan',    before: 'Marketing Head',                  after: 'Growth Head, Wordful',                 program: 'PM MBA',                city: 'San Francisco', outcome: 'First job in 60 days',      col: '#818CF8' },
+  { img: '/images/students/sandhya.jpg',  name: 'Sandhya Pradhan',     before: 'Team Lead at IBM, Infosys',       after: 'Head of Growth, Mindler.ai',           program: 'PM MBA',                city: 'Delhi',         outcome: 'Hired in 45 days',          col: '#34D399' },
+  { img: '/images/students/samrudh.jpg',  name: 'Samrudh R',           before: 'Student at IIT-Madras',           after: 'Founder of BlendYeh',                  program: 'Strategy & Leadership', city: 'Mumbai',        outcome: 'Profitable | Student Founder', col: '#FB923C' },
+  { img: '/images/students/shivam.jpg',   name: 'Shivam Pal',          before: 'Data Scientist at Uola',          after: 'Product at Mvaak.ai',                  program: 'AI Agents MBA',         city: 'Mumbai',        outcome: 'Promoted internally',       col: '#60A5FA' },
+  { img: '/images/students/md.jpg',       name: 'Mohammed Elsifiwy',   before: 'Finance Analyst',                 after: 'Series A Founder',                     program: 'PM MBA',                city: 'Abu Dhabi',     outcome: 'Switched industry',         col: '#FB923C' },
+  { img: '/images/students/sumana.jpg',   name: 'Sumana Mandal',       before: 'Software Engineer',               after: 'Founder',                              program: 'PM MBA',                city: 'Kochi',         outcome: 'Complete career change',    col: '#4ADE80' },
 ]
 
 const STAGES = [
@@ -163,7 +171,7 @@ export default function BrochurePage() {
 
           {/* Stats */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
-            {[['6 weeks', 'Avg. time to first revenue'], ['94%', 'Program completion rate'], ['100+', 'Global mentor network'], ['8,000+', 'Founders trained']].map(([n, l]) => (
+            {[['6 weeks', 'Avg. time to first revenue'], ['94%', 'Program completion rate'], ['100+', 'Global mentor network'], ['500+', 'Founders trained']].map(([n, l]) => (
               <div key={l} style={{ textAlign: 'center', padding: '12px 8px', background: '#0A0A0F', borderRadius: '8px' }}>
                 <div style={{ fontSize: '20px', fontWeight: '900', color: '#FF6A00', fontFamily: 'Playfair Display,serif', letterSpacing: '-0.02em' }}>{n}</div>
                 <div style={{ fontSize: '8px', color: '#555', lineHeight: '1.3', marginTop: '4px', fontFamily: 'DM Mono,monospace' }}>{l}</div>
@@ -355,7 +363,7 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="Your Mentor Network" title={`Every mentor — their relevance to ${cp.business_name}`} />
         <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.7', marginBottom: '16px' }}>Our 100+ mentor network spans founders, VCs, operators and domain experts across India, Singapore, US and SEA. Every mentor below teaches inside the program through weekly live sessions. Here is why each one matters to {cp.business_name}.</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           {allMentors.map((m: any, i: number) => (
             <MentorRow key={i} m={m} relevance={bc.mentor_relevance?.[m.name]} />
           ))}
@@ -404,24 +412,23 @@ export default function BrochurePage() {
       <PageWrapper>
         <SectionHeader label="Our Community" title="Founders who started where you are" />
         <p style={{ fontSize: '11px', color: '#666', lineHeight: '1.7', marginBottom: '20px' }}>These founders came in with an idea — many had doubts, no revenue, no team. They followed the program. Here is what happened.</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {PAST_STUDENTS.map((s, i) => (
-            <div key={i} style={{ display: 'flex', gap: '14px', padding: '14px 16px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px' }}>
-              <div style={{ fontSize: '28px', flexShrink: 0, lineHeight: '1' }}>{s.flag}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: '700', color: '#111' }}>{s.name}</span>
-                  <span style={{ fontSize: '9px', color: '#AAA' }}>·</span>
-                  <span style={{ fontSize: '10px', color: '#888' }}>{s.business}</span>
-                  <span style={{ fontSize: '9px', color: '#CCC' }}>·</span>
-                  <span style={{ fontSize: '9px', color: '#AAA' }}>{s.category}</span>
-                </div>
-                <p style={{ fontSize: '11px', color: '#444', lineHeight: '1.6', marginBottom: '6px' }}>{s.outcome}</p>
+            <div key={i} style={{ display: 'flex', gap: '10px', padding: '10px 12px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px', borderLeft: `3px solid ${s.col}` }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', border: `2px solid ${s.col}30`, flexShrink: 0, background: `${s.col}10`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {s.img
+                  ? <img src={s.img} alt={s.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                  : <span style={{ fontSize: '12px', fontWeight: '800', color: s.col }}>{s.name[0]}</span>}
               </div>
-              <div style={{ flexShrink: 0, textAlign: 'right' }}>
-                <div style={{ padding: '4px 10px', background: 'rgba(29,158,117,0.08)', border: '1px solid rgba(29,158,117,0.2)', borderRadius: '100px', whiteSpace: 'nowrap' as const }}>
-                  <span style={{ fontSize: '10px', color: '#1D9E75', fontWeight: '700', fontFamily: 'DM Mono,monospace' }}>{s.revenue}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px', flexWrap: 'wrap' as const }}>
+                  <span style={{ fontSize: '11px', fontWeight: '700', color: '#111' }}>{s.name}</span>
+                  <span style={{ fontSize: '8px', color: '#CCC' }}>·</span>
+                  <span style={{ fontSize: '8px', color: '#888', fontFamily: 'DM Mono,monospace' }}>{s.city}</span>
                 </div>
+                <div style={{ fontSize: '9px', color: '#AAA', textDecoration: 'line-through', marginBottom: '2px' }}>{s.before}</div>
+                <div style={{ fontSize: '10px', color: s.col, fontWeight: '600' }}>→ {s.after}</div>
+                <div style={{ marginTop: '4px', display: 'inline-block', fontSize: '8px', color: '#1D9E75', background: 'rgba(29,158,117,0.08)', border: '1px solid rgba(29,158,117,0.15)', padding: '1px 6px', borderRadius: '100px', fontFamily: 'DM Mono,monospace' }}>{s.outcome}</div>
               </div>
             </div>
           ))}
@@ -429,7 +436,7 @@ export default function BrochurePage() {
 
         {/* Community stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
-          {[['8,000+', 'Founders trained globally'], ['40+', 'Countries represented'], ['6 wks', 'Avg. to first revenue'], ['$3.8K', 'Avg. first month revenue']].map(([n, l]) => (
+          {[['500+', 'Founders trained globally'], ['40+', 'Countries represented'], ['6 wks', 'Avg. to first revenue'], ['$3.8K', 'Avg. first month revenue']].map(([n, l]) => (
             <div key={l} style={{ textAlign: 'center', padding: '14px 8px', background: '#0A0A0F', borderRadius: '9px' }}>
               <div style={{ fontSize: '22px', fontWeight: '900', color: '#FF6A00', fontFamily: 'Playfair Display,serif', letterSpacing: '-0.02em' }}>{n}</div>
               <div style={{ fontSize: '8px', color: '#555', lineHeight: '1.3', marginTop: '4px', fontFamily: 'DM Mono,monospace' }}>{l}</div>
@@ -443,21 +450,86 @@ export default function BrochurePage() {
         <SectionHeader label="Immersion Program" title="Beyond the screen — live, in person" color="#1D9E75" />
         <p style={{ fontSize: '12px', color: '#444', lineHeight: '1.85', marginBottom: '24px' }}>Once a year, the top founders in the LaunchPilot cohort are invited to a 4-day immersion program. This is where the real breakthroughs happen — not in front of a laptop, but in a room with people who are building at the same pace as you.</p>
 
-        {/* Cities visual */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '28px' }}>
-          {[['🇸🇬', 'Singapore', 'Investor meetings, pitch days, VC roundtables'],
-            ['🇦🇪', 'Dubai', 'Middle East market entry, GTM workshops'],
-            ['🇮🇩', 'Bali', 'Founder reset, deep strategy offsite, recovery'],
-            ['🇮🇳', 'Mumbai', 'India market, distribution, founder fireside']].map(([flag, city, desc]) => (
-            <div key={city as string} style={{ padding: '16px 14px', background: '#F8F8F8', border: '1px solid #EEEEEE', borderRadius: '10px', textAlign: 'center', borderTop: '3px solid #1D9E75' }}>
-              <div style={{ fontSize: '28px', marginBottom: '6px' }}>{flag}</div>
-              <div style={{ fontSize: '12px', fontWeight: '700', color: '#111', marginBottom: '4px' }}>{city}</div>
-              <div style={{ fontSize: '9px', color: '#888', lineHeight: '1.4' }}>{desc}</div>
+        {/* World map SVG */}
+        <div style={{ background: '#0A0A0F', borderRadius: '12px', overflow: 'hidden', marginBottom: '20px', padding: '16px' }}>
+          <div style={{ fontSize: '7px', color: '#FF6A00', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px', textAlign: 'center' }}>Global Immersion Locations</div>
+          <svg viewBox="0 0 1000 480" style={{ width: '100%', height: 'auto', display: 'block' }}>
+            <rect width="1000" height="480" fill="#0D1117" rx="8"/>
+            {/* Continents */}
+            <path d="M80 80 L200 70 L230 100 L220 160 L200 200 L170 220 L150 200 L130 220 L110 200 L90 160Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M70 225 L100 205 L125 220 L130 245 L115 265 L95 270 L75 260 L65 242Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M155 255 L190 245 L205 265 L210 295 L205 325 L190 350 L170 360 L155 350 L145 325 L148 298 L148 275Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M400 55 L460 48 L480 65 L475 90 L450 98 L420 95 L400 80Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M405 110 L465 104 L490 120 L495 155 L485 190 L465 215 L440 220 L415 210 L402 185 L398 155 L400 128Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M470 108 L520 102 L540 120 L538 155 L520 178 L498 185 L474 174 L462 150 L460 128Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M460 40 L630 32 L660 52 L655 88 L625 100 L590 98 L555 100 L525 80 L500 60Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M615 105 L670 100 L690 125 L682 160 L655 168 L628 158 L610 135Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M680 58 L760 52 L800 72 L795 108 L760 120 L725 115 L690 100 L678 80Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M810 100 L870 96 L895 118 L888 155 L858 165 L825 158 L806 135Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M855 100 L920 95 L945 118 L940 155 L910 165 L878 158 L856 135Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <path d="M860 280 L930 275 L955 302 L948 345 L918 358 L882 355 L858 332 L852 308Z" fill="#1A2332" stroke="#1D9E75" strokeWidth="0.5" opacity="0.8"/>
+            <line x1="0" y1="240" x2="1000" y2="240" stroke="#1D9E75" strokeWidth="0.3" opacity="0.15" strokeDasharray="4,8"/>
+            <line x1="500" y1="0" x2="500" y2="480" stroke="#1D9E75" strokeWidth="0.3" opacity="0.15" strokeDasharray="4,8"/>
+            {/* City pins */}
+            {[
+              { x: 853, y: 158, label: 'Singapore',    col: '#FF6A00' },
+              { x: 545, y: 128, label: 'Dubai',         col: '#1D9E75' },
+              { x: 160, y: 155, label: 'San Francisco', col: '#60A5FA' },
+              { x: 225, y: 138, label: 'New York',      col: '#A78BFA' },
+              { x: 461, y:  85, label: 'London',        col: '#F59E0B' },
+              { x: 762, y:  78, label: 'Shanghai',      col: '#4ADE80' },
+              { x: 880, y: 178, label: 'Bali',          col: '#FB7185' },
+              { x: 620, y: 160, label: 'Mumbai',        col: '#FB923C' },
+            ].map((c) => (
+              <g key={c.label}>
+                <circle cx={c.x} cy={c.y} r="18" fill={c.col} opacity="0.1"/>
+                <circle cx={c.x} cy={c.y} r="7" fill={c.col} opacity="0.35"/>
+                <circle cx={c.x} cy={c.y} r="3.5" fill={c.col}/>
+                <text x={c.x} y={c.y - 14} textAnchor="middle" fill={c.col} fontSize="9" fontFamily="DM Mono, monospace" fontWeight="bold" letterSpacing="0.06em">{c.label}</text>
+              </g>
+            ))}
+            {/* Connection arcs */}
+            <path d="M 545,128 Q 580,80 620,160" stroke="#FF6A00" strokeWidth="0.8" fill="none" opacity="0.25" strokeDasharray="3,5"/>
+            <path d="M 620,160 Q 730,145 853,158" stroke="#FF6A00" strokeWidth="0.8" fill="none" opacity="0.25" strokeDasharray="3,5"/>
+            <path d="M 853,158 Q 866,168 880,178" stroke="#FF6A00" strokeWidth="0.8" fill="none" opacity="0.25" strokeDasharray="3,5"/>
+            <path d="M 461,85 Q 500,70 545,128" stroke="#FF6A00" strokeWidth="0.8" fill="none" opacity="0.2" strokeDasharray="3,5"/>
+            <path d="M 225,138 Q 340,80 461,85" stroke="#FF6A00" strokeWidth="0.8" fill="none" opacity="0.2" strokeDasharray="3,5"/>
+          </svg>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '6px', marginTop: '10px' }}>
+            {[['#FF6A00','Singapore','VC roundtables, pitch days'],['#1D9E75','Dubai','GTM, Middle East market entry'],['#60A5FA','San Francisco','AI sessions, investor meetings'],['#A78BFA','New York','Finance, enterprise sales'],['#F59E0B','London','AI bootcamp, strategy'],['#4ADE80','Shanghai','Asia expansion, market entry'],['#FB7185','Bali','Founder reset, deep strategy'],['#FB923C','Mumbai','India market, distribution']].map(([col,city,desc]) => (
+              <div key={city} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}>
+                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: col, flexShrink: 0, marginTop: '3px' }} />
+                <div>
+                  <div style={{ fontSize: '8px', fontWeight: '700', color: '#F0EDE6' }}>{city}</div>
+                  <div style={{ fontSize: '7px', color: '#555', lineHeight: '1.3' }}>{desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Real immersion photos */}
+        <div style={{ fontSize: '7px', color: '#1D9E75', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '8px' }}>Real moments from our immersions</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '6px', marginBottom: '20px' }}>
+          {[
+            { src: '/images/immersions/singapore-1.jpg', city: 'Singapore', label: 'Jan 2025' },
+            { src: '/images/immersions/dubai-1.jpg',     city: 'Dubai',     label: 'Feb 2025' },
+            { src: '/images/immersions/sf-1.jpg',        city: 'San Francisco', label: 'Mar 2025' },
+            { src: '/images/immersions/mumbai-1.jpg',    city: 'Mumbai',    label: 'Jul 2025' },
+            { src: '/images/immersions/bali-1.jpg',      city: 'Bali',      label: 'Apr 2025' },
+            { src: '/images/immersions/singapore-2.jpg', city: 'Singapore', label: 'Aug 2025 · Capstone Day' },
+          ].map((item, i) => (
+            <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', position: 'relative', height: '80px', background: '#F0F0F0' }}>
+              <img src={item.src} alt={item.city} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.background = '#E8E8E8' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '4px 8px', background: 'linear-gradient(transparent,rgba(0,0,0,0.7))' }}>
+                <div style={{ fontSize: '8px', fontWeight: '700', color: '#fff' }}>{item.city}</div>
+                <div style={{ fontSize: '7px', color: 'rgba(255,255,255,0.6)', fontFamily: 'DM Mono,monospace' }}>{item.label}</div>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* What happens */}
+                {/* What happens */}
         <div style={{ fontSize: '8px', color: '#1D9E75', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>What happens at immersion</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '24px' }}>
           {[
