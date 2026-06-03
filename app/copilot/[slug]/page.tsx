@@ -15,6 +15,7 @@ export default function CopilotPage() {
   const [email, setEmail]             = useState('')
   const [password, setPassword]       = useState('')
   const [loginError, setLoginError]   = useState('')
+  const [generatingBrochure, setGeneratingBrochure] = useState(false)
   const [activeTrack, setActiveTrack] = useState<any>(null)
   const [tracks, setTracks]           = useState<any[]>([])
   const [concepts, setConcepts]       = useState<any[]>([])
@@ -79,6 +80,24 @@ export default function CopilotPage() {
     await supabase.from('student_competencies').update({ status: 'paused' }).eq('student_id', user.id).eq('status', 'active')
     await supabase.from('student_competencies').update({ status: 'active' }).eq('student_id', user.id).eq('competency_code', track.code)
     await loadTrackDataDirect(track.code, tracks, user.id)
+  }
+
+  const handleBrochure = async () => {
+    setGeneratingBrochure(true)
+    try {
+      const res = await fetch(`/api/copilot/${slug}/brochure`)
+      if (!res.ok) throw new Error('Failed')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${copilotProfile.business_name}-LaunchPilot-Program.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch {
+      alert('Could not generate brochure. Please try again.')
+    }
+    setGeneratingBrochure(false)
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -500,6 +519,19 @@ export default function CopilotPage() {
           ))}
         </div>
 
+        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+          <button onClick={handleBrochure} disabled={generatingBrochure}
+            style={{ width: '100%', padding: '11px', borderRadius: '9px', border: '1px solid rgba(155,148,240,0.2)', background: 'rgba(155,148,240,0.06)', color: generatingBrochure ? '#555' : '#9B94F0', fontSize: '13px', fontWeight: '600', cursor: generatingBrochure ? 'default' : 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            {generatingBrochure ? (
+              <>
+                <span style={{ width: '12px', height: '12px', borderRadius: '50%', border: '2px solid rgba(155,148,240,0.3)', borderTopColor: '#9B94F0', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} />
+                Generating brochure...
+              </>
+            ) : (
+              <>📄 Download Personalised Brochure</>
+            )}
+          </button>
+        </div>
         <div style={{ textAlign: 'center' }}>
           <div className="mono" style={{ fontSize: '10px', color: '#444', letterSpacing: '0.08em' }}>Private session · Not for sharing</div>
         </div>
