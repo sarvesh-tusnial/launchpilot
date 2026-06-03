@@ -571,7 +571,7 @@ export default function HomePage() {
           .roi-stats { grid-template-columns: 1fr 1fr !important; }
           .footer-inner { flex-direction: column !important; gap: 16px !important; align-items: center !important; text-align: center !important; }
           .section-pad { padding: 60px 16px !important; }
-          .hero-section { padding: 100px 16px 60px !important; }
+          .hero-section { padding: 110px 16px 60px !important; }
           .nav-pad { padding: 0 16px !important; }
           .screenshot-hide { display: none !important; }
         }
@@ -591,7 +591,7 @@ export default function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px', position: 'relative' }}>
+      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', textAlign: 'center', padding: '140px 24px 80px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(255,106,0,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', maxWidth: '860px' }}>
