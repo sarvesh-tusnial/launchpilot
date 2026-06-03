@@ -41,7 +41,7 @@ const ALL_SPRINTS = [
 
 const SUNDAY_SESSIONS = [
   { theme: 'Investor Roundtable',    desc: 'Pitch live to seed investors. Get real-time feedback on your narrative and fundraising readiness.' },
-  { theme: 'Founder Fireside',       desc: 'Closed-room with founders who crossed Rs 1Cr ARR — raw, unfiltered stories of what actually worked.' },
+  { theme: 'Founder Fireside',       desc: 'Closed-room with founders who crossed Rs. 1Cr ARR — raw, unfiltered stories of what actually worked.' },
   { theme: 'GTM Masterclass',        desc: 'Go-to-market workshop with founders who launched across India and SEA simultaneously.' },
   { theme: 'PMF Lab',                desc: 'Validate your PMF hypothesis with real customer interviews, facilitated live by senior product leaders.' },
   { theme: 'AI Tools Deep Dive',     desc: 'Build and deploy AI automations for your business in a 6-hour hands-on session.' },
@@ -176,6 +176,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const timeline = cp.personalised_content?.timeline || []
 
     const bc = await generateBrochureContent(cp, tracks, concepts)
+
+    // Sanitize all text — replace characters PDF standard fonts can't encode
+    const sanitize = (s: string) => (s || '').replace(/₹/g, 'Rs.').replace(/[^ -]/g, (c) => {
+      const map: Record<string, string> = { '–':'--','—':'--','‘':"'",'\u2019':"'",'\u201C':'"','\u201D':'"','\u2026':'...','\u2022':'-','\u00B7':'-' }
+      return map[c] || ''
+    })
+
+    // Sanitize bc fields
+    for (const key of Object.keys(bc)) {
+      if (typeof bc[key] === 'string') bc[key] = sanitize(bc[key])
+      if (Array.isArray(bc[key])) bc[key] = bc[key].map((v: any) => typeof v === 'string' ? sanitize(v) : (typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k,val]) => [k, typeof val === 'string' ? sanitize(val as string) : val])) : v))
+    }
 
     // ── Build PDF ──────────────────────────────────────────────────────
     const pdfDoc = await PDFDocument.create()
