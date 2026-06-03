@@ -176,9 +176,12 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
   const [messages, setMessages] = useState<{ role: 'maya' | 'user'; text: string }[]>([
     { role: 'maya', text: "Hey! I'm Maya. Answer 6 quick questions and I'll build your personalised launch roadmap — mentors, milestones, sprints, all tailored to your idea. What's your name?" }
   ])
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, step])
+  useEffect(() => {
+    const el = messagesContainerRef.current
+    if (el) el.scrollTop = el.scrollHeight
+  }, [messages, step])
 
   const addMsg = (role: 'maya' | 'user', text: string) => setMessages(m => [...m, { role, text }])
 
@@ -259,7 +262,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
       </div>
 
       {/* Messages */}
-      <div style={{ height: '256px', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div ref={messagesContainerRef} style={{ height: '256px', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-start', width: '100%' }}>
             {m.role === 'maya' && (
@@ -278,7 +281,6 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
             </div>
           </div>
         )}
-        <div ref={bottomRef} />
       </div>
 
       {/* Input */}
