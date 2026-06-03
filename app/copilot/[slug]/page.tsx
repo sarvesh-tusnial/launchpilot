@@ -269,7 +269,7 @@ export default function CopilotPage() {
           {/* HERO */}
           <div style={{ marginBottom: '60px' }}>
             <div className="mono" style={{ fontSize: '9px', color: '#9B94F0', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
-            <h1 className="serif" className="hero-title" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
+            <h1 className="serif hero-title" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
               Hey {copilotProfile.founder_name},<br />
               <span style={{ color: '#9B94F0', fontStyle: 'italic' }}>your program is ready.</span>
             </h1>
