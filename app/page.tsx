@@ -625,10 +625,13 @@ export default function HomePage() {
       <section className='section-pad' style={{ padding: '80px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <div className="mono" style={{ fontSize: '10px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>Pick your pathway</div>
+            <div className="mono" style={{ fontSize: '10px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>Don't have an idea yet?</div>
             <h2 className="serif" style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: '700', letterSpacing: '-0.03em', lineHeight: '1.1' }}>
-              What do you want to build?
+              Choose a predefined pathway.<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>Follow, launch and earn.</span>
             </h2>
+            <p style={{ fontSize: '15px', color: '#666', marginTop: '16px', maxWidth: '480px', margin: '16px auto 0', lineHeight: '1.7' }}>
+              10 battle-tested pathways — each with 25 structured steps from idea to first paying customer.
+            </p>
           </div>
           <div className='pw-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
             {PATHWAYS.map(p => (
@@ -656,263 +659,265 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* JOURNEY FLOW */}
-      <section className='section-pad' style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      {/* HYBRID LEARNING */}
+      <section className='section-pad' style={{ padding: '100px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#060608' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+
+          {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '72px' }}>
-            <div className="mono" style={{ fontSize: '10px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>The journey</div>
-            <h2 className="serif" style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: '700', letterSpacing: '-0.03em', lineHeight: '1.1', marginBottom: '16px' }}>
-              From idea to revenue.<br />Step by step.
+            <div className="mono" style={{ fontSize: '10px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>How it works</div>
+            <h2 className="serif" style={{ fontSize: 'clamp(32px, 4.5vw, 56px)', fontWeight: '700', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
+              AI coaching meets<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>real-world learning.</span>
             </h2>
-            <p style={{ fontSize: '15px', color: '#666', maxWidth: '480px', margin: '0 auto', lineHeight: '1.7' }}>
-              Every pathway follows the same structure — 25 steps across 4 phases. Each step teaches you something and makes you execute it.
+            <p style={{ fontSize: '16px', color: '#666', maxWidth: '480px', margin: '0 auto', lineHeight: '1.7' }}>
+              LaunchPilot is not a course. It's a structured system combining a 24/7 AI co-pilot with live mentor sessions, weekly sprints, and Sunday experiential workshops.
             </p>
           </div>
 
-          {/* Phase 1 — Idea & Validation */}
-          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className="mono" style={{ fontSize: '11px', color: '#FF6A00', fontWeight: '700' }}>01</span>
-                </div>
-                <div>
-                  <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Phase one</div>
-                  <div className="serif" style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em' }}>Idea & Validation</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.8', marginBottom: '24px' }}>
-                Most people skip this and build the wrong thing. We make you validate before you build. Real conversations with real potential customers — not surveys, not assumptions.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Find a real problem worth solving', 'Validate demand before building anything', 'Define your ideal customer precisely', 'Get your first pre-commitment'].map((s, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(255,106,0,0.1)', border: '1px solid rgba(255,106,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
-                      <span style={{ fontSize: '9px', color: '#FF6A00', fontWeight: '700' }}>{i + 1}</span>
+          {/* THREE PILLARS */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '80px' }}>
+            {[
+              {
+                icon: '🤖',
+                label: 'AI Co-Pilot',
+                color: '#FF6A00',
+                title: 'Maya — your 24/7 AI mentor',
+                desc: 'Maya teaches you every concept through an 8-stage structured session — hook, teach, quiz, task, action step. She knows your business, remembers every session, and is available any time.',
+                tags: ['8-stage learning per concept', 'Full session memory', 'Instant task evaluation', 'Available at 3am'],
+              },
+              {
+                icon: '🎤',
+                label: 'Live Mentors',
+                color: '#4ADE80',
+                title: 'Weekly sessions with real practitioners',
+                desc: 'Every week, live sessions with founders and operators who have done it. Not theory — real war stories, live Q&A, direct feedback on your work.',
+                tags: ['100+ global mentors', 'Weekly live sessions', 'Direct Q&A', 'Real founder stories'],
+              },
+              {
+                icon: '🌍',
+                label: 'Sunday Sessions',
+                color: '#60A5FA',
+                title: 'Experiential workshops every Sunday',
+                desc: 'Hands-on online workshops every Sunday — investor roundtables, sales simulations, GTM masterclasses, PMF labs. Learning by doing, not watching.',
+                tags: ['Every Sunday online', 'Investor roundtables', 'Sales simulations', 'GTM masterclasses'],
+              },
+            ].map((p, i) => (
+              <div key={i} style={{ padding: '28px 24px', background: 'rgba(255,255,255,0.02)', border: `1px solid rgba(255,255,255,0.07)`, borderRadius: '18px', borderTop: `3px solid ${p.color}` }}>
+                <div style={{ fontSize: '32px', marginBottom: '16px' }}>{p.icon}</div>
+                <div className="mono" style={{ fontSize: '9px', color: p.color, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>{p.label}</div>
+                <div className="serif" style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6', marginBottom: '12px', lineHeight: '1.3' }}>{p.title}</div>
+                <p style={{ fontSize: '13px', color: '#888', lineHeight: '1.7', marginBottom: '18px' }}>{p.desc}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {p.tags.map((t, j) => (
+                    <div key={j} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <span style={{ color: p.color, fontSize: '10px', flexShrink: 0 }}>✓</span>
+                      <span style={{ fontSize: '12px', color: '#AAA' }}>{t}</span>
                     </div>
-                    <span style={{ fontSize: '14px', color: '#888', lineHeight: '1.5' }}>{s}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Screenshot */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(255,106,0,0.12)' }}>
-              <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
-                <span className="mono" style={{ fontSize: '9px', color: '#333', letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1, textAlign: 'center' }}>Step 3 — Validate your idea</span>
-              </div>
-              <div style={{ padding: '20px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
-                  <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Before you build anything, let's find out if people will actually pay for this. I'm giving you a challenge.</p>
-                  </div>
-                </div>
-                <div style={{ marginLeft: '36px', background: 'rgba(249,112,102,0.05)', border: '1px solid rgba(249,112,102,0.2)', borderRadius: '10px', padding: '14px', marginBottom: '14px' }}>
-                  <div className="mono" style={{ fontSize: '9px', color: '#F97066', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>⏱ Timer Challenge · 5 minutes</div>
-                  <p style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.6', margin: '0 0 10px' }}>Find 3 people who have this problem right now. Not friends. Real strangers. Where do they complain about it online?</p>
-                  <div style={{ height: '3px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
-                    <div style={{ width: '45%', height: '100%', background: 'linear-gradient(90deg, #F97066, #F59E0B)', borderRadius: '2px' }} />
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px' }}>
-                  <div style={{ background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '12px 4px 12px 12px', padding: '10px 14px', maxWidth: '75%' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.6', margin: 0 }}>Found 5 Reddit threads and a Facebook group where people complain about this exact problem.</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
-                  <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}><span style={{ color: '#4ADE80', fontWeight: '600' }}>That's real signal.</span> Now let's turn one of those people into your first conversation. Moving to Step 4.</p>
-                  </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Phase 2 — Build & Launch */}
-          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
-            {/* Screenshot first */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(139,111,255,0.1)' }}>
-              <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
-                <span className="mono" style={{ fontSize: '9px', color: '#333', letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1, textAlign: 'center' }}>Step 12 — First sales conversation</span>
-              </div>
-              <div style={{ padding: '20px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
-                  <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Last week you committed to contacting 5 potential customers. <span style={{ color: '#F59E0B', fontWeight: '600' }}>Did you do it?</span> Before we move on, I need to know.</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '14px' }}>
-                  <div style={{ background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '12px 4px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.6', margin: 0 }}>I contacted 3. Got 2 replies. One wants to jump on a call tomorrow.</p>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
-                  <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Two replies from cold outreach is strong — most people get zero. A call tomorrow is huge. Let's prepare you to close it.</p>
-                  </div>
-                </div>
-                <div style={{ marginLeft: '36px', padding: '12px', background: 'rgba(255,106,0,0.05)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
-                  <div className="mono" style={{ fontSize: '9px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Your action step for this week</div>
-                  <p style={{ fontSize: '12px', color: '#AAA', margin: 0, lineHeight: '1.5' }}>Before your call tomorrow, write out 3 objections they might raise and your response to each. Takes 20 minutes. Do it tonight.</p>
-                </div>
-              </div>
+          {/* AI CO-PILOT DEEP DIVE — screenshots */}
+          <div style={{ marginBottom: '80px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+              <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '10px' }}>AI Co-Pilot · Deep dive</div>
+              <h3 className="serif" style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', lineHeight: '1.1' }}>
+                An AI mentor who actually knows you.
+              </h3>
             </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(139,111,255,0.15)', border: '1px solid rgba(139,111,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className="mono" style={{ fontSize: '11px', color: '#FF8C00', fontWeight: '700' }}>02</span>
-                </div>
-                <div>
-                  <div className="mono" style={{ fontSize: '9px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Phase two</div>
-                  <div className="serif" style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em' }}>Build & Launch</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.8', marginBottom: '24px' }}>
-                This is where most people stall — they build forever and never ship. We give you a deadline, a minimum viable product definition, and we hold you to it.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Build an MVP in 2 weeks, not 6 months', 'Your first sales conversation, scripted', 'Handle objections like a founder', 'Close your first paying customer'].map((s, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(139,111,255,0.1)', border: '1px solid rgba(139,111,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
-                      <span style={{ fontSize: '9px', color: '#FF8C00', fontWeight: '700' }}>{i + 1}</span>
-                    </div>
-                    <span style={{ fontSize: '14px', color: '#888', lineHeight: '1.5' }}>{s}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* Phase 3 — Growth */}
-          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', marginBottom: '100px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className="mono" style={{ fontSize: '11px', color: '#FF9A00', fontWeight: '700' }}>03</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+
+              {/* Screenshot 1 — Hook stage */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+                <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
+                  <span className="mono" style={{ fontSize: '9px', color: '#333', textTransform: 'uppercase', letterSpacing: '0.1em', flex: 1, textAlign: 'center' }}>Maya · Stage 1 — Hook</span>
                 </div>
-                <div>
-                  <div className="mono" style={{ fontSize: '9px', color: '#FF9A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Phase three</div>
-                  <div className="serif" style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em' }}>Marketing & Sales</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.8', marginBottom: '24px' }}>
-                One customer isn't a business. We build the systems to get more — a repeatable sales process, content that attracts, referrals that compound.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Build a repeatable outreach process', 'Content that attracts your ideal customer', 'Turn customers into referral sources', 'Get to your first $1K month'].map((s, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
-                      <span style={{ fontSize: '9px', color: '#FF9A00', fontWeight: '700' }}>{i + 1}</span>
-                    </div>
-                    <span style={{ fontSize: '14px', color: '#888', lineHeight: '1.5' }}>{s}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Evaluation screenshot */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(167,139,250,0.08)' }}>
-              <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
-                <span className="mono" style={{ fontSize: '9px', color: '#333', letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1, textAlign: 'center' }}>Step 16 — Your cold outreach email</span>
-              </div>
-              <div style={{ padding: '20px' }}>
-                <div style={{ background: 'rgba(74,222,128,0.04)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '12px', padding: '16px', marginBottom: '14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span className="mono" style={{ fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Maya's Evaluation</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span className="serif" style={{ fontSize: '24px', fontWeight: '900', color: '#4ADE80' }}>84</span>
-                      <span style={{ fontSize: '11px', color: '#888' }}>/100</span>
-                      <span className="mono" style={{ fontSize: '9px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ADE80', textTransform: 'uppercase' }}>PASS</span>
+                <div style={{ padding: '18px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Before you build anything, let's find out if people will actually pay for this. I'm giving you a 5-minute challenge.</p>
                     </div>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '12px' }}>
-                    {[{ d: 'Subject line', s: 18, m: 20 }, { d: 'Problem clarity', s: 17, m: 20 }, { d: 'Call to action', s: 16, m: 20 }, { d: 'Personalisation', s: 15, m: 20 }, { d: 'Social proof', s: 10, m: 20 }].map(d => (
-                      <div key={d.d} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 8px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px' }}>
-                        <span style={{ fontSize: '10px', color: '#888' }}>{d.d}</span>
-                        <span style={{ fontSize: '10px', fontWeight: '700', color: '#4ADE80' }}>{d.s}<span style={{ color: '#444', fontWeight: '400' }}>/{d.m}</span></span>
+                  <div style={{ marginLeft: '36px', background: 'rgba(249,112,102,0.05)', border: '1px solid rgba(249,112,102,0.2)', borderRadius: '10px', padding: '12px', marginBottom: '12px' }}>
+                    <div className="mono" style={{ fontSize: '9px', color: '#F97066', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '5px' }}>⏱ Timer Challenge · 5 minutes</div>
+                    <p style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.6', margin: 0 }}>Find 3 people who have this problem right now. Not friends. Real strangers. Where do they complain online?</p>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                    <div style={{ background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '12px 4px 12px 12px', padding: '10px 14px', maxWidth: '75%' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.6', margin: 0 }}>Found 5 Reddit threads where people complain about exactly this problem.</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
+                    <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}><span style={{ color: '#4ADE80', fontWeight: '600' }}>That's real signal.</span> Moving to Stage 2.</p>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ padding: '10px 18px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
+                  <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Stage 1 of 8 · Hook</div>
+                </div>
+              </div>
+
+              {/* Screenshot 2 — Accountability */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+                <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
+                  <span className="mono" style={{ fontSize: '9px', color: '#333', textTransform: 'uppercase', letterSpacing: '0.1em', flex: 1, textAlign: 'center' }}>Maya · Stage 2 — Accountability</span>
+                </div>
+                <div style={{ padding: '18px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
+                    <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Last session you committed to contacting 5 potential customers. <span style={{ color: '#F59E0B', fontWeight: '600' }}>Did you do it?</span></p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
+                    <div style={{ background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '12px 4px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.6', margin: 0 }}>I contacted 3. Got 2 replies. One wants a call tomorrow.</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
+                    <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>Two replies from cold outreach is strong. Let's prepare you to close the call tomorrow.</p>
+                    </div>
+                  </div>
+                  <div style={{ marginLeft: '36px', padding: '10px 12px', background: 'rgba(255,106,0,0.05)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
+                    <div className="mono" style={{ fontSize: '9px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '3px' }}>This week's action</div>
+                    <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>Write 3 objections they might raise and your responses. Do it tonight.</p>
+                  </div>
+                </div>
+                <div style={{ padding: '10px 18px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
+                  <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Stage 2 of 8 · Reality Check</div>
+                </div>
+              </div>
+
+              {/* Screenshot 3 — Task evaluation */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+                <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
+                  <span className="mono" style={{ fontSize: '9px', color: '#333', textTransform: 'uppercase', letterSpacing: '0.1em', flex: 1, textAlign: 'center' }}>Maya · Stage 6 — Task Evaluation</span>
+                </div>
+                <div style={{ padding: '18px' }}>
+                  <div style={{ background: 'rgba(74,222,128,0.04)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '12px', padding: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                      <span className="mono" style={{ fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Maya's Evaluation</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span className="serif" style={{ fontSize: '24px', fontWeight: '900', color: '#4ADE80' }}>84</span>
+                        <span style={{ fontSize: '11px', color: '#888' }}>/100</span>
+                        <span className="mono" style={{ fontSize: '9px', padding: '3px 8px', borderRadius: '100px', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ADE80', textTransform: 'uppercase' }}>PASS</span>
                       </div>
-                    ))}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#AAA', lineHeight: '1.65', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '10px' }}>
-                    <span style={{ color: '#4ADE80', fontWeight: '600' }}>Strong: </span>You led with their problem, not your pitch. Subject line will get opens.
-                    <br />
-                    <span style={{ color: '#F59E0B', fontWeight: '600' }}>Fix: </span>Add one result from your first client. Even "helped one person get X" changes the conversion.
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px', marginBottom: '10px' }}>
+                      {[['Problem Clarity', 18, 20],['Business Thinking', 17, 20],['Execution', 16, 20],['Communication', 15, 20],['User Insight', 10, 20]].map(([d, s, m]) => (
+                        <div key={d as string} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 8px', background: 'rgba(255,255,255,0.03)', borderRadius: '5px' }}>
+                          <span style={{ fontSize: '10px', color: '#888' }}>{d}</span>
+                          <span style={{ fontSize: '10px', fontWeight: '700', color: '#4ADE80' }}>{s}<span style={{ color: '#444' }}>/{m}</span></span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#AAA', lineHeight: '1.6', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '8px' }}>
+                      <span style={{ color: '#4ADE80', fontWeight: '600' }}>Strong: </span>You led with the customer's problem, not your solution.<br />
+                      <span style={{ color: '#F59E0B', fontWeight: '600' }}>Fix: </span>Add one line of social proof to boost conversion.
+                    </div>
                   </div>
                 </div>
-                <div style={{ padding: '10px 14px', background: 'rgba(255,106,0,0.05)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
-                  <span className="mono" style={{ fontSize: '9px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.1em' }}>This week's action: </span>
-                  <span style={{ fontSize: '12px', color: '#AAA' }}>Add the social proof line and send to 10 people by Friday. Commit?</span>
+                <div style={{ padding: '10px 18px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
+                  <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Stage 6 of 8 · Execution Task</div>
+                </div>
+              </div>
+
+              {/* Screenshot 4 — Progress */}
+              <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+                <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
+                  <span className="mono" style={{ fontSize: '9px', color: '#333', textTransform: 'uppercase', letterSpacing: '0.1em', flex: 1, textAlign: 'center' }}>Maya · Stage 8 — Action Step</span>
+                </div>
+                <div style={{ padding: '18px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
+                    <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
+                      <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>You're at <span style={{ color: '#4ADE80', fontWeight: '600' }}>$4,200/month</span>. 3 steps left and this business can replace your salary.</p>
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                      <span className="mono" style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase' }}>Pathway Progress</span>
+                      <span className="mono" style={{ fontSize: '9px', color: '#FF8C00' }}>22/25 steps</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '3px' }}>
+                      {Array.from({ length: 25 }).map((_, i) => (
+                        <div key={i} style={{ flex: 1, height: '5px', borderRadius: '2px', background: i < 22 ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ padding: '12px', background: 'rgba(255,106,0,0.05)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
+                    <div className="mono" style={{ fontSize: '9px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>Your action this week</div>
+                    <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>Hire one part-time person for customer support. By Friday. Can you commit?</p>
+                  </div>
+                </div>
+                <div style={{ padding: '10px 18px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.01)' }}>
+                  <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Stage 8 of 8 · Bridge</div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Phase 4 — Revenue & Scale */}
-          <div className='journey-grid' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-            {/* Progress screenshot */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(196,181,253,0.06)' }}>
-              <div style={{ padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ display: 'flex', gap: '5px' }}>{['#F97066','#F59E0B','#4ADE80'].map(c => <div key={c} style={{ width: '8px', height: '8px', borderRadius: '50%', background: c, opacity: 0.5 }} />)}</div>
-                <span className="mono" style={{ fontSize: '9px', color: '#333', letterSpacing: '0.1em', textTransform: 'uppercase', flex: 1, textAlign: 'center' }}>Step 22 — Getting to $5K/month</span>
-              </div>
-              <div style={{ padding: '20px' }}>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span className="mono" style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pathway Progress</span>
-                    <span className="mono" style={{ fontSize: '9px', color: '#C4B5FD' }}>22/25 steps</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '3px', marginBottom: '8px' }}>
-                    {Array.from({ length: 25 }).map((_, i) => (
-                      <div key={i} style={{ flex: 1, height: '6px', borderRadius: '3px', background: i < 22 ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                    ))}
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                    {[{ l: 'Revenue', v: '$4,200/mo', col: '#00C851' }, { l: 'Clients', v: '6 active', col: '#FF6A00' }, { l: 'Steps left', v: '3 to go', col: '#C4B5FD' }].map(s => (
-                      <div key={s.l} style={{ padding: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: s.col, marginBottom: '2px' }}>{s.v}</div>
-                        <div className="mono" style={{ fontSize: '8px', color: '#444', textTransform: 'uppercase' }}>{s.l}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
-                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF8C00', flexShrink: 0 }}>M</div>
-                  <div style={{ background: 'rgba(74,222,128,0.05)', border: '1px solid rgba(74,222,128,0.18)', borderRadius: '4px 12px 12px 12px', padding: '10px 14px' }}>
-                    <p style={{ fontSize: '12px', color: '#CCC', lineHeight: '1.65', margin: 0 }}>You're at $4,200/month. <span style={{ color: '#4ADE80', fontWeight: '600' }}>That's real money.</span> 3 steps left and you'll have a business that can replace your salary. Let's talk about what happens when you get there.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* LIVE MENTOR SESSION */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center', marginBottom: '64px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(196,181,253,0.15)', border: '1px solid rgba(196,181,253,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className="mono" style={{ fontSize: '11px', color: '#C4B5FD', fontWeight: '700' }}>04</span>
-                </div>
-                <div>
-                  <div className="mono" style={{ fontSize: '9px', color: '#C4B5FD', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Phase four</div>
-                  <div className="serif" style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em' }}>Revenue & Scale</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '15px', color: '#666', lineHeight: '1.8', marginBottom: '24px' }}>
-                This is where your side hustle becomes a real business. We help you systematise, delegate, and decide if you're ready to go full-time.
+              <div className="mono" style={{ fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '14px' }}>Real mentors · Live sessions</div>
+              <h3 className="serif" style={{ fontSize: 'clamp(24px, 3vw, 38px)', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', lineHeight: '1.15', marginBottom: '16px' }}>
+                Weekly sessions with people who have actually done it.
+              </h3>
+              <p style={{ fontSize: '15px', color: '#888', lineHeight: '1.8', marginBottom: '24px' }}>
+                Every week, LaunchPilot hosts live sessions with founders, investors and operators from our 100+ mentor network. Real stories, direct Q&A, no slides, no theory.
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {['Get to $5K per month consistently', 'Build systems that run without you', 'Hire your first help when ready', 'Go full-time when the numbers make sense'].map((s, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(196,181,253,0.1)', border: '1px solid rgba(196,181,253,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
-                      <span style={{ fontSize: '9px', color: '#C4B5FD', fontWeight: '700' }}>{i + 1}</span>
-                    </div>
-                    <span style={{ fontSize: '14px', color: '#888', lineHeight: '1.5' }}>{s}</span>
+              {[
+                { label: 'Prantik Mazumdar', sub: 'President, TiE Singapore · Exited Founder', color: '#FF6A00' },
+                { label: 'Jason Kraus', sub: 'Partner, EQx Fund · Prepare4VC', color: '#4ADE80' },
+                { label: 'Yash Shah', sub: 'GenAI Head India & SEA · AWS', color: '#60A5FA' },
+                { label: 'Sarvash Malani', sub: 'DeepTech VC · Temasek', color: '#F59E0B' },
+              ].map((m, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `${m.color}18`, border: `1px solid ${m.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: '11px', fontWeight: '700', color: m.color }}>{m.label[0]}</span>
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0' }}>{m.label}</div>
+                    <div style={{ fontSize: '11px', color: '#555' }}>{m.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '28px' }}>
+              <div className="mono" style={{ fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>This week's live sessions</div>
+              {[
+                { day: 'Mon', title: 'How I got to $100K ARR in 6 months', mentor: 'Prantik Mazumdar', type: 'Founder Story' },
+                { day: 'Wed', title: 'Seed round mechanics — what investors actually look for', mentor: 'Jason Kraus', type: 'Investor AMA' },
+                { day: 'Fri', title: 'Building with AI — what actually works right now', mentor: 'Yash Shah', type: 'Masterclass' },
+                { day: 'Sun', title: 'Sales Simulation — cold call to close', mentor: 'Live facilitated', type: 'Sunday Session' },
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', padding: '12px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span className="mono" style={{ fontSize: '9px', color: '#888', fontWeight: '700' }}>{s.day}</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0', marginBottom: '2px' }}>{s.title}</div>
+                    <div style={{ fontSize: '11px', color: '#555' }}>{s.mentor}</div>
+                  </div>
+                  <span className="mono" style={{ fontSize: '8px', color: s.type === 'Sunday Session' ? '#60A5FA' : '#FF8C00', background: s.type === 'Sunday Session' ? 'rgba(96,165,250,0.1)' : 'rgba(255,140,0,0.1)', border: `1px solid ${s.type === 'Sunday Session' ? 'rgba(96,165,250,0.2)' : 'rgba(255,140,0,0.2)'}`, padding: '3px 8px', borderRadius: '4px', flexShrink: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.type}</span>
+                </div>
+              ))}
             </div>
           </div>
+
         </div>
       </section>
 
