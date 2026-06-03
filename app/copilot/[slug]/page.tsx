@@ -134,7 +134,7 @@ export default function CopilotPage() {
   if (loggedIn) return (
     <div style={{ background: '#050309', minHeight: '100vh', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#E8E6E0', display: 'flex', flexDirection: 'column' }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap'); .mono{font-family:'DM Mono',monospace;}`}</style>
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(5,3,9,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
+      <nav className="dash-nav" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(5,3,9,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(127,119,221,0.2)', border: '1px solid rgba(127,119,221,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#9B94F0' }} />
@@ -150,7 +150,7 @@ export default function CopilotPage() {
         </div>
       </nav>
       <div style={{ display: 'flex', flex: 1, paddingTop: '56px' }}>
-        <aside style={{ width: '256px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.06)', padding: '24px 16px', position: 'fixed', top: '56px', bottom: 0, left: 0, overflowY: 'auto', background: '#050309' }}>
+        <aside className="dash-aside" style={{ width: '256px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.06)', padding: '24px 16px', position: 'fixed', top: '56px', bottom: 0, left: 0, overflowY: 'auto', background: '#050309' }}>
           <div className="mono" style={{ fontSize: '9px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>Tracks</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '20px' }}>
             {tracks.map((t, i) => {
@@ -197,7 +197,7 @@ export default function CopilotPage() {
             </>
           )}
         </aside>
-        <main style={{ marginLeft: '256px', flex: 1, height: 'calc(100vh - 56px)', overflow: 'hidden' }}>
+        <main className="dash-main" style={{ marginLeft: '256px', flex: 1, height: 'calc(100vh - 56px)', overflow: 'hidden' }}>
           {!initialized || loadingTrack ? (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
               <div className="mono" style={{ fontSize: '11px', color: '#555' }}>Loading your session...</div>
@@ -219,7 +219,7 @@ export default function CopilotPage() {
 
   // ── LOGIN PAGE ──
   return (
-    <div style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans', system-ui, sans-serif", display: 'flex' }}>
+    <div className="login-layout" style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans', system-ui, sans-serif", display: 'flex' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&display=swap');
         .serif{font-family:'Fraunces',Georgia,serif}
@@ -230,13 +230,31 @@ export default function CopilotPage() {
         ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
         .section-label{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.18em;margin-bottom:6px}
         .section-title{font-size:14px;font-weight:600;color:#E8E6E0;margin-bottom:16px;line-height:1.4}
+
+        @media(max-width:768px){
+          .login-layout{flex-direction:column!important}
+          .login-left{padding:32px 24px 48px!important}
+          .login-right{width:100%!important;height:auto!important;position:relative!important;border-left:none!important;border-top:1px solid rgba(255,255,255,0.06)!important;padding:36px 24px!important}
+          .sticky-bar{padding:14px 20px!important}
+          .sprints-grid{grid-template-columns:1fr!important}
+          .timeline-grid{grid-template-columns:1fr 1fr!important}
+          .hero-title{font-size:32px!important}
+          .dash-nav{padding:0 16px!important}
+          .dash-aside{display:none!important}
+          .dash-main{margin-left:0!important;height:calc(100vh - 56px)!important}
+        }
+        @media(max-width:480px){
+          .timeline-grid{grid-template-columns:1fr!important}
+          .login-left{padding:24px 16px 40px!important}
+          .login-right{padding:28px 16px!important}
+        }
       `}</style>
 
       {/* LEFT — scrollable */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div className="login-left-wrap" style={{ flex: 1, overflowY: 'auto' }}>
 
         {/* Sticky top bar */}
-        <div style={{ position: 'sticky', top: 0, zIndex: 10, padding: '18px 52px', background: 'rgba(5,3,9,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="sticky-bar" style={{ position: 'sticky', top: 0, zIndex: 10, padding: '18px 52px', background: 'rgba(5,3,9,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(155,148,240,0.2)', border: '1px solid rgba(155,148,240,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#9B94F0' }} />
           </div>
@@ -246,12 +264,12 @@ export default function CopilotPage() {
           </div>
         </div>
 
-        <div style={{ padding: '52px 52px 80px' }}>
+        <div className="login-left" style={{ padding: '52px 52px 80px' }}>
 
           {/* HERO */}
           <div style={{ marginBottom: '60px' }}>
             <div className="mono" style={{ fontSize: '9px', color: '#9B94F0', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
-            <h1 className="serif" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
+            <h1 className="serif" className="hero-title" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
               Hey {copilotProfile.founder_name},<br />
               <span style={{ color: '#9B94F0', fontStyle: 'italic' }}>your program is ready.</span>
             </h1>
@@ -311,7 +329,7 @@ export default function CopilotPage() {
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#BA7517' }}>Monthly sprints</div>
               <div className="section-title">6 sprints lined up for you — 4 weeks each</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div className="sprints-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {content.sprints.map((s: any, i: number) => (
                   <div key={i} style={{ padding: '16px 18px', background: i % 2 === 0 ? 'rgba(186,117,23,0.05)' : 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', borderTop: `2px solid ${i % 2 === 0 ? 'rgba(186,117,23,0.4)' : 'rgba(155,148,240,0.3)'}` }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -377,7 +395,7 @@ export default function CopilotPage() {
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#AAA' }}>Your 6-month northstar</div>
               <div className="section-title">The journey for {copilotProfile.business_name}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
+              <div className="timeline-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
                 {content.timeline.map((t: any, i: number) => {
                   const colors = ['#9B94F0','#8B6FFF','#7A6FFF','#1D9E75','#17876A','#117055']
                   const col = colors[i] || '#9B94F0'
@@ -437,7 +455,7 @@ export default function CopilotPage() {
       </div>
 
       {/* RIGHT — sticky login */}
-      <div style={{ width: '380px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', background: '#07050F', borderLeft: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px 40px' }}>
+      <div className="login-right" style={{ width: '380px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', background: '#07050F', borderLeft: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px 40px' }}>
         <div style={{ marginBottom: '36px' }}>
           <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '8px' }}>Sign in</h2>
           <p style={{ fontSize: '13px', color: '#888', lineHeight: '1.6' }}>
