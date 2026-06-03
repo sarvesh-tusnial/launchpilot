@@ -26,26 +26,31 @@ const RUBRIC = [
   { key: 'communication_clarity', label: 'Communication Clarity', def: 10 },
 ]
 
-const SCHOOL_COLS: Record<string, string> = {
-  business: '#FF6A00', finance: '#1D4ED8', ai: '#7C3AED', manufacturing: '#0D9488', generic: '#16A34A',
-}
+const PATHWAYS_PREFIX = 'P'
+const BUBBLER_CODES   = new Set(['B01', 'B02', 'B03', 'B04'])
 
-const SCHOOL_LABELS: Record<string, string> = {
-  business: 'School of Business', finance: 'School of Finance', ai: 'School of AI & Technology',
-  manufacturing: 'School of Manufacturing', generic: 'Generic — All Schools',
-}
-
-const SCHOOL_ORDER = ['business', 'finance', 'ai', 'manufacturing', 'generic']
-
-// Derive school purely from code prefix — no database dependency
 function schoolFromCode(code: string): string {
-  if (!code || typeof code !== 'string' || code.length === 0) return 'generic'
-  const c = code[0].toUpperCase()
-  if (c === 'B') return 'business'
-  if (c === 'F') return 'finance'
-  if (c === 'A') return 'ai'
-  if (c === 'M') return 'manufacturing'
+  if (!code) return 'generic'
+  if (code.startsWith(PATHWAYS_PREFIX) && code.length === 3) return 'launchpilot'
+  if (BUBBLER_CODES.has(code)) return 'bubbler'
+  if (code.includes('_')) return code.replace(/_{1}[0-9]+$/, '')
   return 'generic'
+}
+
+function schoolLabel(school: string): string {
+  if (school === 'launchpilot') return 'LaunchPilot Pathways'
+  if (school === 'bubbler') return 'Bubbler Co-Pilot'
+  if (school === 'generic') return 'Generic'
+  return 'Co-Pilot: ' + school.charAt(0).toUpperCase() + school.slice(1)
+}
+
+function schoolColor(school: string): string {
+  if (school === 'launchpilot') return '#6C47FF'
+  if (school === 'bubbler') return '#7F77DD'
+  const colors = ['#1D9E75', '#BA7517', '#D85A30', '#D4537E', '#378ADD', '#639922']
+  let hash = 0
+  for (let i = 0; i < school.length; i++) hash = school.charCodeAt(i) + ((hash << 5) - hash)
+  return colors[Math.abs(hash) % colors.length]
 }
 
 export default function TaskForm({ competencies, concepts, task }: Props) {
@@ -68,10 +73,19 @@ export default function TaskForm({ competencies, concepts, task }: Props) {
   // Group competencies by school using code prefix — guaranteed to work
   const grouped: Record<string, Competency[]> = {}
   for (const comp of competencies) {
-    if (!comp || !comp.code || typeof comp.code !== 'string') continue
+    if (!comp?.code) continue
     const school = schoolFromCode(comp.code)
+    if (!grouped[school]) grouped[school] = []
     grouped[school].push(comp)
   }
+  const SCHOOL_ORDER = Object.keys(grouped).sort((a, b) => {
+    const order = ['launchpilot', 'bubbler']
+    const ai = order.indexOf(a), bi = order.indexOf(b)
+    if (ai !== -1 && bi !== -1) return ai - bi
+    if (ai !== -1) return -1
+    if (bi !== -1) return 1
+    return a.localeCompare(b)
+  })
 
   // Concepts for selected competency
   const filteredConcepts = concepts

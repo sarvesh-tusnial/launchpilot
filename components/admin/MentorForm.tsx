@@ -11,7 +11,6 @@ interface Props {
   mentor?: any
 }
 
-
 const PATHWAYS_PREFIX = 'P'
 const BUBBLER_CODES   = new Set(['B01', 'B02', 'B03', 'B04'])
 
@@ -19,7 +18,7 @@ function schoolFromCode(code: string): string {
   if (!code) return 'generic'
   if (code.startsWith(PATHWAYS_PREFIX) && code.length === 3) return 'launchpilot'
   if (BUBBLER_CODES.has(code)) return 'bubbler'
-  if (code.includes('_')) return code.replace(/_\d+$/, '')
+  if (code.includes('_')) return code.replace(/_{1}[0-9]+$/, '')
   return 'generic'
 }
 
@@ -27,7 +26,7 @@ function schoolLabel(school: string): string {
   if (school === 'launchpilot') return 'LaunchPilot Pathways'
   if (school === 'bubbler') return 'Bubbler Co-Pilot'
   if (school === 'generic') return 'Generic'
-  return `Co-Pilot: ${school.charAt(0).toUpperCase() + school.slice(1)}`
+  return 'Co-Pilot: ' + school.charAt(0).toUpperCase() + school.slice(1)
 }
 
 function schoolColor(school: string): string {
@@ -38,7 +37,6 @@ function schoolColor(school: string): string {
   for (let i = 0; i < school.length; i++) hash = school.charCodeAt(i) + ((hash << 5) - hash)
   return colors[Math.abs(hash) % colors.length]
 }
-
 
 export default function MentorForm({ competencies, concepts, mentor }: Props) {
   const router = useRouter()
@@ -58,8 +56,17 @@ export default function MentorForm({ competencies, concepts, mentor }: Props) {
   for (const comp of competencies) {
     if (!comp?.code) continue
     const school = schoolFromCode(comp.code)
+    if (!grouped[school]) grouped[school] = []
     grouped[school].push(comp)
   }
+  const SCHOOL_ORDER = Object.keys(grouped).sort((a, b) => {
+    const order = ['launchpilot', 'bubbler']
+    const ai = order.indexOf(a), bi = order.indexOf(b)
+    if (ai !== -1 && bi !== -1) return ai - bi
+    if (ai !== -1) return -1
+    if (bi !== -1) return 1
+    return a.localeCompare(b)
+  })
 
   // Concepts for the currently expanded competency
   const filteredConcepts = concepts
