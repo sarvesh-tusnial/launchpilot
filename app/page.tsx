@@ -262,7 +262,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
             {m.role === 'maya' && (
               <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#FF6A00,#FF9A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: '700', color: '#fff', flexShrink: 0 }}>M</div>
             )}
-            <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#FF6A00' : 'rgba(255,255,255,0.05)', border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)', color: m.role === 'user' ? '#fff' : '#E8E6E0', fontSize: '13px', color: '#D4D0CC', lineHeight: '1.65' }}>
+            <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#FF6A00' : 'rgba(255,255,255,0.05)', border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)', color: m.role === 'user' ? '#fff' : '#D4D0CC', fontSize: '13px', lineHeight: '1.65' }}>
               {m.text}
             </div>
           </div>
