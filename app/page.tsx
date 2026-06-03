@@ -139,8 +139,11 @@ const PLAN_SESSIONS = [
 
 async function generateRoadmapPlan(userData: { name: string; idea: string; category: string; bizName: string; challenges: string[]; stage: string }) {
   const trackNames = userData.challenges.slice(0, 3).map(c => TRACK_NAMES[c] || c)
-  const mentors = PLAN_MENTORS.filter(m => userData.challenges.some(c => m.tags.some(t => t.includes(c) || c.includes(t)))).slice(0, 5)
-  const finalMentors = mentors.length >= 3 ? mentors : PLAN_MENTORS.slice(0, 5)
+  const mentors = PLAN_MENTORS.filter(m => userData.challenges.some(c => m.tags.some(t => t.includes(c) || c.includes(t))))
+  // Always show at least 5 — top up from full list if needed
+  const mentorKeys = new Set(mentors.map(m => m.name))
+  const topUp = PLAN_MENTORS.filter(m => !mentorKeys.has(m.name))
+  const finalMentors = [...mentors, ...topUp].slice(0, 5)
   const sprints = PLAN_SPRINTS.filter(s => userData.challenges.some(c => s.tags.includes(c))).slice(0, 6)
   const finalSprints = sprints.length >= 3 ? sprints : PLAN_SPRINTS.slice(0, 6)
 
