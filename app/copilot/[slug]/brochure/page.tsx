@@ -422,7 +422,7 @@ export default function BrochurePage() {
 
         {/* Community stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
-          {[['500+', 'Founders trained globally'], ['40+', 'Countries represented'], ['6 wks', 'Avg. to first revenue'], ['$3.8K', 'Avg. first month revenue']].map(([n, l]) => (
+          {[['500+', 'Founders trained globally'], ['100+', 'Global mentor network'], ['6 wks', 'Avg. to first revenue'], ['$3.8K', 'Avg. first month revenue']].map(([n, l]) => (
             <div key={l} style={{ textAlign: 'center', padding: '14px 8px', background: '#0A0A0F', borderRadius: '9px' }}>
               <div style={{ fontSize: '22px', fontWeight: '900', color: '#FF6A00', fontFamily: 'Playfair Display,serif', letterSpacing: '-0.02em' }}>{n}</div>
               <div style={{ fontSize: '8px', color: '#555', lineHeight: '1.3', marginTop: '4px', fontFamily: 'DM Mono,monospace' }}>{l}</div>
@@ -502,7 +502,7 @@ export default function BrochurePage() {
             { src: '/images/immersions/dubai-1.jpg',     city: 'Dubai',     label: 'Feb 2025' },
             { src: '/images/immersions/sf-1.jpg',        city: 'San Francisco', label: 'Mar 2025' },
             { src: '/images/immersions/mumbai-1.jpg',    city: 'Mumbai',    label: 'Jul 2025' },
-            { src: '/images/immersions/bali-1.jpg',      city: 'Bali',      label: 'Apr 2025' },
+            { src: '/images/immersions/nyc-1.jpg',        city: 'New York',  label: 'Jan 2025' },
             { src: '/images/immersions/singapore-2.jpg', city: 'Singapore', label: 'Aug 2025 · Capstone Day' },
           ].map((item, i) => (
             <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', position: 'relative', height: '96px', background: '#F0F0F0' }}>
@@ -668,10 +668,7 @@ export default function BrochurePage() {
           </div>
           <div style={{ background: '#FFF8F3', borderRadius: '0 0 14px 14px', padding: '18px 26px', borderBottom: '4px solid #FF6A00' }}>
             <p style={{ fontSize: '12px', color: '#333', lineHeight: '1.85', marginBottom: '16px' }}>{bc.closing}</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono,monospace' }}>→</span>
-              <span style={{ fontSize: '11px', color: '#888', fontFamily: 'DM Mono,monospace' }}>launchpilot-phi.vercel.app/apply · Rolling admissions</span>
-            </div>
+
           </div>
         </div>
       </PageWrapper>
