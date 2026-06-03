@@ -66,7 +66,7 @@ const JOURNEY = [
 
 
 // ── Chat types & data ──────────────────────────────────────────────────
-type ChatStep = 'name' | 'idea' | 'category' | 'biz_name' | 'challenges' | 'stage' | 'generating' | 'plan'
+type ChatStep = 'name' | 'idea' | 'category' | 'biz_name' | 'challenges' | 'stage' | 'generating' | 'done' | 'plan'
 
 const CATEGORIES = [
   { id: 'saas', label: 'SaaS / Software' },
@@ -216,58 +216,62 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
     setStep('stage')
   }
 
+  const [generatedPlan, setGeneratedPlan] = useState<any>(null)
+
   const handleStage = async (s: typeof STAGES[0]) => {
     addMsg('user', s.label)
     addMsg('maya', 'Building your personalised roadmap now...')
     setStep('generating')
     try {
       const result = await generateRoadmapPlan({ name, idea, category, bizName, challenges, stage: s.id })
-      onPlanGenerated(result, { name, bizName })
+      setGeneratedPlan(result)
+      addMsg('maya', `Your personalised launch roadmap for ${bizName !== 'My Business' ? bizName : 'your business'} is ready, ${name.split(' ')[0]}!`)
+      setStep('done')
     } catch {
       addMsg('maya', 'Something went wrong. Please try again.')
       setStep('stage')
     }
   }
 
-  const stepsList: ChatStep[] = ['name','idea','category','biz_name','challenges','stage']
+  const stepsList: ChatStep[] = ['name','idea','category','biz_name','challenges','stage','done']
   const currentStepIdx = stepsList.indexOf(step)
 
   return (
-    <div style={{ width: '100%', maxWidth: '640px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.4)' }}>
+    <div style={{ width: '100%', maxWidth: '640px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,106,0,0.2)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 0 60px rgba(255,106,0,0.06)', flexShrink: 0 }}>
       {/* Header */}
-      <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(108,71,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#fff', fontFamily: 'Fraunces,serif' }}>M</div>
+      <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,106,0,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#FF6A00,#FF9A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '700', color: '#fff', fontFamily: 'Playfair Display,serif' }}>M</div>
         <div>
           <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>Maya · LaunchPilot AI</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#4ADE80', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Building your roadmap</span>
+            <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#4ADE80', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>Online · LaunchPilot AI</span>
           </div>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
           {stepsList.map((_, i) => (
-            <div key={i} style={{ width: i === currentStepIdx ? '16px' : '6px', height: '6px', borderRadius: '3px', background: i < currentStepIdx ? '#6C47FF' : i === currentStepIdx ? '#8B6FFF' : 'rgba(255,255,255,0.1)', transition: 'all 0.3s' }} />
+            <div key={i} style={{ width: i === currentStepIdx ? '16px' : '6px', height: '6px', borderRadius: '3px', background: i < currentStepIdx ? '#FF6A00' : i === currentStepIdx ? '#FF8C00' : 'rgba(255,255,255,0.1)', transition: 'all 0.3s' }} />
           ))}
         </div>
       </div>
 
       {/* Messages */}
-      <div style={{ height: '260px', overflowY: 'auto', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ height: '260px', minHeight: '260px', maxHeight: '260px', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '12px', scrollBehavior: 'smooth' }}>
         {messages.map((m, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', gap: '8px', alignItems: 'flex-end' }}>
             {m.role === 'maya' && (
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: '700', color: '#fff', flexShrink: 0 }}>M</div>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#FF6A00,#FF9A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: '700', color: '#fff', flexShrink: 0 }}>M</div>
             )}
-            <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? 'rgba(108,71,255,0.15)' : 'rgba(255,255,255,0.05)', border: m.role === 'user' ? '1px solid rgba(108,71,255,0.25)' : '1px solid rgba(255,255,255,0.08)', fontSize: '13px', color: '#D4D0CC', lineHeight: '1.65' }}>
+            <div style={{ maxWidth: '78%', padding: '10px 14px', borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px', background: m.role === 'user' ? '#FF6A00' : 'rgba(255,255,255,0.05)', border: m.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)', color: m.role === 'user' ? '#fff' : '#E8E6E0', fontSize: '13px', color: '#D4D0CC', lineHeight: '1.65' }}>
               {m.text}
             </div>
           </div>
         ))}
         {step === 'generating' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#6C47FF,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#fff' }}>M</div>
+            <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(135deg,#FF6A00,#FF9A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#fff' }}>M</div>
             <div style={{ display: 'flex', gap: '4px', padding: '10px 14px', borderRadius: '4px 14px 14px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              {[0,1,2].map(d => <div key={d} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6C47FF', animation: `pulse 1.2s ${d * 0.2}s infinite` }} />)}
+              {[0,1,2].map(d => <div key={d} style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FF6A00', animation: `pulse 1.2s ${d * 0.2}s infinite` }} />)}
             </div>
           </div>
         )}
@@ -279,7 +283,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
         {step === 'category' && (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
             {CATEGORIES.map(c => (
-              <button key={c.id} onClick={() => handleCategory(c)} style={{ padding: '9px 14px', borderRadius: '8px', background: 'rgba(108,71,255,0.08)', border: '1px solid rgba(108,71,255,0.2)', color: '#C8C4BC', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{c.label}</button>
+              <button key={c.id} onClick={() => handleCategory(c)} style={{ padding: '9px 14px', borderRadius: '8px', background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.2)', color: '#C8C4BC', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{c.label}</button>
             ))}
           </div>
         )}
@@ -290,14 +294,14 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
               {CHALLENGES.map(c => {
                 const sel = challenges.includes(c.id)
                 return (
-                  <button key={c.id} onClick={() => toggleChallenge(c.id)} style={{ padding: '9px 12px', borderRadius: '8px', background: sel ? 'rgba(108,71,255,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${sel ? 'rgba(108,71,255,0.4)' : 'rgba(255,255,255,0.08)'}`, color: sel ? '#C8C4BC' : '#777', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px' }}>
-                    <span style={{ width: '13px', height: '13px', borderRadius: '3px', border: sel ? '2px solid #8B6FFF' : '1px solid rgba(255,255,255,0.2)', background: sel ? '#6C47FF' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: '#fff' }}>{sel ? '✓' : ''}</span>
+                  <button key={c.id} onClick={() => toggleChallenge(c.id)} style={{ padding: '9px 12px', borderRadius: '8px', background: sel ? 'rgba(255,106,0,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${sel ? 'rgba(255,106,0,0.4)' : 'rgba(255,255,255,0.08)'}`, color: sel ? '#C8C4BC' : '#777', fontSize: '12px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                    <span style={{ width: '13px', height: '13px', borderRadius: '3px', border: sel ? '2px solid #FF8C00' : '1px solid rgba(255,255,255,0.2)', background: sel ? '#FF6A00' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '8px', color: '#fff' }}>{sel ? '✓' : ''}</span>
                     {c.label}
                   </button>
                 )
               })}
             </div>
-            <button onClick={handleChallengesDone} disabled={challenges.length === 0} style={{ width: '100%', padding: '11px', borderRadius: '10px', border: 'none', background: challenges.length > 0 ? '#6C47FF' : 'rgba(108,71,255,0.2)', color: challenges.length > 0 ? '#fff' : 'rgba(255,255,255,0.3)', fontFamily: 'inherit', fontWeight: '700', fontSize: '14px', cursor: challenges.length > 0 ? 'pointer' : 'default' }}>
+            <button onClick={handleChallengesDone} disabled={challenges.length === 0} style={{ width: '100%', padding: '11px', borderRadius: '10px', border: 'none', background: challenges.length > 0 ? '#FF6A00' : 'rgba(255,106,0,0.2)', color: challenges.length > 0 ? '#fff' : 'rgba(255,255,255,0.3)', fontFamily: 'inherit', fontWeight: '700', fontSize: '14px', cursor: challenges.length > 0 ? 'pointer' : 'default' }}>
               {challenges.length === 0 ? 'Select your challenges' : `Continue with ${challenges.length} challenge${challenges.length > 1 ? 's' : ''} →`}
             </button>
           </div>
@@ -305,9 +309,15 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
         {step === 'stage' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {STAGES.map(s => (
-              <button key={s.id} onClick={() => handleStage(s)} style={{ padding: '11px 16px', borderRadius: '10px', background: 'rgba(108,71,255,0.08)', border: '1px solid rgba(108,71,255,0.2)', color: '#C8C4BC', fontSize: '13px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{s.label}</button>
+              <button key={s.id} onClick={() => handleStage(s)} style={{ padding: '11px 16px', borderRadius: '10px', background: 'rgba(255,106,0,0.08)', border: '1px solid rgba(255,106,0,0.2)', color: '#C8C4BC', fontSize: '13px', textAlign: 'left', fontFamily: 'inherit', cursor: 'pointer' }}>{s.label}</button>
             ))}
           </div>
+        )}
+        {step === 'done' && generatedPlan && (
+          <button onClick={() => onPlanGenerated(generatedPlan, { name, bizName })}
+            style={{ width: '100%', padding: '14px', borderRadius: '12px', border: 'none', background: '#FF6A00', color: '#fff', fontFamily: 'inherit', fontWeight: '700', fontSize: '15px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            View your personalised roadmap →
+          </button>
         )}
         {(step === 'name' || step === 'idea' || step === 'biz_name') && (
           <div style={{ display: 'flex', gap: '8px' }}>
@@ -317,7 +327,7 @@ function MayaChatWidget({ onPlanGenerated }: { onPlanGenerated: (plan: any, user
             {step === 'biz_name' && (
               <button onClick={() => { setInputVal('skip'); setTimeout(handleSend, 0) }} style={{ padding: '11px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#888', fontSize: '11px', cursor: 'pointer', fontFamily: 'DM Mono,monospace', whiteSpace: 'nowrap' as const }}>No name yet</button>
             )}
-            <button onClick={handleSend} disabled={!inputVal.trim()} style={{ width: '42px', height: '42px', borderRadius: '10px', border: 'none', background: inputVal.trim() ? '#6C47FF' : 'rgba(108,71,255,0.3)', color: '#fff', fontSize: '16px', cursor: inputVal.trim() ? 'pointer' : 'default', flexShrink: 0 }}>→</button>
+            <button onClick={handleSend} disabled={!inputVal.trim()} style={{ width: '42px', height: '42px', borderRadius: '10px', border: 'none', background: inputVal.trim() ? '#FF6A00' : 'rgba(255,106,0,0.3)', color: '#fff', fontSize: '16px', cursor: inputVal.trim() ? 'pointer' : 'default', flexShrink: 0 }}>→</button>
           </div>
         )}
       </div>
@@ -346,8 +356,8 @@ function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: str
       {/* Top bar */}
       <div className="plan-hbar" style={{ position: 'sticky', top: 0, zIndex: 100, padding: '14px 48px', background: 'rgba(5,3,9,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(108,71,255,0.2)', border: '1px solid rgba(108,71,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#8B6FFF' }} />
+          <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#FF6A00' }} />
           </div>
           <div>
             <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>{bizName === 'My Business' ? 'Your' : bizName} Roadmap</div>
@@ -356,7 +366,7 @@ function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: str
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button onClick={onBack} style={{ padding: '7px 14px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Mono,monospace' }}>← Start over</button>
-          <Link href="/apply" style={{ padding: '9px 20px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
+          <Link href="/apply" style={{ padding: '9px 20px', borderRadius: '8px', background: '#FF6A00', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
         </div>
       </div>
 
@@ -364,9 +374,9 @@ function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: str
 
         {/* Hero */}
         <div className="plan-fade" style={{ marginBottom: '56px' }}>
-          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#6C47FF', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
           <h1 className="plan-serif" style={{ fontSize: 'clamp(30px,5vw,50px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '14px' }}>
-            Hey {firstName},<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>{plan.headline || 'your launch roadmap is ready.'}</span>
+            Hey {firstName},<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>{plan.headline || 'your launch roadmap is ready.'}</span>
           </h1>
           <p style={{ fontSize: '15px', color: '#AAA', lineHeight: '1.8', maxWidth: '520px' }}>
             Based on your idea and challenges — here's exactly what LaunchPilot will help you build, tailored to {bizName === 'My Business' ? 'your business' : bizName}.
@@ -375,13 +385,13 @@ function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: str
 
         {/* Tracks */}
         <div className="plan-fade p-d1" style={{ marginBottom: '48px' }}>
-          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#8B6FFF', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Your 3 focus areas</div>
+          <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase' as const, letterSpacing: '0.18em', marginBottom: '6px' }}>Your 3 focus areas</div>
           <div style={{ fontSize: '15px', fontWeight: '600', color: '#E8E6E0', marginBottom: '14px' }}>Built around your biggest challenges</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {plan.tracks?.map((t: any, i: number) => (
               <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
-                <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(108,71,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '10px', fontWeight: '700', color: '#8B6FFF' }}>0{i+1}</span>
+                <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(255,106,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'DM Mono,monospace', fontSize: '10px', fontWeight: '700', color: '#FF6A00' }}>0{i+1}</span>
                 </div>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6', marginBottom: '2px' }}>{t.name}</div>
@@ -501,11 +511,11 @@ function RoadmapPlanPage({ plan, name, bizName, onBack }: { plan: any; name: str
         )}
 
         {/* CTA */}
-        <div style={{ padding: '40px', background: 'rgba(108,71,255,0.06)', border: '1px solid rgba(108,71,255,0.18)', borderRadius: '20px', textAlign: 'center' }}>
+        <div style={{ padding: '40px', background: 'rgba(255,106,0,0.04)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '20px', textAlign: 'center' }}>
           <div className="plan-serif" style={{ fontSize: 'clamp(22px,4vw,34px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '10px' }}>This roadmap is waiting for you.</div>
           <p style={{ fontSize: '14px', color: '#888', lineHeight: '1.7', maxWidth: '400px', margin: '0 auto 24px' }}>Apply for a spot on LaunchPilot — we review every application within 24 hours.</p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 36px', borderRadius: '10px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '15px', fontWeight: '700' }}>Apply for a spot →</Link>
+            <Link href="/apply" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 36px', borderRadius: '10px', background: '#FF6A00', color: '#fff', textDecoration: 'none', fontSize: '15px', fontWeight: '700' }}>Apply for a spot →</Link>
             <button onClick={onBack} style={{ padding: '14px 24px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#AAA', fontSize: '13px', cursor: 'pointer', fontFamily: 'inherit' }}>Start over</button>
           </div>
           <div style={{ fontFamily: 'DM Mono,monospace', fontSize: '10px', color: '#333', marginTop: '14px', letterSpacing: '0.06em' }}>Rolling admissions · Review within 24 hours</div>
@@ -526,15 +536,15 @@ export default function HomePage() {
   return (
     <div style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#F0EDE6', overflowX: 'hidden' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        .serif { font-family: 'Fraunces', Georgia, serif; }
+        .serif { font-family: 'Playfair Display', Georgia, serif; }
         .mono { font-family: 'DM Mono', monospace; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         .fade-up { animation: fadeUp 0.7s ease both; }
         .d1{animation-delay:0.1s} .d2{animation-delay:0.25s} .d3{animation-delay:0.4s}
-        .pw-card:hover { border-color: rgba(108,71,255,0.35) !important; transform: translateY(-2px); background: rgba(108,71,255,0.06) !important; }
+        .pw-card:hover { border-color: rgba(255,106,0,0.35) !important; transform: translateY(-2px); background: rgba(255,106,0,0.06) !important; }
         .pw-card { transition: all 0.18s; }
         .cta:hover { opacity:0.88; transform:translateY(-1px); }
         .cta { transition: all 0.15s; }
@@ -572,22 +582,22 @@ export default function HomePage() {
         </div>
         <div className="nav-desktop" style={{ display: 'flex', gap: '10px' }}>
           <Link href="/auth/login" className="ghost" style={{ padding: '8px 20px', borderRadius: '8px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#AAA', textDecoration: 'none', fontSize: '13px', fontWeight: '500' }}>Sign In</Link>
-          <Link href="/apply" className="cta" style={{ padding: '9px 22px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
+          <Link href="/apply" className="cta" style={{ padding: '9px 22px', borderRadius: '8px', background: '#FF6A00', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply Now →</Link>
         </div>
         <Link href="/apply" className="nav-mobile-btn cta" style={{ display: 'none', padding: '9px 18px', borderRadius: '8px', background: '#6C47FF', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '700' }}>Apply →</Link>
       </nav>
 
       {/* HERO */}
-      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 60px', position: 'relative' }}>
+      <section className='hero-section' style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '400px', background: 'radial-gradient(ellipse, rgba(108,71,255,0.13) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none' }} />
         <div style={{ position: 'relative', maxWidth: '860px' }}>
           <div className="fade-up d1" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '5px 14px', borderRadius: '100px', background: 'rgba(108,71,255,0.1)', border: '1px solid rgba(108,71,255,0.25)', marginBottom: '32px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#6C47FF', display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            <span className="mono" style={{ fontSize: '10px', color: '#8B6FFF', textTransform: 'uppercase', letterSpacing: '0.16em' }}>10 pathways · idea to first revenue</span>
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FF6A00', display: 'inline-block', animation: 'pulse 2s infinite' }} />
+            <span className="mono" style={{ fontSize: '10px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.16em' }}>10 pathways · idea to first revenue</span>
           </div>
           <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(44px, 7vw, 84px)', fontWeight: '900', lineHeight: '1.01', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-            Stop planning.<br /><span style={{ color: '#6C47FF', fontStyle: 'italic' }}>Start launching.</span>
+            Stop planning.<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>Start launching.</span>
           </h1>
           <p className="fade-up d3" style={{ fontSize: '17px', color: '#777', lineHeight: '1.75', maxWidth: '480px', margin: '0 auto 36px', fontWeight: '400' }}>
             Answer 6 questions — Maya builds your personalised launch roadmap in seconds.
