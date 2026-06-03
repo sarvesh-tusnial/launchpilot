@@ -283,7 +283,7 @@ export default function CopilotPage() {
           {content?.mentors && content.mentors.length > 0 && (
             <div style={{ marginBottom: '56px' }}>
               <div className="section-label" style={{ color: '#1D9E75' }}>Your mentors</div>
-              <div className="section-title">Learn from world-class practitioners — live</div>
+              <div className="section-title">From 100+ mentors, we shortlisted these 5 for {copilotProfile.business_name}</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {content.mentors.map((m: any, i: number) => (
                   <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '14px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
