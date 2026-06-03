@@ -101,7 +101,7 @@ const RED    = rgb(0.847, 0.353, 0.188)
 const PALE   = rgb(0.976, 0.976, 0.976)
 
 function wrap(text: string, maxChars: number): string[] {
-  const words = text.replace(/\n/g, ' ').split(' ')
+  const words = sanitize(text).replace(/\n/g, ' ').split(' ')
   const lines: string[] = []
   let current = ''
   for (const word of words) {
@@ -122,8 +122,19 @@ function drawRect(page: any, x: number, y: number, w: number, h: number, color: 
   page.drawRectangle({ x, y, width: w, height: h, color })
 }
 
+function sanitize(s: string): string {
+  return (s || '')
+    .replace(/\u20b9/g, 'Rs.')
+    .replace(/–/g, '-').replace(/—/g, '--')
+    .replace(/‘/g, "'").replace(/’/g, "'")
+    .replace(/“/g, '"').replace(/”/g, '"')
+    .replace(/…/g, '...').replace(/•/g, '-')
+    .replace(/·/g, '-').replace(/ /g, ' ')
+    .replace(/[^ -]/g, '')
+}
+
 function drawText(page: any, text: string, x: number, y: number, size: number, color: any, font: any) {
-  page.drawText(text, { x, y, size, color, font })
+  page.drawText(sanitize(text), { x, y, size, color, font })
 }
 
 function sectionHeader(page: any, fonts: Fonts, title: string, y: number, pageW: number): number {
@@ -178,7 +189,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const bc = await generateBrochureContent(cp, tracks, concepts)
 
     // Sanitize all text — replace characters PDF standard fonts can't encode
-    const sanitize = (s: string) => (s || '').replace(/₹/g, 'Rs.').replace(/[^ -]/g, (c) => {
+    const sanitize = (s: string) => (s || '').replace(/\u20b9/g, 'Rs.').replace(/[^ -]/g, (c) => {
       const map: Record<string, string> = { '–':'--','—':'--','‘':"'",'\u2019':"'",'\u201C':'"','\u201D':'"','\u2026':'...','\u2022':'-','\u00B7':'-' }
       return map[c] || ''
     })
