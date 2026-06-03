@@ -144,41 +144,17 @@ async function generateRoadmapPlan(userData: { name: string; idea: string; categ
   const sprints = PLAN_SPRINTS.filter(s => userData.challenges.some(c => s.tags.includes(c))).slice(0, 6)
   const finalSprints = sprints.length >= 3 ? sprints : PLAN_SPRINTS.slice(0, 6)
 
-  const prompt = `You are a startup advisor. Generate a personalised program plan for this founder.
-FOUNDER: ${userData.name}
-BUSINESS: ${userData.bizName}
-CATEGORY: ${userData.category}
-IDEA: ${userData.idea}
-STAGE: ${userData.stage}
-TOP CHALLENGES: ${userData.challenges.slice(0, 3).join(', ')}
-TRACKS: ${trackNames.join(', ')}
-Return ONLY valid JSON:
-{
-  "headline": "one powerful line about what this founder can achieve — specific to their business, max 12 words",
-  "track_descriptions": ["1 sentence on what they learn in track 1 specific to ${userData.bizName}", "track 2", "track 3"],
-  "critical_questions": ["sharp question max 10 words", "question 2", "question 3", "question 4"],
-  "timeline": [
-    { "month": "Month 1", "milestone": "short title", "description": "specific to ${userData.bizName}" },
-    { "month": "Month 2", "milestone": "...", "description": "..." },
-    { "month": "Month 3", "milestone": "...", "description": "..." },
-    { "month": "Month 4", "milestone": "...", "description": "..." },
-    { "month": "Month 5", "milestone": "...", "description": "..." },
-    { "month": "Month 6", "milestone": "...", "description": "..." }
-  ],
-  "tools_highlight": "1 sentence on the most useful tools for ${userData.bizName} from our 500+ deals platform"
-}`
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/api/generate-roadmap', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] }),
+    body: JSON.stringify({ ...userData, trackNames }),
   })
-  const data = await res.json()
-  const text = data.content?.[0]?.text || '{}'
-  const parsed = JSON.parse(text.replace(/```json|```/g, '').trim())
+  const parsed = await res.json()
+  if (parsed.error) throw new Error(parsed.error)
+
   return {
     ...parsed,
-    tracks: trackNames.map((name, i) => ({ name, description: parsed.track_descriptions?.[i] || '' })),
+    tracks: trackNames.map((name: string, i: number) => ({ name, description: parsed.track_descriptions?.[i] || '' })),
     mentors: finalMentors,
     sprints: finalSprints,
     sessions: PLAN_SESSIONS,
