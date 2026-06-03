@@ -81,7 +81,7 @@ STAGE: ${businessStage}
 COUNTRY: ${country}
 TRACKS: ${track1Name}, ${track2Name}, ${track3Name}
 
-AVAILABLE MENTORS (pick 3 most relevant):
+AVAILABLE MENTORS (pick 5 most relevant):
 ${ALL_MENTORS.map(m => `- ${m.key}: ${m.name} (${m.role}, ${m.company}) — expertise: ${m.expertise.join(', ')}`).join('\n')}
 
 AVAILABLE SPRINTS (pick 3 most relevant):
@@ -93,25 +93,27 @@ ${SUNDAY_SESSIONS.map(s => `- ${s.city}: ${s.theme} — ${s.description}`).join(
 Generate a personalised program overview. Return ONLY valid JSON, no markdown, no explanation:
 {
   "critical_warnings": [
-    { "title": "short fear-inducing title", "description": "2 sentences specific to this business — what will go wrong if they don't fix this" },
-    { "title": "...", "description": "..." },
-    { "title": "...", "description": "..." },
-    { "title": "...", "description": "..." }
+    { "question": "short sharp question that creates fear — specific to this business, max 10 words, no answer" },
+    { "question": "..." },
+    { "question": "..." },
+    { "question": "..." }
   ],
   "mentors": [
-    { "key": "mentor_key_from_list", "reason": "1 sentence why this mentor is relevant to ${businessName}" },
+    { "key": "mentor_key_from_list", "reason": "1 sentence on what the founder will learn from this mentor in real world sessions" },
+    { "key": "...", "reason": "..." },
+    { "key": "...", "reason": "..." },
     { "key": "...", "reason": "..." },
     { "key": "...", "reason": "..." }
   ],
   "sprints": [
-    { "name": "sprint name from list", "month": "month", "description": "original description", "relevance": "1 sentence why relevant to ${businessName}" },
-    { "name": "...", "month": "...", "description": "...", "relevance": "..." },
-    { "name": "...", "month": "...", "description": "...", "relevance": "..." }
+    { "name": "sprint name from list", "description": "original description", "relevance": "1 sentence why relevant to ${businessName}" },
+    { "name": "...", "description": "...", "relevance": "..." },
+    { "name": "...", "description": "...", "relevance": "..." }
   ],
   "sunday_sessions": [
-    { "city": "city", "theme": "theme", "description": "original description", "relevance": "1 sentence why" },
-    { "city": "...", "theme": "...", "description": "...", "relevance": "..." },
-    { "city": "...", "theme": "...", "description": "...", "relevance": "..." }
+    { "theme": "theme", "description": "original description", "relevance": "1 sentence why" },
+    { "theme": "...", "description": "...", "relevance": "..." },
+    { "theme": "...", "description": "...", "relevance": "..." }
   ],
   "timeline": [
     { "month": "Month 1", "milestone": "short milestone title", "description": "what they will achieve — specific to ${businessName}" },
@@ -121,7 +123,8 @@ Generate a personalised program overview. Return ONLY valid JSON, no markdown, n
     { "month": "Month 5", "milestone": "...", "description": "..." },
     { "month": "Month 6", "milestone": "...", "description": "..." }
   ],
-  "tools_highlight": "2 sentences about the 500+ tools platform — specific to what ${businessName} will need (mention actual tools like Webflow, Notion, Stripe, Mixpanel, etc.)"
+  "tools": ["tool1", "tool2", "tool3", "tool4", "tool5", "tool6"],
+  "tools_highlight": "1 sentence on how these tools help ${businessName} specifically"
 }`
 
   const response = await anthropic.messages.create({
