@@ -206,9 +206,8 @@ export default function BrochurePage() {
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: '700', color: '#111', fontFamily: 'Playfair Display,serif' }}>{t.name}</div>
                 </div>
-                <div style={{ padding: '10px 16px', display: 'flex', gap: '16px' }}>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: '10px', color: '#555', lineHeight: '1.7', marginBottom: '6px' }}>{ov.overview}</p>
+                <div style={{ padding: '10px 16px' }}>
+                    <p style={{ fontSize: '10px', color: '#555', lineHeight: '1.7', marginBottom: '8px' }}>{ov.overview}</p>
                     {(ov.outcomes || []).length > 0 && (
                       <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                         {ov.outcomes.map((o: string, i: number) => (
@@ -216,13 +215,14 @@ export default function BrochurePage() {
                         ))}
                       </div>
                     )}
-                  </div>
-                  <div style={{ width: '140px', flexShrink: 0 }}>
-                    <div style={{ fontSize: '7px', color: '#AAA', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '5px' }}>8 Concepts</div>
+                </div>
+                <div style={{ padding: '10px 16px', borderTop: '1px solid #F0F0F0', background: '#FAFAFA' }}>
+                  <div style={{ fontSize: '7px', color: '#AAA', fontFamily: 'DM Mono,monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>8 Concepts</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                     {(t.concepts || []).map((c: any) => (
-                      <div key={c.sequence} style={{ display: 'flex', gap: '5px', alignItems: 'flex-start', marginBottom: '2px' }}>
-                        <span style={{ fontSize: '7px', fontWeight: '700', color: col, fontFamily: 'DM Mono,monospace', flexShrink: 0, marginTop: '1px' }}>{String(c.sequence).padStart(2, '0')}</span>
-                        <span style={{ fontSize: '8px', color: '#555', lineHeight: '1.3' }}>{c.title}</span>
+                      <div key={c.sequence} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '5px 8px', background: '#fff', border: '1px solid #EEEEEE', borderRadius: '5px' }}>
+                        <span style={{ fontSize: '8px', fontWeight: '700', color: col, fontFamily: 'DM Mono,monospace', flexShrink: 0, marginTop: '1px' }}>{String(c.sequence).padStart(2, '0')}</span>
+                        <span style={{ fontSize: '9px', color: '#333', lineHeight: '1.4' }}>{c.title}</span>
                       </div>
                     ))}
                   </div>
@@ -506,7 +506,7 @@ export default function BrochurePage() {
             { src: '/images/immersions/singapore-2.jpg', city: 'Singapore', label: 'Aug 2025 · Capstone Day' },
           ].map((item, i) => (
             <div key={i} style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', position: 'relative', height: '96px', background: '#F0F0F0' }}>
-              <img src={item.src} alt={item.city} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block' }} onError={(e) => { const el = e.target as HTMLImageElement; el.style.display='none' }} />
+              <img src={item.src} alt={item.city} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }} onError={(e) => { const p = (e.target as HTMLImageElement).parentElement; if(p){ p.style.background='#E0E0E0'; (e.target as HTMLImageElement).style.display='none' } }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '4px 8px', background: 'linear-gradient(transparent,rgba(0,0,0,0.7))' }}>
                 <div style={{ fontSize: '8px', fontWeight: '700', color: '#fff' }}>{item.city}</div>
                 <div style={{ fontSize: '7px', color: 'rgba(255,255,255,0.6)', fontFamily: 'DM Mono,monospace' }}>{item.label}</div>
@@ -649,9 +649,9 @@ export default function BrochurePage() {
           </div>
           <div style={{ background: '#FFF8F3', borderRadius: '0 0 14px 14px', padding: '18px 26px', borderBottom: '4px solid #FF6A00' }}>
             <p style={{ fontSize: '12px', color: '#333', lineHeight: '1.85', marginBottom: '16px' }}>{bc.closing}</p>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <div style={{ padding: '10px 24px', background: '#FF6A00', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: '700', fontFamily: 'DM Sans,sans-serif' }}>Apply for a spot →</div>
-              <span style={{ fontSize: '10px', color: '#AAA', fontFamily: 'DM Mono,monospace' }}>launchpilot-phi.vercel.app/apply</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono,monospace' }}>→</span>
+              <span style={{ fontSize: '11px', color: '#888', fontFamily: 'DM Mono,monospace' }}>launchpilot-phi.vercel.app/apply · Rolling admissions</span>
             </div>
           </div>
         </div>
