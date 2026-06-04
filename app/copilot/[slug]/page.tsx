@@ -25,6 +25,7 @@ export default function CopilotPage() {
   const [profile, setProfile]         = useState<any>(null)
   const [loadingTrack, setLoadingTrack] = useState(false)
   const [initialized, setInitialized] = useState(false)
+  const [copilotView, setCopilotView] = useState<'dashboard'|'chat'|'tracks'|'progress'>('dashboard')
 
   useEffect(() => { loadCopilotProfile() }, [slug])
 
@@ -137,85 +138,321 @@ export default function CopilotPage() {
 
   // ── DASHBOARD (after login) ──
   if (loggedIn) return (
-    <div style={{ background: '#050309', minHeight: '100vh', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#E8E6E0', display: 'flex', flexDirection: 'column' }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap'); .mono{font-family:'DM Mono',monospace;}`}</style>
-      <nav className="dash-nav" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(5,3,9,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
+    <div style={{ background: '#05050A', minHeight: '100vh', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#E8E6E0', display: 'flex', flexDirection: 'column' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+        .mono{font-family:'DM Mono',monospace}
+        .nav-item{transition:background 0.15s;cursor:pointer}
+        .nav-item:hover{background:rgba(255,255,255,0.04)!important}
+        .nav-item.active{background:rgba(255,106,0,0.1)!important;border-left:3px solid #FF6A00!important;color:#F0EDE6!important}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media(max-width:768px){.dash-aside{display:none!important}.dash-main{margin-left:0!important}}
+      `}</style>
+
+      {/* NAV */}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(5,5,10,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(127,119,221,0.2)', border: '1px solid rgba(127,119,221,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#9B94F0' }} />
+          <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FF6A00' }} />
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>{copilotProfile.business_name} Co-Pilot</div>
-            <div className="mono" style={{ fontSize: '9px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Powered by LaunchPilot</div>
+            <div style={{ fontSize: '13px', fontWeight: '700', color: '#F0EDE6' }}>{copilotProfile.business_name} Co-Pilot</div>
+            <div className="mono" style={{ fontSize: '8px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span className="mono" style={{ fontSize: '11px', color: '#555' }}>{copilotProfile.founder_name}</span>
-          <button onClick={handleSignOut} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', cursor: 'pointer', fontFamily: 'DM Mono, monospace' }}>Sign out</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF6A00' }}>
+            {copilotProfile.founder_name?.[0]?.toUpperCase()}
+          </div>
+          <button onClick={handleSignOut} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.08)', background: 'transparent', color: '#666', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Sign out</button>
         </div>
       </nav>
+
       <div style={{ display: 'flex', flex: 1, paddingTop: '56px' }}>
-        <aside className="dash-aside" style={{ width: '256px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.06)', padding: '24px 16px', position: 'fixed', top: '56px', bottom: 0, left: 0, overflowY: 'auto', background: '#050309' }}>
-          <div className="mono" style={{ fontSize: '9px', color: '#666', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '10px' }}>Tracks</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '20px' }}>
-            {tracks.map((t, i) => {
-              const isActive = t.code === activeTrack?.code
-              return (
-                <button key={t.code} onClick={() => switchTrack(t)} style={{ width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: '8px', background: isActive ? 'rgba(127,119,221,0.12)' : 'transparent', border: isActive ? '1px solid rgba(127,119,221,0.25)' : '1px solid transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '22px', height: '22px', borderRadius: '5px', background: isActive ? 'rgba(127,119,221,0.2)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span className="mono" style={{ fontSize: '9px', fontWeight: '700', color: isActive ? '#9B94F0' : '#555' }}>0{i + 1}</span>
-                  </div>
-                  <span style={{ fontSize: '12px', fontWeight: '500', color: isActive ? '#F0EDE6' : '#888', lineHeight: '1.3' }}>{t.name}</span>
-                </button>
-              )
-            })}
-          </div>
-          {!loadingTrack && activeTrack && (
-            <>
-              <div style={{ padding: '14px', background: 'rgba(127,119,221,0.08)', border: '1px solid rgba(127,119,221,0.2)', borderRadius: '10px', marginBottom: '16px' }}>
-                <div className="mono" style={{ fontSize: '9px', color: '#9B94F0', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '6px' }}>Now Studying</div>
-                <div style={{ fontSize: '12px', fontWeight: '500', color: '#E8E6E0', marginBottom: '8px', lineHeight: '1.4' }}>{currentConcept?.title || 'Starting first concept'}</div>
+
+        {/* SIDEBAR */}
+        <aside className="dash-aside" style={{ width: '220px', flexShrink: 0, position: 'fixed', top: '56px', bottom: 0, left: 0, background: '#05050A', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+          <div style={{ padding: '20px 12px', flex: 1 }}>
+
+            {/* Nav */}
+            {([
+              { id: 'dashboard', label: 'Dashboard',      icon: '⊞' },
+              { id: 'chat',      label: 'Chat with Maya', icon: '◉', dot: true },
+              { id: 'tracks',    label: 'My Tracks',      icon: '◈' },
+              { id: 'progress',  label: 'Progress',       icon: '◎' },
+            ] as const).map(item => (
+              <div key={item.id}
+                className={`nav-item ${copilotView === item.id ? 'active' : ''}`}
+                onClick={() => setCopilotView(item.id as any)}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', marginBottom: '2px', color: copilotView === item.id ? '#F0EDE6' : '#555', fontSize: '13px', fontWeight: copilotView === item.id ? '600' : '400', borderLeft: '3px solid transparent' }}>
+                <span style={{ fontSize: '14px', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ flex: 1 }}>{item.label}</span>
+                {'dot' in item && item.dot && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ADE80', animation: 'pulse 2s infinite' }} />}
+              </div>
+            ))}
+
+            {/* Now studying card */}
+            {activeTrack && !loadingTrack && (
+              <div style={{ margin: '16px 0 8px', padding: '14px', background: 'rgba(255,106,0,0.06)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '10px' }}>
+                <div className="mono" style={{ fontSize: '8px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '5px' }}>Now Studying</div>
+                <div className="mono" style={{ fontSize: '9px', color: '#555', marginBottom: '2px' }}>{activeTrack.code}</div>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: '#F0EDE6', marginBottom: '10px', lineHeight: '1.3' }}>{activeTrack.name}</div>
                 <div style={{ display: 'flex', gap: '2px', marginBottom: '4px' }}>
                   {Array.from({ length: totalConcepts }).map((_, i) => (
-                    <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < masteredCount ? '#9B94F0' : 'rgba(255,255,255,0.08)' }} />
+                    <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < masteredCount ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
                   ))}
                 </div>
-                <div className="mono" style={{ fontSize: '9px', color: '#666' }}>{masteredCount}/{totalConcepts} completed</div>
+                <div className="mono" style={{ fontSize: '9px', color: '#444' }}>{masteredCount}/{totalConcepts} concepts</div>
+                <button onClick={() => setCopilotView('chat')} style={{ width: '100%', marginTop: '10px', padding: '8px', borderRadius: '7px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
+                  Continue with Maya →
+                </button>
               </div>
-              {concepts.length > 0 && (
-                <>
-                  <div className="mono" style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Concepts</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-                    {concepts.map((c: any) => {
-                      const isDone = completedIds.has(c.id)
-                      const isCurrent = c.id === currentConcept?.id
-                      return (
-                        <div key={c.id} style={{ display: 'flex', gap: '8px', padding: '5px 6px', borderRadius: '5px', background: isCurrent ? 'rgba(255,255,255,0.04)' : 'transparent' }}>
-                          <span style={{ fontSize: '9px', color: isDone ? '#1D9E75' : isCurrent ? '#9B94F0' : '#444', flexShrink: 0, marginTop: '2px' }}>{isDone ? '✓' : isCurrent ? '→' : '○'}</span>
-                          <span style={{ fontSize: '11px', color: isDone ? '#555' : isCurrent ? '#E8E6E0' : '#888', lineHeight: '1.4', textDecoration: isDone ? 'line-through' : 'none' }}>{c.title}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </>
-              )}
-            </>
-          )}
+            )}
+          </div>
         </aside>
-        <main className="dash-main" style={{ marginLeft: '256px', flex: 1, height: 'calc(100vh - 56px)', overflow: 'hidden' }}>
-          {!initialized || loadingTrack ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <div className="mono" style={{ fontSize: '11px', color: '#555' }}>Loading your session...</div>
+
+        {/* MAIN */}
+        <main className="dash-main" style={{ marginLeft: '220px', flex: 1, overflowY: 'auto', height: 'calc(100vh - 56px)' }}>
+
+          {/* ── DASHBOARD VIEW ── */}
+          {copilotView === 'dashboard' && (
+            <div style={{ padding: '36px 40px', maxWidth: '1000px' }}>
+              <div style={{ marginBottom: '28px' }}>
+                <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '6px' }}>
+                  Hey {copilotProfile.founder_name.split(' ')[0]} 👋
+                </h1>
+                <p style={{ fontSize: '13px', color: '#555' }}>
+                  {activeTrack ? `You're working on ${activeTrack.name}. Keep going.` : `Welcome to your ${copilotProfile.business_name} Co-Pilot.`}
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '28px' }}>
+                {[
+                  { value: tracks.length,   label: 'Focus tracks',      color: '#FF6A00' },
+                  { value: masteredCount,   label: 'Concepts mastered', color: '#4ADE80' },
+                  { value: totalConcepts - masteredCount, label: 'Concepts left', color: '#F59E0B' },
+                  { value: tracks.length > 0 ? `${Math.round((masteredCount / (tracks.length * totalConcepts || 1)) * 100)}%` : '0%', label: 'Overall progress', color: '#60A5FA' },
+                ].map((stat, i) => (
+                  <div key={i} style={{ padding: '18px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px' }}>
+                    <div style={{ fontSize: '28px', fontWeight: '800', color: stat.color, letterSpacing: '-0.03em', marginBottom: '4px' }}>{stat.value}</div>
+                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Resume card */}
+              {activeTrack && (
+                <div style={{ padding: '22px 26px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '6px' }}>Resume where you left off</div>
+                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em', marginBottom: '4px' }}>{activeTrack.code} · {activeTrack.name}</div>
+                    <div style={{ fontSize: '13px', color: '#555', marginBottom: '12px' }}>
+                      {currentConcept ? `Working on "${currentConcept.title}"` : 'Starting first concept — ready to begin'}
+                    </div>
+                    <div style={{ display: 'flex', gap: '2px', marginBottom: '5px' }}>
+                      {Array.from({ length: totalConcepts }).map((_, i) => (
+                        <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < masteredCount ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                      ))}
+                    </div>
+                    <div className="mono" style={{ fontSize: '10px', color: '#444' }}>{masteredCount}/{totalConcepts} concepts</div>
+                    {/* Concepts preview */}
+                    {concepts.length > 0 && (
+                      <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                        {concepts.map((c: any) => {
+                          const done = completedIds.has(c.id)
+                          const isCurrent = c.id === currentConcept?.id
+                          return (
+                            <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
+                              <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                              <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                  <button onClick={() => setCopilotView('chat')} style={{ padding: '12px 24px', borderRadius: '10px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                    Continue with Maya →
+                  </button>
+                </div>
+              )}
+
+              {/* My Tracks */}
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>My Tracks</div>
+                  <button onClick={() => setCopilotView('tracks')} style={{ fontSize: '12px', color: '#FF6A00', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>View all →</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
+                  {tracks.map((t, i) => {
+                    const isActive = t.code === activeTrack?.code
+                    const trackConcepts = concepts.filter(c => c.competency_code === t.code)
+                    const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
+                    const trackTotal = trackConcepts.length || 8
+                    return (
+                      <div key={t.code} style={{ padding: '16px 18px', background: isActive ? 'rgba(255,106,0,0.04)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '12px', cursor: 'pointer' }}
+                        onClick={() => { switchTrack(t); setCopilotView('chat') }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
+                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Paused'}</span>
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
+                        <div className="mono" style={{ fontSize: '9px', color: '#444', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {Array.from({ length: trackTotal }).map((_, i) => (
+                            <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
-          ) : (
-            <MayaChat
-              profile={profile || { full_name: copilotProfile.founder_name, email: copilotProfile.email }}
-              openingMessage={openingMessage}
-              sessionContext={sessionContext}
-              chatHistory={chatHistory}
-              currentConceptId={currentConcept?.id}
-              currentStage={currentStage}
-            />
+          )}
+
+          {/* ── CHAT VIEW ── */}
+          {copilotView === 'chat' && (
+            <div style={{ height: '100%' }}>
+              {!initialized || loadingTrack ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                  <div className="mono" style={{ fontSize: '11px', color: '#444' }}>Loading your session...</div>
+                </div>
+              ) : (
+                <MayaChat
+                  profile={profile || { full_name: copilotProfile.founder_name, email: copilotProfile.email }}
+                  openingMessage={openingMessage}
+                  sessionContext={sessionContext}
+                  chatHistory={chatHistory}
+                  currentConceptId={currentConcept?.id}
+                  currentStage={currentStage}
+                />
+              )}
+            </div>
+          )}
+
+          {/* ── MY TRACKS VIEW ── */}
+          {copilotView === 'tracks' && (
+            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
+              <div style={{ marginBottom: '24px' }}>
+                <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>My Tracks</h1>
+                <p className="mono" style={{ fontSize: '11px', color: '#444' }}>{tracks.length} tracks built for {copilotProfile.business_name}</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {tracks.map((t, i) => {
+                  const isActive = t.code === activeTrack?.code
+                  const trackConcepts = concepts.filter(c => c.competency_code === t.code)
+                  const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
+                  const trackTotal = trackConcepts.length || 8
+                  return (
+                    <div key={t.code} style={{ background: isActive ? 'rgba(255,106,0,0.03)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.18)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
+                      <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
+                          <span style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6' }}>{t.name}</span>
+                          {isActive && <span className="mono" style={{ fontSize: '8px', color: '#FF6A00', background: 'rgba(255,106,0,0.08)', padding: '2px 6px', borderRadius: '3px' }}>● ACTIVE</span>}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span className="mono" style={{ fontSize: '10px', color: '#444' }}>{trackMastered}/{trackTotal}</span>
+                          {!isActive && (
+                            <button onClick={() => { switchTrack(t); setCopilotView('chat') }} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Switch →</button>
+                          )}
+                          {isActive && (
+                            <button onClick={() => setCopilotView('chat')} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '6px', border: 'none', background: '#FF6A00', color: '#fff', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', fontWeight: '600' }}>Continue →</button>
+                          )}
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px 18px' }}>
+                        <div style={{ display: 'flex', gap: '2px', marginBottom: '10px' }}>
+                          {Array.from({ length: trackTotal }).map((_, i) => (
+                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                          ))}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                          {trackConcepts.map((c: any) => {
+                            const done = completedIds.has(c.id)
+                            const isCurrent = c.id === currentConcept?.id
+                            return (
+                              <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
+                                <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ── PROGRESS VIEW ── */}
+          {copilotView === 'progress' && (
+            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
+              <div style={{ marginBottom: '24px' }}>
+                <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>Progress</h1>
+                <p className="mono" style={{ fontSize: '11px', color: '#444' }}>{copilotProfile.business_name} · {copilotProfile.founder_name}</p>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '24px' }}>
+                {[
+                  { value: masteredCount,   label: 'Concepts mastered', color: '#FF6A00' },
+                  { value: totalConcepts - masteredCount, label: 'Concepts remaining', color: '#F59E0B' },
+                  { value: tracks.length,   label: 'Total tracks',      color: '#60A5FA' },
+                ].map((stat, i) => (
+                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
+                    <div style={{ fontSize: '26px', fontWeight: '800', color: stat.color, letterSpacing: '-0.02em', marginBottom: '3px' }}>{stat.value}</div>
+                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {tracks.map((t, i) => {
+                  const trackConcepts = concepts.filter(c => c.competency_code === t.code)
+                  const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
+                  const trackTotal = trackConcepts.length || 8
+                  const trackPct = trackTotal > 0 ? Math.round((trackMastered / trackTotal) * 100) : 0
+                  const isActive = t.code === activeTrack?.code
+                  return (
+                    <div key={t.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.18)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
+                      <div style={{ padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
+                          <span style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0' }}>{t.name}</span>
+                          {isActive && <span className="mono" style={{ fontSize: '8px', color: '#FF6A00' }}>● ACTIVE</span>}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span className="mono" style={{ fontSize: '10px', color: '#444' }}>{trackMastered}/{trackTotal}</span>
+                          <span className="mono" style={{ fontSize: '11px', fontWeight: '700', color: trackPct > 0 ? '#FF6A00' : '#333' }}>{trackPct}%</span>
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px 18px' }}>
+                        <div style={{ display: 'flex', gap: '2px', marginBottom: '8px' }}>
+                          {Array.from({ length: trackTotal }).map((_, i) => (
+                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                          ))}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                          {trackConcepts.map((c: any) => {
+                            const done = completedIds.has(c.id)
+                            const isCurrent = c.id === currentConcept?.id
+                            return (
+                              <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
+                                <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           )}
         </main>
       </div>
