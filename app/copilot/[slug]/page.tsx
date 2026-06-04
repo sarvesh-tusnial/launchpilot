@@ -291,21 +291,7 @@ export default function CopilotPage() {
                       ))}
                     </div>
                     <div className="mono" style={{ fontSize: '10px', color: '#444' }}>{masteredCount}/{totalConcepts} concepts</div>
-                    {/* Concepts preview */}
-                    {concepts.length > 0 && (
-                      <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
-                        {concepts.map((c: any) => {
-                          const done = completedIds.has(c.id)
-                          const isCurrent = c.id === currentConcept?.id
-                          return (
-                            <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
-                              <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
-                              <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )}
+
                   </div>
                   <button onClick={() => setCopilotView('chat')} style={{ padding: '12px 24px', borderRadius: '10px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
                     Continue with Maya →
