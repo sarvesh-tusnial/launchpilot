@@ -242,12 +242,44 @@ export default function CopilotPage() {
                 ))}
               </div>
 
+              {/* My Tracks grid — shown first */}
+              <div style={{ marginBottom: '28px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>My Tracks</div>
+                  <button onClick={() => setCopilotView('tracks')} style={{ fontSize: '12px', color: '#FF6A00', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>View all →</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
+                  {tracks.map((t, i) => {
+                    const isActive = t.code === activeTrack?.code
+                    const trackConcepts = concepts.filter((c: any) => c.competency_code === t.code)
+                    const trackMastered = trackConcepts.filter((c: any) => completedIds.has(c.id)).length
+                    const trackTotal = trackConcepts.length || 8
+                    return (
+                      <div key={t.code} style={{ padding: '16px 18px', background: isActive ? 'rgba(255,106,0,0.04)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '12px', cursor: 'pointer' }}
+                        onClick={() => { switchTrack(t); setCopilotView('chat') }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>Track {String(i+1).padStart(2,'0')}</span>
+                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Paused'}</span>
+                        </div>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
+                        <div className="mono" style={{ fontSize: '9px', color: '#444', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {Array.from({ length: trackTotal }).map((_, i) => (
+                            <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
               {/* Resume card */}
               {activeTrack && (
                 <div style={{ padding: '22px 26px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
                   <div style={{ flex: 1 }}>
                     <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '6px' }}>Resume where you left off</div>
-                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em', marginBottom: '4px' }}>{activeTrack.code} · {activeTrack.name}</div>
+                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em', marginBottom: '4px' }}>{activeTrack.name}</div>
                     <div style={{ fontSize: '13px', color: '#555', marginBottom: '12px' }}>
                       {currentConcept ? `Working on "${currentConcept.title}"` : 'Starting first concept — ready to begin'}
                     </div>
@@ -279,43 +311,13 @@ export default function CopilotPage() {
                 </div>
               )}
 
-              {/* My Tracks */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>My Tracks</div>
-                  <button onClick={() => setCopilotView('tracks')} style={{ fontSize: '12px', color: '#FF6A00', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>View all →</button>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
-                  {tracks.map((t, i) => {
-                    const isActive = t.code === activeTrack?.code
-                    const trackConcepts = concepts.filter(c => c.competency_code === t.code)
-                    const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
-                    const trackTotal = trackConcepts.length || 8
-                    return (
-                      <div key={t.code} style={{ padding: '16px 18px', background: isActive ? 'rgba(255,106,0,0.04)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '12px', cursor: 'pointer' }}
-                        onClick={() => { switchTrack(t); setCopilotView('chat') }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
-                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Paused'}</span>
-                        </div>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
-                        <div className="mono" style={{ fontSize: '9px', color: '#444', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
-                        <div style={{ display: 'flex', gap: '2px' }}>
-                          {Array.from({ length: trackTotal }).map((_, i) => (
-                            <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+
             </div>
           )}
 
           {/* ── CHAT VIEW ── */}
           {copilotView === 'chat' && (
-            <div style={{ height: '100%' }}>
+            <div style={{ height: '100%', '--bg': '#07070F', '--bg2': '#0F0F18', '--bg3': '#141420', '--bg4': '#1A1A28', '--border': 'rgba(255,255,255,0.08)', '--text': '#F0EDE6', '--text2': '#AAA8A0', '--text3': '#666' } as React.CSSProperties}>
               {!initialized || loadingTrack ? (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                   <div className="mono" style={{ fontSize: '11px', color: '#444' }}>Loading your session...</div>
