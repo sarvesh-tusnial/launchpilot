@@ -53,15 +53,17 @@ export default function CopilotPage() {
   const loadTrackDataDirect = async (trackCode: string, trackList: any[], userId: string) => {
     setLoadingTrack(true)
     const supabase = createClient()
+    const allCodes = trackList.map(t => t.code)
     const [conceptData, progressData, chatData] = await Promise.all([
-      supabase.from('concepts').select('*').eq('competency_code', trackCode).order('sequence'),
+      supabase.from('concepts').select('*').in('competency_code', allCodes).order('competency_code').order('sequence'),
       supabase.from('student_concepts').select('*').eq('student_id', userId),
       supabase.from('chat_messages').select('role, content, created_at').eq('student_id', userId).order('created_at', { ascending: false }).limit(50),
     ])
     const allConcepts  = conceptData.data || []
     const allProgress  = progressData.data || []
+    const activeConcepts = allConcepts.filter((c: any) => c.competency_code === trackCode)
     const completedIds = new Set(allProgress.filter((p: any) => p.is_completed).map((p: any) => p.concept_id))
-    const current      = allConcepts.find((c: any) => !completedIds.has(c.id)) || allConcepts[0] || null
+    const current      = activeConcepts.find((c: any) => !completedIds.has(c.id)) || activeConcepts[0] || null
     const track        = trackList.find(t => t.code === trackCode)
     setActiveTrack(track || { code: trackCode, name: trackCode })
     setConcepts(allConcepts)
@@ -259,7 +261,7 @@ export default function CopilotPage() {
                         onClick={() => { switchTrack(t); setCopilotView('chat') }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                           <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>Track {String(i+1).padStart(2,'0')}</span>
-                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Paused'}</span>
+                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Switch →'}</span>
                         </div>
                         <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
                         <div className="mono" style={{ fontSize: '9px', color: '#444', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
@@ -337,53 +339,65 @@ export default function CopilotPage() {
 
           {/* ── MY TRACKS VIEW ── */}
           {copilotView === 'tracks' && (
-            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
-              <div style={{ marginBottom: '24px' }}>
+            <div style={{ padding: '36px 40px', maxWidth: '1000px' }}>
+              <div style={{ marginBottom: '28px' }}>
                 <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>My Tracks</h1>
                 <p className="mono" style={{ fontSize: '11px', color: '#444' }}>{tracks.length} tracks built for {copilotProfile.business_name}</p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {tracks.map((t, i) => {
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {tracks.map((t, ti) => {
                   const isActive = t.code === activeTrack?.code
-                  const trackConcepts = concepts.filter(c => c.competency_code === t.code)
-                  const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
+                  const trackConcepts = concepts.filter((c: any) => c.competency_code === t.code)
+                  const trackMastered = trackConcepts.filter((c: any) => completedIds.has(c.id)).length
                   const trackTotal = trackConcepts.length || 8
+                  const trackPct = trackTotal > 0 ? Math.round((trackMastered / trackTotal) * 100) : 0
+                  const accentColor = ['#FF6A00','#FF8C00','#1D9E75'][ti] || '#FF6A00'
                   return (
-                    <div key={t.code} style={{ background: isActive ? 'rgba(255,106,0,0.03)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.18)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
-                      <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
-                          <span style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6' }}>{t.name}</span>
-                          {isActive && <span className="mono" style={{ fontSize: '8px', color: '#FF6A00', background: 'rgba(255,106,0,0.08)', padding: '2px 6px', borderRadius: '3px' }}>● ACTIVE</span>}
+                    <div key={t.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? `${accentColor}30` : 'rgba(255,255,255,0.07)'}`, borderRadius: '14px', overflow: 'hidden', borderTop: `3px solid ${isActive ? accentColor : 'rgba(255,255,255,0.08)'}` }}>
+                      {/* Track header */}
+                      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: `${accentColor}15`, border: `1px solid ${accentColor}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span className="mono" style={{ fontSize: '10px', fontWeight: '800', color: accentColor }}>0{ti+1}</span>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: '#F0EDE6', marginBottom: '2px' }}>{t.name}</div>
+                            <div className="mono" style={{ fontSize: '9px', color: '#444' }}>{trackMastered} of {trackTotal} concepts · {trackPct}%</div>
+                          </div>
+                          {isActive && <span style={{ fontSize: '8px', color: accentColor, background: `${accentColor}10`, border: `1px solid ${accentColor}25`, padding: '2px 8px', borderRadius: '100px', fontFamily: 'DM Mono, monospace', fontWeight: '700' }}>● Active</span>}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span className="mono" style={{ fontSize: '10px', color: '#444' }}>{trackMastered}/{trackTotal}</span>
-                          {!isActive && (
-                            <button onClick={() => { switchTrack(t); setCopilotView('chat') }} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Switch →</button>
-                          )}
-                          {isActive && (
-                            <button onClick={() => setCopilotView('chat')} style={{ fontSize: '11px', padding: '5px 12px', borderRadius: '6px', border: 'none', background: '#FF6A00', color: '#fff', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', fontWeight: '600' }}>Continue →</button>
-                          )}
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '20px', fontWeight: '800', color: accentColor, letterSpacing: '-0.02em', lineHeight: '1' }}>{trackPct}%</div>
+                          </div>
+                          {isActive
+                            ? <button onClick={() => setCopilotView('chat')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', background: accentColor, color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap' as const }}>Continue →</button>
+                            : <button onClick={() => { switchTrack(t); setCopilotView('chat') }} style={{ padding: '8px 16px', borderRadius: '8px', border: `1px solid rgba(255,255,255,0.1)`, background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap' as const }}>Switch to this →</button>
+                          }
                         </div>
                       </div>
-                      <div style={{ padding: '8px 18px' }}>
-                        <div style={{ display: 'flex', gap: '2px', marginBottom: '10px' }}>
+                      {/* Progress bar */}
+                      <div style={{ padding: '0 20px', marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', gap: '2px' }}>
                           {Array.from({ length: trackTotal }).map((_, i) => (
-                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                            <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i < trackMastered ? accentColor : 'rgba(255,255,255,0.06)' }} />
                           ))}
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
-                          {trackConcepts.map((c: any) => {
-                            const done = completedIds.has(c.id)
-                            const isCurrent = c.id === currentConcept?.id
-                            return (
-                              <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
-                                <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
-                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                      </div>
+                      {/* Concepts grid */}
+                      <div style={{ padding: '0 20px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                        {trackConcepts.map((c: any) => {
+                          const done = completedIds.has(c.id)
+                          const isCurrent = c.id === currentConcept?.id && isActive
+                          return (
+                            <div key={c.id} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', padding: '7px 10px', background: isCurrent ? `${accentColor}08` : done ? 'transparent' : 'rgba(255,255,255,0.01)', borderRadius: '7px', border: isCurrent ? `1px solid ${accentColor}20` : '1px solid rgba(255,255,255,0.04)' }}>
+                              <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: done ? 'rgba(74,222,128,0.15)' : isCurrent ? `${accentColor}15` : 'rgba(255,255,255,0.04)', border: done ? '1px solid rgba(74,222,128,0.3)' : isCurrent ? `1px solid ${accentColor}30` : '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
+                                <span style={{ fontSize: '8px', fontWeight: '700', color: done ? '#4ADE80' : isCurrent ? accentColor : '#333' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
                               </div>
-                            )
-                          })}
-                        </div>
+                              <span style={{ fontSize: '11px', color: done ? '#555' : isCurrent ? '#F0EDE6' : '#888', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   )
@@ -394,61 +408,90 @@ export default function CopilotPage() {
 
           {/* ── PROGRESS VIEW ── */}
           {copilotView === 'progress' && (
-            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
+            <div style={{ padding: '36px 40px', maxWidth: '1000px' }}>
               <div style={{ marginBottom: '24px' }}>
                 <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>Progress</h1>
                 <p className="mono" style={{ fontSize: '11px', color: '#444' }}>{copilotProfile.business_name} · {copilotProfile.founder_name}</p>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '24px' }}>
+
+              {/* Overall stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '28px' }}>
                 {[
-                  { value: masteredCount,   label: 'Concepts mastered', color: '#FF6A00' },
-                  { value: totalConcepts - masteredCount, label: 'Concepts remaining', color: '#F59E0B' },
-                  { value: tracks.length,   label: 'Total tracks',      color: '#60A5FA' },
+                  { value: concepts.filter((c: any) => completedIds.has(c.id)).length, label: 'Concepts mastered', color: '#4ADE80' },
+                  { value: concepts.filter((c: any) => !completedIds.has(c.id)).length, label: 'Remaining', color: '#F59E0B' },
+                  { value: tracks.length, label: 'Total tracks', color: '#FF6A00' },
+                  { value: concepts.length > 0 ? `${Math.round((concepts.filter((c: any) => completedIds.has(c.id)).length / concepts.length) * 100)}%` : '0%', label: 'Overall', color: '#60A5FA' },
                 ].map((stat, i) => (
-                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
+                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px' }}>
                     <div style={{ fontSize: '26px', fontWeight: '800', color: stat.color, letterSpacing: '-0.02em', marginBottom: '3px' }}>{stat.value}</div>
-                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
+                    <div style={{ fontSize: '11px', color: '#555' }}>{stat.label}</div>
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {tracks.map((t, i) => {
-                  const trackConcepts = concepts.filter(c => c.competency_code === t.code)
-                  const trackMastered = trackConcepts.filter(c => completedIds.has(c.id)).length
+
+              {/* Per track */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {tracks.map((t, ti) => {
+                  const trackConcepts = concepts.filter((c: any) => c.competency_code === t.code)
+                  const trackMastered = trackConcepts.filter((c: any) => completedIds.has(c.id)).length
                   const trackTotal = trackConcepts.length || 8
                   const trackPct = trackTotal > 0 ? Math.round((trackMastered / trackTotal) * 100) : 0
                   const isActive = t.code === activeTrack?.code
+                  const accentColor = ['#FF6A00','#FF8C00','#1D9E75'][ti] || '#FF6A00'
                   return (
-                    <div key={t.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.18)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
-                      <div style={{ padding: '12px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{String(i+1).padStart(2,'0')}</span>
-                          <span style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0' }}>{t.name}</span>
-                          {isActive && <span className="mono" style={{ fontSize: '8px', color: '#FF6A00' }}>● ACTIVE</span>}
+                    <div key={t.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid rgba(255,255,255,0.07)`, borderRadius: '14px', overflow: 'hidden', borderLeft: `4px solid ${isActive ? accentColor : 'rgba(255,255,255,0.1)'}` }}>
+                      {/* Header */}
+                      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `${accentColor}12`, border: `2px solid ${accentColor}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span style={{ fontSize: '12px', fontWeight: '800', color: accentColor }}>0{ti+1}</span>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '14px', fontWeight: '700', color: '#F0EDE6', marginBottom: '2px' }}>{t.name}</div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span className="mono" style={{ fontSize: '9px', color: '#444' }}>{trackMastered}/{trackTotal} concepts</span>
+                              {isActive && <span style={{ fontSize: '8px', color: accentColor, background: `${accentColor}10`, padding: '1px 6px', borderRadius: '100px', fontFamily: 'DM Mono, monospace' }}>● Active</span>}
+                            </div>
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span className="mono" style={{ fontSize: '10px', color: '#444' }}>{trackMastered}/{trackTotal}</span>
-                          <span className="mono" style={{ fontSize: '11px', fontWeight: '700', color: trackPct > 0 ? '#FF6A00' : '#333' }}>{trackPct}%</span>
+                        {/* Circular-style progress */}
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '28px', fontWeight: '900', color: trackPct > 0 ? accentColor : '#333', letterSpacing: '-0.03em', lineHeight: '1' }}>{trackPct}%</div>
+                          <div className="mono" style={{ fontSize: '8px', color: '#444', marginTop: '2px' }}>complete</div>
                         </div>
                       </div>
-                      <div style={{ padding: '8px 18px' }}>
-                        <div style={{ display: 'flex', gap: '2px', marginBottom: '8px' }}>
-                          {Array.from({ length: trackTotal }).map((_, i) => (
-                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                          ))}
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
-                          {trackConcepts.map((c: any) => {
+
+                      {/* Progress bar — segmented */}
+                      <div style={{ padding: '0 20px', marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {trackConcepts.map((c: any, ci: number) => {
                             const done = completedIds.has(c.id)
-                            const isCurrent = c.id === currentConcept?.id
+                            const isCurr = c.id === currentConcept?.id && isActive
                             return (
-                              <div key={c.id} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start', padding: '4px 7px', background: isCurrent ? 'rgba(255,106,0,0.06)' : 'transparent', borderRadius: '4px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
-                                <span style={{ fontSize: '8px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
-                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
-                              </div>
+                              <div key={c.id} style={{ flex: 1, height: '6px', borderRadius: '3px', background: done ? accentColor : isCurr ? `${accentColor}50` : 'rgba(255,255,255,0.06)', transition: 'background 0.3s', position: 'relative' as const }} title={c.title} />
                             )
                           })}
                         </div>
+                      </div>
+
+                      {/* Concepts */}
+                      <div style={{ padding: '0 20px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                        {trackConcepts.map((c: any) => {
+                          const done = completedIds.has(c.id)
+                          const isCurrent = c.id === currentConcept?.id && isActive
+                          return (
+                            <div key={c.id} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', padding: '6px 10px', background: isCurrent ? `${accentColor}08` : done ? 'rgba(74,222,128,0.03)' : 'rgba(255,255,255,0.01)', borderRadius: '7px', border: isCurrent ? `1px solid ${accentColor}20` : done ? '1px solid rgba(74,222,128,0.1)' : '1px solid rgba(255,255,255,0.04)' }}>
+                              <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: done ? 'rgba(74,222,128,0.15)' : isCurrent ? `${accentColor}15` : 'rgba(255,255,255,0.04)', border: done ? '1px solid rgba(74,222,128,0.4)' : isCurrent ? `1px solid ${accentColor}40` : '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
+                                <span style={{ fontSize: '7px', fontWeight: '800', color: done ? '#4ADE80' : isCurrent ? accentColor : '#444' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <span style={{ fontSize: '11px', color: done ? '#555' : isCurrent ? '#F0EDE6' : '#888', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none', display: 'block' }}>{c.title}</span>
+                                {done && <span style={{ fontSize: '8px', color: '#4ADE80', fontFamily: 'DM Mono, monospace' }}>Completed</span>}
+                                {isCurrent && <span style={{ fontSize: '8px', color: accentColor, fontFamily: 'DM Mono, monospace' }}>In progress</span>}
+                              </div>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                   )
