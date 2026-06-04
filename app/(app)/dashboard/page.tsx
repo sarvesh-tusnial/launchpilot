@@ -437,7 +437,7 @@ export default function Dashboard() {
 
               {/* Per-pathway breakdown */}
               <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6', marginBottom: '14px' }}>Pathway Breakdown</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {competencies.map((comp: any) => {
                   const compConcepts = concepts.filter(c => c.competency_code === comp.code)
                   const compMastered = compConcepts.filter(c => completedIds.has(c.id)).length
@@ -447,22 +447,45 @@ export default function Dashboard() {
                   const isActive = sc?.status === 'active'
                   const isCompleted = sc?.is_completed
                   return (
-                    <div key={comp.code} style={{ padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div key={comp.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
+                      {/* Header */}
+                      <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: compConcepts.length > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{comp.code}</span>
-                          <span style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0' }}>{comp.name}</span>
-                          {isActive && <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace' }}>● ACTIVE</span>}
-                          {isCompleted && <span style={{ fontSize: '9px', color: '#4ADE80', fontFamily: 'DM Mono, monospace' }}>✓ DONE</span>}
+                          <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px', fontWeight: '600' }}>{comp.code}</span>
+                          <span style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0' }}>{comp.name}</span>
+                          {isActive && <span style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.08)', padding: '2px 6px', borderRadius: '3px' }}>● ACTIVE</span>}
+                          {isCompleted && <span style={{ fontSize: '8px', color: '#4ADE80', fontFamily: 'DM Mono, monospace', background: 'rgba(74,222,128,0.08)', padding: '2px 6px', borderRadius: '3px' }}>✓ DONE</span>}
                         </div>
-                        <span style={{ fontSize: '12px', fontWeight: '700', color: compPct > 0 ? '#FF6A00' : '#333', fontFamily: 'DM Mono, monospace' }}>{compPct}%</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <span style={{ fontSize: '11px', color: '#555', fontFamily: 'DM Mono, monospace' }}>{compMastered}/{compTotal}</span>
+                          <span style={{ fontSize: '12px', fontWeight: '700', color: compPct > 0 ? '#FF6A00' : '#333', fontFamily: 'DM Mono, monospace' }}>{compPct}%</span>
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', gap: '2px' }}>
-                        {Array.from({ length: Math.min(compTotal, 20) }).map((_, i) => (
-                          <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i < Math.floor(compMastered * 20 / compTotal) ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                        ))}
+                      {/* Progress bar */}
+                      <div style={{ padding: '0 18px' }}>
+                        <div style={{ display: 'flex', gap: '2px', padding: '8px 0' }}>
+                          {Array.from({ length: Math.min(compTotal, 25) }).map((_, i) => (
+                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < Math.floor(compMastered * Math.min(compTotal,25) / compTotal) ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
+                          ))}
+                        </div>
                       </div>
-                      <div style={{ fontSize: '10px', color: '#333', fontFamily: 'DM Mono, monospace', marginTop: '5px' }}>{compMastered}/{compTotal} concepts</div>
+                      {/* Concepts list */}
+                      {compConcepts.length > 0 && (
+                        <div style={{ padding: '8px 18px 14px' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
+                            {compConcepts.map((c: any) => {
+                              const done = completedIds.has(c.id)
+                              const isCurrent = c.id === currentConcept?.id
+                              return (
+                                <div key={c.id} style={{ display: 'flex', gap: '7px', alignItems: 'flex-start', padding: '5px 8px', background: isCurrent ? 'rgba(255,106,0,0.06)' : done ? 'transparent' : 'transparent', borderRadius: '5px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
+                                  <span style={{ fontSize: '9px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                                  <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )
                 })}
