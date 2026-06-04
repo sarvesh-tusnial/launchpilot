@@ -110,7 +110,7 @@ export default function Dashboard() {
 
   // Weeks active
   const createdAt = profile?.created_at ? new Date(profile.created_at) : new Date()
-  const weeksActive = Math.max(1, Math.floor((Date.now() - createdAt.getTime()) / (7 * 24 * 60 * 60 * 1000)))
+  const daysActive = Math.max(1, Math.floor((Date.now() - createdAt.getTime()) / (24 * 60 * 60 * 1000)))
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
@@ -242,9 +242,9 @@ export default function Dashboard() {
               <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '32px' }}>
                 {[
                   { value: unlockedCount, label: 'Pathways unlocked', color: '#FF6A00' },
-                  { value: completedComps, label: 'Completed', color: '#4ADE80' },
+                  { value: completedComps, label: 'Tasks completed', color: '#4ADE80' },
                   { value: totalConceptsMastered, label: 'Concepts mastered', color: '#A78BFA' },
-                  { value: `${weeksActive}w`, label: 'Weeks active', color: '#60A5FA' },
+                  { value: `${daysActive}d`, label: 'Days active', color: '#60A5FA' },
                 ].map((stat, i) => (
                   <div key={i} className="stat-card" style={{ padding: '20px 22px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px' }}>
                     <div style={{ fontSize: '32px', fontWeight: '800', color: stat.color, letterSpacing: '-0.03em', marginBottom: '4px', fontFamily: 'DM Sans, sans-serif' }}>{stat.value}</div>
@@ -268,6 +268,23 @@ export default function Dashboard() {
                       ))}
                     </div>
                     <div style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Mono, monospace' }}>{masteredCount}/{totalConcepts} concepts · {pct}%</div>
+                    {concepts.length > 0 && (
+                      <div style={{ marginTop: '16px' }}>
+                        <div style={{ fontSize: '10px', color: '#555', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>Concepts</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                          {concepts.map((c: any) => {
+                            const done = completedIds.has(c.id)
+                            const isCurrent = c.id === currentConcept?.id
+                            return (
+                              <div key={c.id} style={{ display: 'flex', gap: '7px', alignItems: 'flex-start', padding: '5px 8px', background: isCurrent ? 'rgba(255,106,0,0.08)' : 'rgba(255,255,255,0.02)', borderRadius: '5px', border: isCurrent ? '1px solid rgba(255,106,0,0.2)' : '1px solid transparent' }}>
+                                <span style={{ fontSize: '9px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '1px' }}>{done ? '✓' : isCurrent ? '→' : '○'}</span>
+                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <button onClick={() => setView('chat')}
                     style={{ padding: '13px 28px', borderRadius: '10px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -409,7 +426,7 @@ export default function Dashboard() {
                   { value: unlockedCount, label: 'Pathways unlocked', color: '#FF6A00' },
                   { value: completedComps, label: 'Pathways completed', color: '#4ADE80' },
                   { value: totalConceptsMastered, label: 'Concepts mastered', color: '#A78BFA' },
-                  { value: `${weeksActive}w`, label: 'Weeks active', color: '#60A5FA' },
+                  { value: `${daysActive}d`, label: 'Days active', color: '#60A5FA' },
                 ].map((stat, i) => (
                   <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
                     <div style={{ fontSize: '26px', fontWeight: '800', color: stat.color, letterSpacing: '-0.02em', marginBottom: '3px' }}>{stat.value}</div>
