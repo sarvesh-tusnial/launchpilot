@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import MayaChat from '@/components/features/MayaChat'
 
-type View = 'dashboard' | 'chat' | 'competencies' | 'progress'
+type View = 'dashboard' | 'chat' | 'competencies'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -51,24 +51,27 @@ export default function Dashboard() {
 
     if (activeCompData || myComps[0]) {
       const code = (activeCompData || myComps[0]).code
-      await loadConceptData(user.id, code)
+      const allCodes = myComps.map((c: any) => c.code)
+      await loadConceptData(user.id, code, allCodes)
     }
 
     setLoading(false)
   }
 
-  const loadConceptData = async (userId: string, compCode: string) => {
+  const loadConceptData = async (userId: string, compCode: string, allCompCodes?: string[]) => {
     const supabase = createClient()
+    const codes = allCompCodes || [compCode]
     const [conceptsRes, progressRes, chatRes] = await Promise.all([
-      supabase.from('concepts').select('*').eq('competency_code', compCode).order('sequence'),
+      supabase.from('concepts').select('*').in('competency_code', codes).order('competency_code').order('sequence'),
       supabase.from('student_concepts').select('*').eq('student_id', userId),
       supabase.from('chat_messages').select('role, content, created_at')
         .eq('student_id', userId).order('created_at', { ascending: false }).limit(60),
     ])
     const allConcepts = conceptsRes.data || []
     const allProgress = progressRes.data || []
+    const activeConcepts = allConcepts.filter((c: any) => c.competency_code === compCode)
     const completedIds = new Set(allProgress.filter((p: any) => p.is_completed).map((p: any) => p.concept_id))
-    const current = allConcepts.find((c: any) => !completedIds.has(c.id)) || allConcepts[0] || null
+    const current = activeConcepts.find((c: any) => !completedIds.has(c.id)) || activeConcepts[0] || null
     setConcepts(allConcepts)
     setConceptProgress(allProgress)
     setCurrentConcept(current)
@@ -85,7 +88,7 @@ export default function Dashboard() {
     await supabase.from('student_competencies').update({ status: 'active' })
       .eq('student_id', user.id).eq('competency_code', comp.code)
     setActiveComp(comp)
-    await loadConceptData(user.id, comp.code)
+    await loadConceptData(user.id, comp.code, competencies.map((c: any) => c.code))
     setSwitching(false)
     setView('chat')
   }
@@ -182,7 +185,6 @@ export default function Dashboard() {
               { id: 'dashboard', label: 'Dashboard', icon: '⊞' },
               { id: 'chat',      label: 'Chat with Maya', icon: '◉', dot: true },
               { id: 'competencies', label: 'My Pathways', icon: '◈' },
-              { id: 'progress',  label: 'Progress', icon: '◎' },
             ] as const).map(item => (
               <div key={item.id} className={`nav-item ${view === item.id ? 'active' : ''}`}
                 onClick={() => setView(item.id)}
@@ -212,12 +214,85 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Locked count */}
-            {lockedCount > 0 && (
-              <div style={{ padding: '10px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px', marginTop: '8px' }}>
-                <div style={{ fontSize: '11px', color: '#333', textAlign: 'center' }}>{lockedCount} pathways locked</div>
+            {/* Program name */}
+            <div style={{ marginTop: '14px', padding: '12px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
+              <div className="mono" style={{ fontSize: '7px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '4px' }}>Program</div>
+              <div style={{ fontSize: '11px', fontWeight: '600', color: '#E8E6E0', lineHeight: '1.3', marginBottom: '4px' }}>LaunchPilot School</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#FF6A00' }} />
+                <span className="mono" style={{ fontSize: '8px', color: '#555' }}>Founder Pathways</span>
               </div>
-            )}
+            </div>
+
+            {/* Circular arc + streak */}
+            <div style={{ marginTop: '12px', padding: '16px 14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
+              <div className="mono" style={{ fontSize: '7px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '12px' }}>Your Progress</div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                {(() => {
+                  const compPct     = unlockedCount > 0 ? Math.round((completedComps / unlockedCount) * 100) : 0
+                  const conceptPct  = concepts.length > 0 ? Math.round((totalConceptsMastered / concepts.length) * 100) : 0
+                  const r1 = 44, r2 = 34, cx = 56, cy = 56
+                  const arcPath = (r: number, pct: number) => {
+                    if (pct <= 0) return ''
+                    if (pct >= 100) return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r} Z`
+                    const angle = (pct / 100) * 360
+                    const rad = (angle - 90) * Math.PI / 180
+                    const x = cx + r * Math.cos(rad)
+                    const y = cy + r * Math.sin(rad)
+                    return `M ${cx} ${cy - r} A ${r} ${r} 0 ${angle > 180 ? 1 : 0} 1 ${x} ${y}`
+                  }
+                  return (
+                    <svg width="112" height="112" viewBox="0 0 112 112">
+                      <circle cx={cx} cy={cy} r={r1} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="6"/>
+                      <circle cx={cx} cy={cy} r={r2} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="5"/>
+                      {compPct > 0    && <path d={arcPath(r1, compPct)}   fill="none" stroke="#FF6A00" strokeWidth="6" strokeLinecap="round"/>}
+                      {conceptPct > 0 && <path d={arcPath(r2, conceptPct)} fill="none" stroke="#A78BFA" strokeWidth="5" strokeLinecap="round"/>}
+                      <text x={cx} y={cy - 6}  textAnchor="middle" fill="#F0EDE6" fontSize="16" fontWeight="800" fontFamily="DM Sans, sans-serif">{compPct}%</text>
+                      <text x={cx} y={cy + 10} textAnchor="middle" fill="#555"    fontSize="8"  fontFamily="DM Mono, monospace">overall</text>
+                    </svg>
+                  )
+                })()}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '12px' }}>
+                {[
+                  { col: '#FF6A00', label: 'Pathways', value: `${completedComps}/${unlockedCount}` },
+                  { col: '#A78BFA', label: 'Concepts',  value: `${totalConceptsMastered}/${concepts.length}` },
+                ].map(row => (
+                  <div key={row.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: row.col }} />
+                      <span style={{ fontSize: '10px', color: '#888' }}>{row.label}</span>
+                    </div>
+                    <span className="mono" style={{ fontSize: '10px', color: row.col }}>{row.value}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Streak */}
+              {(() => {
+                const msgs = [...chatHistory].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                const daySet = new Set(msgs.map((m: any) => new Date(m.created_at).toDateString()))
+                let streak = 0
+                const d = new Date()
+                while (daySet.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1) }
+                const lastActive = msgs.length > 0 ? new Date(msgs[0].created_at) : null
+                const diffDays = lastActive ? Math.floor((new Date().getTime() - lastActive.getTime()) / (1000*60*60*24)) : null
+                return (
+                  <div style={{ padding: '10px 12px', background: streak > 0 ? 'rgba(249,115,22,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${streak > 0 ? 'rgba(249,115,22,0.2)' : 'rgba(255,255,255,0.05)'}`, borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '16px' }}>{streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : streak >= 1 ? '✨' : '💤'}</span>
+                      <div>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: streak > 0 ? '#F0EDE6' : '#555' }}>
+                          {streak > 0 ? `${streak} day streak` : 'No streak yet'}
+                        </div>
+                        <div className="mono" style={{ fontSize: '8px', color: '#444', marginTop: '1px' }}>
+                          {diffDays === 0 ? 'Active today ✓' : diffDays === 1 ? 'Last active yesterday' : lastActive ? `Last active ${diffDays}d ago` : 'Not started yet'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
+            </div>
           </div>
         </aside>
 
@@ -241,9 +316,9 @@ export default function Dashboard() {
               {/* Stats */}
               <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '32px' }}>
                 {[
-                  { value: unlockedCount, label: 'Pathways unlocked', color: '#FF6A00' },
+                  { value: `${completedComps}/${unlockedCount}`, label: 'Pathways done', color: '#FF6A00' },
                   { value: completedComps, label: 'Tasks completed', color: '#4ADE80' },
-                  { value: totalConceptsMastered, label: 'Concepts mastered', color: '#A78BFA' },
+                  { value: `${totalConceptsMastered}/${concepts.length}`, label: 'Concepts mastered', color: '#A78BFA' },
                   { value: `${daysActive}d`, label: 'Days active', color: '#60A5FA' },
                 ].map((stat, i) => (
                   <div key={i} className="stat-card" style={{ padding: '20px 22px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px' }}>
@@ -412,86 +487,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* ── PROGRESS VIEW ── */}
-          {view === 'progress' && (
-            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
-              <div style={{ marginBottom: '28px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>Progress</h1>
-                <p style={{ fontSize: '13px', color: '#555' }}>Your learning journey so far</p>
-              </div>
 
-              {/* Summary stats */}
-              <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '28px' }}>
-                {[
-                  { value: unlockedCount, label: 'Pathways unlocked', color: '#FF6A00' },
-                  { value: completedComps, label: 'Pathways completed', color: '#4ADE80' },
-                  { value: totalConceptsMastered, label: 'Concepts mastered', color: '#A78BFA' },
-                  { value: `${daysActive}d`, label: 'Days active', color: '#60A5FA' },
-                ].map((stat, i) => (
-                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
-                    <div style={{ fontSize: '26px', fontWeight: '800', color: stat.color, letterSpacing: '-0.02em', marginBottom: '3px' }}>{stat.value}</div>
-                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Per-pathway breakdown */}
-              <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6', marginBottom: '14px' }}>Pathway Breakdown</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {competencies.map((comp: any) => {
-                  const compConcepts = concepts.filter(c => c.competency_code === comp.code)
-                  const compMastered = compConcepts.filter(c => completedIds.has(c.id)).length
-                  const compTotal = compConcepts.length || 20
-                  const compPct = compTotal > 0 ? Math.round((compMastered / compTotal) * 100) : 0
-                  const sc = studentComps.find(s => s.competency_code === comp.code)
-                  const isActive = sc?.status === 'active'
-                  const isCompleted = sc?.is_completed
-                  return (
-                    <div key={comp.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.06)'}`, borderRadius: '12px', overflow: 'hidden' }}>
-                      {/* Header */}
-                      <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: compConcepts.length > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px', fontWeight: '600' }}>{comp.code}</span>
-                          <span style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0' }}>{comp.name}</span>
-                          {isActive && <span style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.08)', padding: '2px 6px', borderRadius: '3px' }}>● ACTIVE</span>}
-                          {isCompleted && <span style={{ fontSize: '8px', color: '#4ADE80', fontFamily: 'DM Mono, monospace', background: 'rgba(74,222,128,0.08)', padding: '2px 6px', borderRadius: '3px' }}>✓ DONE</span>}
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '11px', color: '#555', fontFamily: 'DM Mono, monospace' }}>{compMastered}/{compTotal}</span>
-                          <span style={{ fontSize: '12px', fontWeight: '700', color: compPct > 0 ? '#FF6A00' : '#333', fontFamily: 'DM Mono, monospace' }}>{compPct}%</span>
-                        </div>
-                      </div>
-                      {/* Progress bar */}
-                      <div style={{ padding: '0 18px' }}>
-                        <div style={{ display: 'flex', gap: '2px', padding: '8px 0' }}>
-                          {Array.from({ length: Math.min(compTotal, 25) }).map((_, i) => (
-                            <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < Math.floor(compMastered * Math.min(compTotal,25) / compTotal) ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                          ))}
-                        </div>
-                      </div>
-                      {/* Concepts list */}
-                      {compConcepts.length > 0 && (
-                        <div style={{ padding: '8px 18px 14px' }}>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px' }}>
-                            {compConcepts.map((c: any) => {
-                              const done = completedIds.has(c.id)
-                              const isCurrent = c.id === currentConcept?.id
-                              return (
-                                <div key={c.id} style={{ display: 'flex', gap: '7px', alignItems: 'flex-start', padding: '5px 8px', background: isCurrent ? 'rgba(255,106,0,0.06)' : done ? 'transparent' : 'transparent', borderRadius: '5px', border: isCurrent ? '1px solid rgba(255,106,0,0.15)' : '1px solid transparent' }}>
-                                  <span style={{ fontSize: '9px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '2px' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
-                                  <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
         </main>
       </div>
     </div>
