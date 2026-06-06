@@ -405,57 +405,57 @@ export default function Dashboard() {
                     )
                   })}
                 </div>
-              </div>
             </div>
           )}
 
-              {/* ── MOTIVATIONAL VISUAL ── */}
-              {activeComp && concepts.length > 0 && (
-                <div style={{ marginBottom: '28px', padding: '22px 26px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <div>
-                      <div style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '4px' }}>Your momentum</div>
-                      <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>
-                        {masteredCount === 0 ? "Every journey starts here." :
-                         masteredCount < Math.floor(totalConcepts * 0.25) ? "You've started. Don't stop now." :
-                         masteredCount < Math.floor(totalConcepts * 0.5) ? "You're building real momentum." :
-                         masteredCount < Math.floor(totalConcepts * 0.75) ? "More than halfway. Keep pushing." :
-                         masteredCount < totalConcepts ? "Almost there. Finish strong." :
-                         "Pathway complete. Well done."}
+              {/* Data visual */}
+              <div style={{ marginBottom: '24px', padding: '20px 24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '12px' }}>Program Overview</div>
+                    {/* Concepts bar */}
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', color: '#888' }}>Concepts mastered</span>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#FF6A00', fontFamily: 'DM Mono, monospace' }}>{masteredCount}/{totalConcepts}</span>
+                      </div>
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(to right, #FF6A00, #FF8C00)', borderRadius: '3px', transition: 'width 0.6s ease' }} />
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: '36px', fontWeight: '900', color: '#FF6A00', letterSpacing: '-0.03em', lineHeight: '1' }}>{pct}%</div>
-                      <div style={{ fontSize: '10px', color: '#444', fontFamily: 'DM Mono, monospace', marginTop: '2px' }}>of this pathway</div>
-                    </div>
-                  </div>
-                  {/* Concept blocks visual */}
-                  <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap', marginBottom: '12px' }}>
-                    {concepts.map((c: any, i: number) => {
-                      const done = completedIds.has(c.id)
-                      const isCurrent = c.id === currentConcept?.id
-                      return (
-                        <div key={c.id} title={c.title} style={{ width: '28px', height: '28px', borderRadius: '6px', background: done ? '#FF6A00' : isCurrent ? 'rgba(255,106,0,0.3)' : 'rgba(255,255,255,0.05)', border: isCurrent ? '1px solid rgba(255,106,0,0.5)' : '1px solid transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'default', transition: 'all 0.2s' }}>
-                          {done && <span style={{ fontSize: '10px', color: '#fff', fontWeight: '800' }}>✓</span>}
-                          {isCurrent && <span style={{ fontSize: '9px', color: '#FF6A00', fontWeight: '800' }}>→</span>}
-                          {!done && !isCurrent && <span style={{ fontSize: '8px', color: '#333', fontFamily: 'DM Mono, monospace' }}>{String(i+1).padStart(2,'0')}</span>}
-                        </div>
-                      )
-                    })}
-                  </div>
-                  {/* Next milestone */}
-                  {currentConcept && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'rgba(255,106,0,0.06)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
-                      <span style={{ fontSize: '14px' }}>🎯</span>
-                      <div>
-                        <div style={{ fontSize: '11px', color: '#FF8C00', fontFamily: 'DM Mono, monospace', marginBottom: '1px' }}>Next up</div>
-                        <div style={{ fontSize: '12px', color: '#E8E6E0', fontWeight: '500' }}>{currentConcept.title}</div>
+                    {/* Pathways bar */}
+                    <div style={{ marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', color: '#888' }}>Pathways done</span>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#4ADE80', fontFamily: 'DM Mono, monospace' }}>{completedComps}/{competencies.length}</span>
                       </div>
-                      <button onClick={() => setView('chat')} style={{ marginLeft: 'auto', padding: '6px 14px', borderRadius: '7px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', flexShrink: 0 }}>Start →</button>
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ width: `${competencies.length > 0 ? (completedComps / competencies.length) * 100 : 0}%`, height: '100%', background: 'linear-gradient(to right, #4ADE80, #1D9E75)', borderRadius: '3px', transition: 'width 0.6s ease' }} />
+                      </div>
                     </div>
-                  )}
+                    {/* Pathway pills */}
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' as const }}>
+                      {competencies.map((comp: any) => {
+                        const sc = studentComps.find((s: any) => s.competency_code === comp.code)
+                        const isActive = sc?.status === 'active'
+                        const isDone = sc?.is_completed
+                        const isLocked = !sc?.is_unlocked
+                        return (
+                          <div key={comp.code} style={{ padding: '3px 8px', borderRadius: '100px', background: isDone ? 'rgba(74,222,128,0.1)' : isActive ? 'rgba(255,106,0,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${isDone ? 'rgba(74,222,128,0.25)' : isActive ? 'rgba(255,106,0,0.3)' : 'rgba(255,255,255,0.06)'}` }}>
+                            <span style={{ fontSize: '8px', color: isDone ? '#4ADE80' : isActive ? '#FF6A00' : '#444', fontFamily: 'DM Mono, monospace' }}>{isDone ? '✓ ' : isLocked ? '🔒 ' : '→ '}{comp.code}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  {/* Big % */}
+                  <div style={{ textAlign: 'center', padding: '20px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ fontSize: '52px', fontWeight: '900', color: '#FF6A00', letterSpacing: '-0.04em', lineHeight: '1' }}>{pct}%</div>
+                    <div style={{ fontSize: '9px', color: '#444', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '6px' }}>of active pathway</div>
+                    <div style={{ fontSize: '11px', color: '#666', marginTop: '8px' }}>{activeComp?.name || 'No active pathway'}</div>
+                  </div>
                 </div>
-              )}
+              </div>
 
               {/* ── DYNAMIC ROADMAP ── */}
               {activeComp && concepts.length > 0 && (
@@ -603,7 +603,7 @@ export default function Dashboard() {
                       </div>
                       {/* Concepts list */}
                       {compConcepts.length > 0 && (
-                        <div style={{ padding: '0 20px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                        <div style={{ padding: '0 20px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px' }}>
                           {compConcepts.map((c: any) => {
                             const done   = completedIds.has(c.id)
                             const isCurr = c.id === currentConcept?.id && isActive
