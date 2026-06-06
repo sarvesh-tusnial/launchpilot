@@ -4,7 +4,7 @@ import { createClient } from '@/lib/db/client'
 import { useRouter } from 'next/navigation'
 import MayaChat from '@/components/features/MayaChat'
 
-type View = 'dashboard' | 'chat' | 'competencies' | 'progress'
+type View = 'dashboard' | 'chat' | 'competencies'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -172,7 +172,6 @@ export default function Dashboard() {
               { id: 'dashboard',    label: 'Dashboard',       icon: '⊞' },
               { id: 'chat',         label: 'Chat with Maya',  icon: '◉', dot: true },
               { id: 'competencies', label: 'My Pathways',     icon: '◈' },
-              { id: 'progress',     label: 'Progress',        icon: '◎' },
             ] as const).map(item => (
               <div key={item.id}
                 className={`nav-item ${view === item.id ? 'active' : ''}`}
@@ -521,58 +520,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* PROGRESS */}
-          {view === 'progress' && (
-            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
-              <div style={{ marginBottom: '28px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>Progress</h1>
-                <p style={{ fontSize: '13px', color: '#555' }}>Your learning journey so far</p>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '28px' }}>
-                {[
-                  { value: `${completedComps}/${competencies.length}`, label: 'Pathways done',      color: '#FF6A00' },
-                  { value: completedComps,                             label: 'Tasks completed',    color: '#4ADE80' },
-                  { value: totalConceptsMastered,                      label: 'Concepts mastered',  color: '#A78BFA' },
-                  { value: `${daysActive}d`,                          label: 'Days active',         color: '#60A5FA' },
-                ].map((stat, i) => (
-                  <div key={i} style={{ padding: '16px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
-                    <div style={{ fontSize: '26px', fontWeight: '800', color: stat.color, letterSpacing: '-0.02em', marginBottom: '3px' }}>{stat.value}</div>
-                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {competencies.map((comp: any) => {
-                  const compConcepts = concepts.filter((c: any) => c.competency_code === comp.code)
-                  const compMastered = compConcepts.filter((c: any) => completedIds.has(c.id)).length
-                  const compTotal = compConcepts.length || 20
-                  const compPct = compTotal > 0 ? Math.round((compMastered / compTotal) * 100) : 0
-                  const sc = studentComps.find((s: any) => s.competency_code === comp.code)
-                  const isActive = sc?.status === 'active'
-                  const isCompleted = sc?.is_completed
-                  return (
-                    <div key={comp.code} style={{ padding: '14px 18px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>{comp.code}</span>
-                          <span style={{ fontSize: '13px', fontWeight: '600', color: '#E8E6E0' }}>{comp.name}</span>
-                          {isActive    && <span className="mono" style={{ fontSize: '9px', color: '#FF6A00' }}>● ACTIVE</span>}
-                          {isCompleted && <span className="mono" style={{ fontSize: '9px', color: '#4ADE80' }}>✓ DONE</span>}
-                        </div>
-                        <span className="mono" style={{ fontSize: '12px', fontWeight: '700', color: compPct > 0 ? '#FF6A00' : '#333' }}>{compPct}%</span>
-                      </div>
-                      <div style={{ display: 'flex', gap: '2px', marginBottom: '5px' }}>
-                        {Array.from({ length: Math.min(compTotal, 25) }).map((_, i) => (
-                          <div key={i} style={{ flex: 1, height: '4px', borderRadius: '2px', background: i < Math.floor(compMastered * Math.min(compTotal,25) / compTotal) ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                        ))}
-                      </div>
-                      <div className="mono" style={{ fontSize: '10px', color: '#333' }}>{compMastered}/{compTotal} concepts</div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+
         </main>
       </div>
     </div>
