@@ -548,44 +548,79 @@ export default function Dashboard() {
 
           {/* ── MY PATHWAYS VIEW ── */}
           {view === 'competencies' && (
-            <div style={{ padding: '36px 40px', maxWidth: '1100px' }}>
+            <div style={{ padding: '36px 40px', maxWidth: '900px' }}>
               <div style={{ marginBottom: '28px' }}>
                 <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>My Pathways</h1>
-                <p style={{ fontSize: '13px', color: '#555' }}>{unlockedCount} pathways unlocked · {lockedCount} still locked</p>
+                <p style={{ fontSize: '13px', color: '#555' }}>{unlockedCount} unlocked · {lockedCount} locked</p>
               </div>
-              <div className="comp-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px' }}>
-                {competencies.map((comp: any) => {
-                  const sc = studentComps.find(s => s.competency_code === comp.code)
-                  const isActive = sc?.status === 'active'
-                  const isPaused = sc?.status === 'paused'
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {competencies.map((comp: any, ci: number) => {
+                  const sc = studentComps.find((s: any) => s.competency_code === comp.code)
+                  const isActive    = sc?.status === 'active'
+                  const isPaused    = sc?.status === 'paused'
                   const isCompleted = sc?.is_completed
-                  const statusLabel = isCompleted ? 'Completed' : isActive ? 'Active' : isPaused ? 'Paused' : 'Locked'
-                  const statusColor = isCompleted ? '#4ADE80' : isActive ? '#FF6A00' : isPaused ? '#F59E0B' : '#333'
-                  const statusBg = isCompleted ? 'rgba(74,222,128,0.1)' : isActive ? 'rgba(255,106,0,0.1)' : isPaused ? 'rgba(245,158,11,0.1)' : 'rgba(255,255,255,0.04)'
-                  const compConcepts = concepts.filter(c => c.competency_code === comp.code)
-                  const compMastered = compConcepts.filter(c => completedIds.has(c.id)).length
-                  const compTotal = compConcepts.length || 20
+                  const isLocked    = !sc?.is_unlocked
+                  const compConcepts = concepts.filter((c: any) => c.competency_code === comp.code)
+                  const compMastered = compConcepts.filter((c: any) => completedIds.has(c.id)).length
+                  const compTotal   = compConcepts.length || 20
+                  const compPct     = compTotal > 0 ? Math.round((compMastered / compTotal) * 100) : 0
+                  const colors = ['#FF6A00','#FF8C00','#4ADE80','#60A5FA','#A78BFA','#F59E0B','#2DD4BF','#FB7185']
+                  const col = isCompleted ? '#4ADE80' : isActive ? '#FF6A00' : colors[ci % colors.length]
                   return (
-                    <div key={comp.code} className="comp-card"
-                      style={{ padding: '18px 20px', background: isActive ? 'rgba(255,106,0,0.04)' : 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                        <span style={{ fontSize: '10px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', background: 'rgba(255,106,0,0.1)', padding: '3px 8px', borderRadius: '4px', fontWeight: '600' }}>{comp.code}</span>
-                        <span style={{ fontSize: '10px', color: statusColor, background: statusBg, padding: '3px 8px', borderRadius: '4px', fontFamily: 'DM Mono, monospace', fontWeight: '600' }}>{statusLabel}</span>
+                    <div key={comp.code} style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '14px', overflow: 'hidden', borderLeft: `4px solid ${isActive ? '#FF6A00' : isCompleted ? '#4ADE80' : 'rgba(255,255,255,0.08)'}` }}>
+                      {/* Header */}
+                      <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: `${col}15`, border: `2px solid ${col}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span style={{ fontSize: '9px', fontWeight: '800', color: col, fontFamily: 'DM Mono, monospace' }}>{comp.code}</span>
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: '#F0EDE6', marginBottom: '2px' }}>{comp.name}</div>
+                            <div style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Mono, monospace' }}>{compMastered}/{compTotal} concepts mastered</div>
+                          </div>
+                          {isActive    && <span style={{ fontSize: '8px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', border: '1px solid rgba(255,106,0,0.2)', padding: '2px 8px', borderRadius: '100px', fontFamily: 'DM Mono, monospace' }}>● Active</span>}
+                          {isCompleted && <span style={{ fontSize: '8px', color: '#4ADE80', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', padding: '2px 8px', borderRadius: '100px', fontFamily: 'DM Mono, monospace' }}>✓ Done</span>}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{ fontSize: '24px', fontWeight: '900', color: compPct > 0 ? col : '#333', letterSpacing: '-0.03em' }}>{compPct}%</div>
+                          {isActive  && <button onClick={() => setView('chat')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Continue →</button>}
+                          {isPaused  && <button onClick={() => switchCompetency(comp)} disabled={switching} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>{switching ? '...' : 'Switch →'}</button>}
+                          {isLocked  && <span style={{ fontSize: '11px', color: '#333', fontFamily: 'DM Mono, monospace' }}>🔒 Locked</span>}
+                        </div>
                       </div>
-                      <div style={{ fontSize: '14px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{comp.name}</div>
-                      {comp.description && <div style={{ fontSize: '11px', color: '#444', marginBottom: '8px', lineHeight: '1.5' }}>{comp.description}</div>}
-                      <div style={{ fontSize: '11px', color: '#444', marginBottom: '8px' }}>{compMastered} of {compTotal} mastered</div>
-                      <div style={{ display: 'flex', gap: '2px', marginBottom: '12px' }}>
-                        {Array.from({ length: Math.min(compTotal, 20) }).map((_, i) => (
-                          <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < compMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
-                        ))}
+                      {/* Segmented progress bar */}
+                      <div style={{ padding: '0 20px', marginBottom: '12px' }}>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {compConcepts.length > 0
+                            ? compConcepts.map((c: any) => {
+                                const done   = completedIds.has(c.id)
+                                const isCurr = c.id === currentConcept?.id && isActive
+                                return <div key={c.id} style={{ flex: 1, height: '5px', borderRadius: '3px', background: done ? col : isCurr ? `${col}45` : 'rgba(255,255,255,0.06)' }} title={c.title} />
+                              })
+                            : Array.from({ length: 10 }).map((_, i) => <div key={i} style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }} />)
+                          }
+                        </div>
                       </div>
-                      {isActive ? (
-                        <button onClick={() => setView('chat')} style={{ width: '100%', padding: '9px', borderRadius: '8px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Continue with Maya →</button>
-                      ) : isPaused ? (
-                        <button onClick={() => switchCompetency(comp)} disabled={switching} style={{ width: '100%', padding: '9px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>{switching ? 'Switching...' : 'Switch to this →'}</button>
-                      ) : (
-                        <div style={{ padding: '9px', textAlign: 'center', fontSize: '12px', color: '#333', fontFamily: 'DM Mono, monospace' }}>{isCompleted ? '✓ Completed' : '🔒 Locked'}</div>
+                      {/* Concepts list */}
+                      {compConcepts.length > 0 && (
+                        <div style={{ padding: '0 20px 16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                          {compConcepts.map((c: any) => {
+                            const done   = completedIds.has(c.id)
+                            const isCurr = c.id === currentConcept?.id && isActive
+                            return (
+                              <div key={c.id} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', padding: '6px 9px', background: isCurr ? 'rgba(255,106,0,0.06)' : done ? 'rgba(74,222,128,0.02)' : 'rgba(255,255,255,0.01)', borderRadius: '7px', border: isCurr ? '1px solid rgba(255,106,0,0.18)' : done ? '1px solid rgba(74,222,128,0.08)' : '1px solid rgba(255,255,255,0.04)' }}>
+                                <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: done ? 'rgba(74,222,128,0.15)' : isCurr ? 'rgba(255,106,0,0.15)' : 'rgba(255,255,255,0.04)', border: done ? '1px solid rgba(74,222,128,0.35)' : isCurr ? '1px solid rgba(255,106,0,0.35)' : '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
+                                  <span style={{ fontSize: '7px', fontWeight: '800', color: done ? '#4ADE80' : isCurr ? '#FF6A00' : '#444' }}>{done ? '✓' : isCurr ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                  <span style={{ fontSize: '11px', color: done ? '#555' : isCurr ? '#F0EDE6' : '#888', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none', display: 'block' }}>{c.title}</span>
+                                  {done   && <span style={{ fontSize: '8px', color: '#4ADE80', fontFamily: 'DM Mono, monospace' }}>Completed</span>}
+                                  {isCurr && <span style={{ fontSize: '8px', color: '#FF6A00', fontFamily: 'DM Mono, monospace' }}>In progress</span>}
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
                       )}
                     </div>
                   )
@@ -595,8 +630,3 @@ export default function Dashboard() {
           )}
 
 
-        </main>
-      </div>
-    </div>
-  )
-}
