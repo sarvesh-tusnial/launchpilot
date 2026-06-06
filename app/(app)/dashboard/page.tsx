@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import MayaChat from '@/components/features/MayaChat'
 
-type View = 'dashboard' | 'chat' | 'competencies'
+type View = 'dashboard' | 'chat' | 'competencies' | 'progress'
 
 export default function Dashboard() {
   const router = useRouter()
