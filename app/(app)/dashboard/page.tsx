@@ -531,6 +531,8 @@ export default function Dashboard() {
                   })()}
                 </div>
               )}
+            </div>
+          )}
 
           {/* ── CHAT VIEW ── */}
           {view === 'chat' && (
