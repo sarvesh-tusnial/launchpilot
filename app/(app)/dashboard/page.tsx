@@ -343,23 +343,7 @@ export default function Dashboard() {
                       ))}
                     </div>
                     <div style={{ fontSize: '11px', color: '#444', fontFamily: 'DM Mono, monospace' }}>{masteredCount}/{totalConcepts} concepts · {pct}%</div>
-                    {concepts.length > 0 && (
-                      <div style={{ marginTop: '16px' }}>
-                        <div style={{ fontSize: '10px', color: '#555', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>Concepts</div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
-                          {concepts.map((c: any) => {
-                            const done = completedIds.has(c.id)
-                            const isCurrent = c.id === currentConcept?.id
-                            return (
-                              <div key={c.id} style={{ display: 'flex', gap: '7px', alignItems: 'flex-start', padding: '5px 8px', background: isCurrent ? 'rgba(255,106,0,0.08)' : 'rgba(255,255,255,0.02)', borderRadius: '5px', border: isCurrent ? '1px solid rgba(255,106,0,0.2)' : '1px solid transparent' }}>
-                                <span style={{ fontSize: '9px', color: done ? '#4ADE80' : isCurrent ? '#FF6A00' : '#333', flexShrink: 0, marginTop: '1px' }}>{done ? '✓' : isCurrent ? '→' : '○'}</span>
-                                <span style={{ fontSize: '10px', color: done ? '#444' : isCurrent ? '#E8E6E0' : '#666', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
+
                   </div>
                   <button onClick={() => setView('chat')}
                     style={{ padding: '13px 28px', borderRadius: '10px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -424,6 +408,129 @@ export default function Dashboard() {
               </div>
             </div>
           )}
+
+              {/* ── MOTIVATIONAL VISUAL ── */}
+              {activeComp && concepts.length > 0 && (
+                <div style={{ marginBottom: '28px', padding: '22px 26px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <div>
+                      <div style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '4px' }}>Your momentum</div>
+                      <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>
+                        {masteredCount === 0 ? "Every journey starts here." :
+                         masteredCount < Math.floor(totalConcepts * 0.25) ? "You've started. Don't stop now." :
+                         masteredCount < Math.floor(totalConcepts * 0.5) ? "You're building real momentum." :
+                         masteredCount < Math.floor(totalConcepts * 0.75) ? "More than halfway. Keep pushing." :
+                         masteredCount < totalConcepts ? "Almost there. Finish strong." :
+                         "Pathway complete. Well done."}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontSize: '36px', fontWeight: '900', color: '#FF6A00', letterSpacing: '-0.03em', lineHeight: '1' }}>{pct}%</div>
+                      <div style={{ fontSize: '10px', color: '#444', fontFamily: 'DM Mono, monospace', marginTop: '2px' }}>of this pathway</div>
+                    </div>
+                  </div>
+                  {/* Concept blocks visual */}
+                  <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                    {concepts.map((c: any, i: number) => {
+                      const done = completedIds.has(c.id)
+                      const isCurrent = c.id === currentConcept?.id
+                      return (
+                        <div key={c.id} title={c.title} style={{ width: '28px', height: '28px', borderRadius: '6px', background: done ? '#FF6A00' : isCurrent ? 'rgba(255,106,0,0.3)' : 'rgba(255,255,255,0.05)', border: isCurrent ? '1px solid rgba(255,106,0,0.5)' : '1px solid transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'default', transition: 'all 0.2s' }}>
+                          {done && <span style={{ fontSize: '10px', color: '#fff', fontWeight: '800' }}>✓</span>}
+                          {isCurrent && <span style={{ fontSize: '9px', color: '#FF6A00', fontWeight: '800' }}>→</span>}
+                          {!done && !isCurrent && <span style={{ fontSize: '8px', color: '#333', fontFamily: 'DM Mono, monospace' }}>{String(i+1).padStart(2,'0')}</span>}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {/* Next milestone */}
+                  {currentConcept && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'rgba(255,106,0,0.06)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '8px' }}>
+                      <span style={{ fontSize: '14px' }}>🎯</span>
+                      <div>
+                        <div style={{ fontSize: '11px', color: '#FF8C00', fontFamily: 'DM Mono, monospace', marginBottom: '1px' }}>Next up</div>
+                        <div style={{ fontSize: '12px', color: '#E8E6E0', fontWeight: '500' }}>{currentConcept.title}</div>
+                      </div>
+                      <button onClick={() => setView('chat')} style={{ marginLeft: 'auto', padding: '6px 14px', borderRadius: '7px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', flexShrink: 0 }}>Start →</button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ── DYNAMIC ROADMAP ── */}
+              {activeComp && concepts.length > 0 && (
+                <div style={{ padding: '22px 26px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px' }}>
+                  <div style={{ fontSize: '9px', color: '#FF6A00', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '4px' }}>Pathway roadmap</div>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#F0EDE6', marginBottom: '18px' }}>{activeComp.name} — your learning path</div>
+                  {/* Group concepts into 4 phases */}
+                  {(() => {
+                    const chunkSize = Math.ceil(concepts.length / 4)
+                    const phases = [
+                      { label: 'Foundation', icon: '🧱', color: '#FF6A00' },
+                      { label: 'Build',      icon: '⚙️',  color: '#F59E0B' },
+                      { label: 'Launch',     icon: '🚀',  color: '#4ADE80' },
+                      { label: 'Scale',      icon: '📈',  color: '#60A5FA' },
+                    ]
+                    const grouped = phases.map((p, pi) => ({
+                      ...p,
+                      concepts: concepts.slice(pi * chunkSize, (pi + 1) * chunkSize),
+                    }))
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                        {grouped.map((phase, pi) => {
+                          const phaseDone   = phase.concepts.filter(c => completedIds.has(c.id)).length
+                          const phaseTotal  = phase.concepts.length
+                          const phasePct    = phaseTotal > 0 ? Math.round((phaseDone / phaseTotal) * 100) : 0
+                          const isActive    = phase.concepts.some(c => c.id === currentConcept?.id)
+                          const isCompleted = phaseDone === phaseTotal && phaseTotal > 0
+                          const isLocked    = pi > 0 && grouped[pi-1].concepts.filter(c => completedIds.has(c.id)).length < grouped[pi-1].concepts.length * 0.5
+                          return (
+                            <div key={phase.label} style={{ display: 'flex', gap: '0', position: 'relative' }}>
+                              {/* Vertical connector line */}
+                              {pi < grouped.length - 1 && (
+                                <div style={{ position: 'absolute', left: '19px', top: '40px', bottom: '-8px', width: '2px', background: isCompleted ? phase.color : 'rgba(255,255,255,0.06)', zIndex: 0 }} />
+                              )}
+                              <div style={{ display: 'flex', gap: '16px', flex: 1, padding: '10px 0', marginBottom: '8px', position: 'relative', zIndex: 1 }}>
+                                {/* Phase icon */}
+                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: isCompleted ? phase.color : isActive ? `${phase.color}20` : 'rgba(255,255,255,0.04)', border: `2px solid ${isCompleted ? phase.color : isActive ? phase.color : 'rgba(255,255,255,0.08)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '16px' }}>
+                                  {isCompleted ? '✓' : phase.icon}
+                                </div>
+                                <div style={{ flex: 1, paddingTop: '4px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                    <span style={{ fontSize: '13px', fontWeight: '700', color: isCompleted ? phase.color : isActive ? '#F0EDE6' : '#666' }}>{phase.label}</span>
+                                    {isActive && <span style={{ fontSize: '8px', color: phase.color, background: `${phase.color}15`, border: `1px solid ${phase.color}30`, padding: '1px 7px', borderRadius: '100px', fontFamily: 'DM Mono, monospace' }}>● In progress</span>}
+                                    {isCompleted && <span style={{ fontSize: '8px', color: '#4ADE80', fontFamily: 'DM Mono, monospace' }}>✓ Done</span>}
+                                    {isLocked && !isActive && !isCompleted && <span style={{ fontSize: '8px', color: '#333', fontFamily: 'DM Mono, monospace' }}>🔒</span>}
+                                    <span style={{ marginLeft: 'auto', fontSize: '10px', fontFamily: 'DM Mono, monospace', color: phasePct > 0 ? phase.color : '#333' }}>{phaseDone}/{phaseTotal}</span>
+                                  </div>
+                                  {/* Mini progress bar */}
+                                  <div style={{ height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', marginBottom: '6px' }}>
+                                    <div style={{ width: `${phasePct}%`, height: '100%', background: phase.color, borderRadius: '2px', transition: 'width 0.5s' }} />
+                                  </div>
+                                  {/* Concept chips — show current phase expanded */}
+                                  {(isActive || isCompleted) && (
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                      {phase.concepts.map((c: any) => {
+                                        const done = completedIds.has(c.id)
+                                        const curr = c.id === currentConcept?.id
+                                        return (
+                                          <span key={c.id} style={{ fontSize: '9px', color: done ? '#4ADE80' : curr ? phase.color : '#555', background: done ? 'rgba(74,222,128,0.08)' : curr ? `${phase.color}12` : 'rgba(255,255,255,0.03)', border: `1px solid ${done ? 'rgba(74,222,128,0.2)' : curr ? `${phase.color}30` : 'rgba(255,255,255,0.05)'}`, padding: '2px 8px', borderRadius: '100px', fontFamily: 'DM Mono, monospace', textDecoration: done ? 'line-through' : 'none' }}>
+                                            {done ? '✓' : curr ? '→' : String(c.sequence).padStart(2,'0')} {c.title.length > 22 ? c.title.slice(0,22)+'…' : c.title}
+                                          </span>
+                                        )
+                                      })}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })()}
+                </div>
+              )}
 
           {/* ── CHAT VIEW ── */}
           {view === 'chat' && (
