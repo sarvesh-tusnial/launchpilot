@@ -197,7 +197,7 @@ export default function CopilotPage() {
             {activeTrack && !loadingTrack && (
               <div style={{ margin: '16px 0 8px', padding: '14px', background: 'rgba(255,106,0,0.06)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '10px' }}>
                 <div className="mono" style={{ fontSize: '8px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '5px' }}>Now Studying</div>
-                <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF', marginBottom: '2px' }}>{activeTrack.code}</div>
+                <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF', marginBottom: '2px' }}>Track {tracks.findIndex(t => t.code === activeTrack.code) + 1}</div>
                 <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '10px', lineHeight: '1.3' }}>{activeTrack.name}</div>
                 <div style={{ display: 'flex', gap: '2px', marginBottom: '4px' }}>
                   {Array.from({ length: totalConcepts }).map((_, i) => (
