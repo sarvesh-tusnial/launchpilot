@@ -124,23 +124,23 @@ export default function CopilotPage() {
     : ''
 
   if (checking) return (
-    <div style={{ minHeight: '100vh', background: '#050309', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ fontSize: '12px', color: '#666', fontFamily: 'DM Mono, monospace' }}>Loading...</div>
+    <div style={{ minHeight: '100vh', background: '#16161E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ fontSize: '12px', color: '#FFFFFF', fontFamily: 'DM Mono, monospace' }}>Loading...</div>
     </div>
   )
 
   if (notFound || !copilotProfile) return (
-    <div style={{ minHeight: '100vh', background: '#050309', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'DM Sans, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#16161E', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'DM Sans, sans-serif' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '28px', fontWeight: '700', color: '#F0EDE6', marginBottom: '10px' }}>Not found</div>
-        <div style={{ fontSize: '14px', color: '#888' }}>This co-pilot doesn't exist or has been removed.</div>
+        <div style={{ fontSize: '28px', fontWeight: '700', color: '#FFFFFF', marginBottom: '10px' }}>Not found</div>
+        <div style={{ fontSize: '14px', color: '#FFFFFF' }}>This co-pilot doesn't exist or has been removed.</div>
       </div>
     </div>
   )
 
   // ── DASHBOARD (after login) ──
   if (loggedIn) return (
-    <div style={{ background: '#05050A', minHeight: '100vh', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#E8E6E0', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#16161E', minHeight: '100vh', fontFamily: "'DM Sans', system-ui, sans-serif", color: '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
         .mono{font-family:'DM Mono',monospace}
@@ -153,28 +153,28 @@ export default function CopilotPage() {
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(5,5,10,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: '56px', background: 'rgba(22,22,30,0.96)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FF6A00' }} />
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '700', color: '#F0EDE6' }}>{copilotProfile.business_name} Co-Pilot</div>
-            <div className="mono" style={{ fontSize: '8px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
+            <div style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF' }}>{copilotProfile.business_name} Co-Pilot</div>
+            <div className="mono" style={{ fontSize: '8px', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,106,0,0.15)', border: '1px solid rgba(255,106,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#FF6A00' }}>
             {copilotProfile.founder_name?.[0]?.toUpperCase()}
           </div>
-          <button onClick={handleSignOut} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.08)', background: 'transparent', color: '#666', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Sign out</button>
+          <button onClick={handleSignOut} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.08)', background: 'transparent', color: '#FFFFFF', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>Sign out</button>
         </div>
       </nav>
 
       <div style={{ display: 'flex', flex: 1, paddingTop: '56px' }}>
 
         {/* SIDEBAR */}
-        <aside className="dash-aside" style={{ width: '220px', flexShrink: 0, position: 'fixed', top: '56px', bottom: 0, left: 0, background: '#05050A', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+        <aside className="dash-aside" style={{ width: '220px', flexShrink: 0, position: 'fixed', top: '56px', bottom: 0, left: 0, background: '#16161E', borderRight: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
           <div style={{ padding: '20px 12px', flex: 1 }}>
 
             {/* Nav */}
@@ -186,7 +186,7 @@ export default function CopilotPage() {
               <div key={item.id}
                 className={`nav-item ${copilotView === item.id ? 'active' : ''}`}
                 onClick={() => setCopilotView(item.id as any)}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', marginBottom: '2px', color: copilotView === item.id ? '#F0EDE6' : '#555', fontSize: '13px', fontWeight: copilotView === item.id ? '600' : '400', borderLeft: '3px solid transparent' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '8px', marginBottom: '2px', color: copilotView === item.id ? '#FFFFFF' : '#FFFFFF', fontSize: '13px', fontWeight: copilotView === item.id ? '600' : '400', borderLeft: '3px solid transparent' }}>
                 <span style={{ fontSize: '14px', flexShrink: 0 }}>{item.icon}</span>
                 <span style={{ flex: 1 }}>{item.label}</span>
                 {'dot' in item && item.dot && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ADE80', animation: 'pulse 2s infinite' }} />}
@@ -197,14 +197,14 @@ export default function CopilotPage() {
             {activeTrack && !loadingTrack && (
               <div style={{ margin: '16px 0 8px', padding: '14px', background: 'rgba(255,106,0,0.06)', border: '1px solid rgba(255,106,0,0.15)', borderRadius: '10px' }}>
                 <div className="mono" style={{ fontSize: '8px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '5px' }}>Now Studying</div>
-                <div className="mono" style={{ fontSize: '9px', color: '#555', marginBottom: '2px' }}>{activeTrack.code}</div>
-                <div style={{ fontSize: '12px', fontWeight: '600', color: '#F0EDE6', marginBottom: '10px', lineHeight: '1.3' }}>{activeTrack.name}</div>
+                <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF', marginBottom: '2px' }}>{activeTrack.code}</div>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '10px', lineHeight: '1.3' }}>{activeTrack.name}</div>
                 <div style={{ display: 'flex', gap: '2px', marginBottom: '4px' }}>
                   {Array.from({ length: totalConcepts }).map((_, i) => (
                     <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < masteredCount ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
                   ))}
                 </div>
-                <div className="mono" style={{ fontSize: '9px', color: '#444' }}>{masteredCount}/{totalConcepts} concepts</div>
+                <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF' }}>{masteredCount}/{totalConcepts} concepts</div>
                 <button onClick={() => setCopilotView('chat')} style={{ width: '100%', marginTop: '10px', padding: '8px', borderRadius: '7px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '11px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>
                   Continue with Maya →
                 </button>
@@ -213,7 +213,7 @@ export default function CopilotPage() {
 
             {/* Progress arc + streak */}
             <div style={{ margin: '12px 0 8px', padding: '14px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '10px' }}>
-              <div className="mono" style={{ fontSize: '7px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>Your Progress</div>
+              <div className="mono" style={{ fontSize: '7px', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>Your Progress</div>
               {/* Circular arc */}
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
                 {(() => {
@@ -236,7 +236,7 @@ export default function CopilotPage() {
                       {overallPct > 0 && <path d={arcPath(r1, overallPct)} fill="none" stroke="#FF6A00" strokeWidth="6" strokeLinecap="round"/>}
                       {trackPct > 0  && <path d={arcPath(r2, trackPct)}   fill="none" stroke="#4ADE80" strokeWidth="5" strokeLinecap="round"/>}
                       <text x={cx} y={cy - 6} textAnchor="middle" fill="#F0EDE6" fontSize="16" fontWeight="800" fontFamily="DM Sans, sans-serif">{overallPct}%</text>
-                      <text x={cx} y={cy + 10} textAnchor="middle" fill="#555" fontSize="8" fontFamily="DM Mono, monospace">overall</text>
+                      <text x={cx} y={cy + 10} textAnchor="middle" fill="#999" fontSize="8" fontFamily="DM Mono, monospace">overall</text>
                     </svg>
                   )
                 })()}
@@ -246,14 +246,14 @@ export default function CopilotPage() {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#FF6A00' }} />
-                    <span style={{ fontSize: '10px', color: '#888' }}>Concepts</span>
+                    <span style={{ fontSize: '10px', color: '#FFFFFF' }}>Concepts</span>
                   </div>
                   <span className="mono" style={{ fontSize: '10px', color: '#FF6A00' }}>{masteredCount}/{totalConcepts}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ADE80' }} />
-                    <span style={{ fontSize: '10px', color: '#888' }}>Tracks</span>
+                    <span style={{ fontSize: '10px', color: '#FFFFFF' }}>Tracks</span>
                   </div>
                   <span className="mono" style={{ fontSize: '10px', color: '#4ADE80' }}>{tracks.length} total</span>
                 </div>
@@ -273,10 +273,10 @@ export default function CopilotPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ fontSize: '16px' }}>{streak >= 7 ? '🔥' : streak >= 3 ? '⚡' : streak >= 1 ? '✨' : '💤'}</span>
                       <div>
-                        <div style={{ fontSize: '12px', fontWeight: '700', color: streak > 0 ? '#F0EDE6' : '#555' }}>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: streak > 0 ? '#F0EDE6' : '#FFFFFF' }}>
                           {streak > 0 ? `${streak} day streak` : 'No streak yet'}
                         </div>
-                        <div className="mono" style={{ fontSize: '8px', color: '#444', marginTop: '1px' }}>
+                        <div className="mono" style={{ fontSize: '8px', color: '#FFFFFF', marginTop: '1px' }}>
                           {diffDays === 0 ? 'Active today ✓' : diffDays === 1 ? 'Last active yesterday' : lastActive ? `Last active ${diffDays}d ago` : 'Start your first session'}
                         </div>
                       </div>
@@ -295,10 +295,10 @@ export default function CopilotPage() {
           {copilotView === 'dashboard' && (
             <div style={{ padding: '36px 40px', maxWidth: '1000px' }}>
               <div style={{ marginBottom: '28px' }}>
-                <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '6px' }}>
+                <h1 style={{ fontSize: '26px', fontWeight: '700', color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '6px' }}>
                   Hey {copilotProfile.founder_name.split(' ')[0]} 👋
                 </h1>
-                <p style={{ fontSize: '13px', color: '#555' }}>
+                <p style={{ fontSize: '13px', color: '#FFFFFF' }}>
                   {activeTrack ? `You're working on ${activeTrack.name}. Keep going.` : `Welcome to your ${copilotProfile.business_name} Co-Pilot.`}
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function CopilotPage() {
                 ].map((stat, i) => (
                   <div key={i} style={{ padding: '18px 20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px' }}>
                     <div style={{ fontSize: '28px', fontWeight: '800', color: stat.color, letterSpacing: '-0.03em', marginBottom: '4px' }}>{stat.value}</div>
-                    <div style={{ fontSize: '11px', color: '#444' }}>{stat.label}</div>
+                    <div style={{ fontSize: '11px', color: '#FFFFFF' }}>{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -325,7 +325,7 @@ export default function CopilotPage() {
                     <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '14px' }}>Program Overview</div>
                     <div style={{ marginBottom: '12px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                        <span style={{ fontSize: '11px', color: '#888' }}>Concepts mastered</span>
+                        <span style={{ fontSize: '11px', color: '#FFFFFF' }}>Concepts mastered</span>
                         <span className="mono" style={{ fontSize: '11px', fontWeight: '700', color: '#FF6A00' }}>{masteredCount}/{totalConcepts}</span>
                       </div>
                       <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
@@ -334,7 +334,7 @@ export default function CopilotPage() {
                     </div>
                     <div style={{ marginBottom: '14px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                        <span style={{ fontSize: '11px', color: '#888' }}>Tracks active</span>
+                        <span style={{ fontSize: '11px', color: '#FFFFFF' }}>Tracks active</span>
                         <span className="mono" style={{ fontSize: '11px', fontWeight: '700', color: '#4ADE80' }}>1/{tracks.length}</span>
                       </div>
                       <div style={{ height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
@@ -347,7 +347,7 @@ export default function CopilotPage() {
                         const cols = ['#FF6A00','#FF8C00','#1D9E75']
                         return (
                           <div key={t.code} style={{ padding: '3px 8px', borderRadius: '100px', background: isActive ? 'rgba(255,106,0,0.12)' : 'rgba(255,255,255,0.04)', border: `1px solid ${isActive ? 'rgba(255,106,0,0.3)' : 'rgba(255,255,255,0.06)'}` }}>
-                            <span className="mono" style={{ fontSize: '8px', color: isActive ? '#FF6A00' : '#444' }}>{isActive ? '→ ' : String(i+1).padStart(2,'0') + ' '}{t.name}</span>
+                            <span className="mono" style={{ fontSize: '8px', color: isActive ? '#FF6A00' : '#FFFFFF' }}>{isActive ? '→ ' : String(i+1).padStart(2,'0') + ' '}{t.name}</span>
                           </div>
                         )
                       })}
@@ -357,8 +357,8 @@ export default function CopilotPage() {
                     <div style={{ fontSize: '52px', fontWeight: '900', color: '#FF6A00', letterSpacing: '-0.04em', lineHeight: '1' }}>
                       {totalConcepts > 0 ? Math.round((masteredCount/totalConcepts)*100) : 0}%
                     </div>
-                    <div className="mono" style={{ fontSize: '9px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '6px' }}>of active track</div>
-                    <div style={{ fontSize: '11px', color: '#666', marginTop: '6px' }}>{activeTrack?.name || 'No active track'}</div>
+                    <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '6px' }}>of active track</div>
+                    <div style={{ fontSize: '11px', color: '#FFFFFF', marginTop: '6px' }}>{activeTrack?.name || 'No active track'}</div>
                   </div>
                 </div>
               </div>
@@ -366,7 +366,7 @@ export default function CopilotPage() {
               {/* My Tracks grid — shown first */}
               <div style={{ marginBottom: '28px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#F0EDE6' }}>My Tracks</div>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#FFFFFF' }}>My Tracks</div>
                   <button onClick={() => setCopilotView('tracks')} style={{ fontSize: '12px', color: '#FF6A00', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif' }}>View all →</button>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
@@ -380,10 +380,10 @@ export default function CopilotPage() {
                         onClick={() => { switchTrack(t); setCopilotView('chat') }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                           <span className="mono" style={{ fontSize: '9px', color: '#FF6A00', background: 'rgba(255,106,0,0.1)', padding: '2px 7px', borderRadius: '4px' }}>Track {String(i+1).padStart(2,'0')}</span>
-                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#333', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Switch →'}</span>
+                          <span className="mono" style={{ fontSize: '9px', color: isActive ? '#FF6A00' : '#FFFFFF', background: isActive ? 'rgba(255,106,0,0.1)' : 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: '4px' }}>{isActive ? 'Active' : 'Switch →'}</span>
                         </div>
-                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
-                        <div className="mono" style={{ fontSize: '9px', color: '#444', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
+                        <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF', marginBottom: '4px', lineHeight: '1.3' }}>{t.name}</div>
+                        <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF', marginBottom: '8px' }}>{trackMastered}/{trackTotal} concepts</div>
                         <div style={{ display: 'flex', gap: '2px' }}>
                           {Array.from({ length: trackTotal }).map((_, i) => (
                             <div key={i} style={{ flex: 1, height: '2px', borderRadius: '1px', background: i < trackMastered ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
@@ -400,8 +400,8 @@ export default function CopilotPage() {
                 <div style={{ padding: '22px 26px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
                   <div style={{ flex: 1 }}>
                     <div className="mono" style={{ fontSize: '9px', color: '#FF6A00', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '6px' }}>Resume where you left off</div>
-                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.01em', marginBottom: '4px' }}>{activeTrack.name}</div>
-                    <div style={{ fontSize: '13px', color: '#555', marginBottom: '12px' }}>
+                    <div style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', letterSpacing: '-0.01em', marginBottom: '4px' }}>{activeTrack.name}</div>
+                    <div style={{ fontSize: '13px', color: '#FFFFFF', marginBottom: '12px' }}>
                       {currentConcept ? `Working on "${currentConcept.title}"` : 'Starting first concept — ready to begin'}
                     </div>
                     <div style={{ display: 'flex', gap: '2px', marginBottom: '5px' }}>
@@ -409,7 +409,7 @@ export default function CopilotPage() {
                         <div key={i} style={{ flex: 1, height: '3px', borderRadius: '2px', background: i < masteredCount ? '#FF6A00' : 'rgba(255,255,255,0.06)' }} />
                       ))}
                     </div>
-                    <div className="mono" style={{ fontSize: '10px', color: '#444' }}>{masteredCount}/{totalConcepts} concepts</div>
+                    <div className="mono" style={{ fontSize: '10px', color: '#FFFFFF' }}>{masteredCount}/{totalConcepts} concepts</div>
 
                   </div>
                   <button onClick={() => setCopilotView('chat')} style={{ padding: '12px 24px', borderRadius: '10px', border: 'none', background: '#FF6A00', color: '#fff', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -424,10 +424,10 @@ export default function CopilotPage() {
 
           {/* ── CHAT VIEW ── */}
           {copilotView === 'chat' && (
-            <div style={{ height: '100%', '--bg': '#07070F', '--bg2': '#0F0F18', '--bg3': '#141420', '--bg4': '#1A1A28', '--border': 'rgba(255,255,255,0.08)', '--text': '#F0EDE6', '--text2': '#AAA8A0', '--text3': '#666' } as React.CSSProperties}>
+            <div style={{ height: '100%', '--bg': '#1A1A24', '--bg2': '#20202C', '--bg3': '#262635', '--bg4': '#2C2C3D', '--border': 'rgba(255,255,255,0.08)', '--text': '#FFFFFF', '--text2': '#FFFFFF', '--text3': '#FFFFFF' } as React.CSSProperties}>
               {!initialized || loadingTrack ? (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                  <div className="mono" style={{ fontSize: '11px', color: '#444' }}>Loading your session...</div>
+                  <div className="mono" style={{ fontSize: '11px', color: '#FFFFFF' }}>Loading your session...</div>
                 </div>
               ) : (
                 <MayaChat
@@ -446,8 +446,8 @@ export default function CopilotPage() {
           {copilotView === 'tracks' && (
             <div style={{ padding: '36px 40px', maxWidth: '1000px' }}>
               <div style={{ marginBottom: '28px' }}>
-                <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '4px' }}>My Tracks</h1>
-                <p className="mono" style={{ fontSize: '11px', color: '#444' }}>{tracks.length} tracks built for {copilotProfile.business_name}</p>
+                <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '4px' }}>My Tracks</h1>
+                <p className="mono" style={{ fontSize: '11px', color: '#FFFFFF' }}>{tracks.length} tracks built for {copilotProfile.business_name}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {tracks.map((t, ti) => {
@@ -466,8 +466,8 @@ export default function CopilotPage() {
                             <span className="mono" style={{ fontSize: '10px', fontWeight: '800', color: accentColor }}>0{ti+1}</span>
                           </div>
                           <div>
-                            <div style={{ fontSize: '15px', fontWeight: '700', color: '#F0EDE6', marginBottom: '2px' }}>{t.name}</div>
-                            <div className="mono" style={{ fontSize: '9px', color: '#444' }}>{trackMastered} of {trackTotal} concepts · {trackPct}%</div>
+                            <div style={{ fontSize: '15px', fontWeight: '700', color: '#FFFFFF', marginBottom: '2px' }}>{t.name}</div>
+                            <div className="mono" style={{ fontSize: '9px', color: '#FFFFFF' }}>{trackMastered} of {trackTotal} concepts · {trackPct}%</div>
                           </div>
                           {isActive && <span style={{ fontSize: '8px', color: accentColor, background: `${accentColor}10`, border: `1px solid ${accentColor}25`, padding: '2px 8px', borderRadius: '100px', fontFamily: 'DM Mono, monospace', fontWeight: '700' }}>● Active</span>}
                         </div>
@@ -477,7 +477,7 @@ export default function CopilotPage() {
                           </div>
                           {isActive
                             ? <button onClick={() => setCopilotView('chat')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', background: accentColor, color: '#fff', fontSize: '12px', fontWeight: '700', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap' as const }}>Continue →</button>
-                            : <button onClick={() => { switchTrack(t); setCopilotView('chat') }} style={{ padding: '8px 16px', borderRadius: '8px', border: `1px solid rgba(255,255,255,0.1)`, background: 'transparent', color: '#888', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap' as const }}>Switch to this →</button>
+                            : <button onClick={() => { switchTrack(t); setCopilotView('chat') }} style={{ padding: '8px 16px', borderRadius: '8px', border: `1px solid rgba(255,255,255,0.1)`, background: 'transparent', color: '#FFFFFF', fontSize: '12px', cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap' as const }}>Switch to this →</button>
                           }
                         </div>
                       </div>
@@ -497,9 +497,9 @@ export default function CopilotPage() {
                           return (
                             <div key={c.id} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', padding: '7px 10px', background: isCurrent ? `${accentColor}08` : done ? 'transparent' : 'rgba(255,255,255,0.01)', borderRadius: '7px', border: isCurrent ? `1px solid ${accentColor}20` : '1px solid rgba(255,255,255,0.04)' }}>
                               <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: done ? 'rgba(74,222,128,0.15)' : isCurrent ? `${accentColor}15` : 'rgba(255,255,255,0.04)', border: done ? '1px solid rgba(74,222,128,0.3)' : isCurrent ? `1px solid ${accentColor}30` : '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
-                                <span style={{ fontSize: '8px', fontWeight: '700', color: done ? '#4ADE80' : isCurrent ? accentColor : '#333' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
+                                <span style={{ fontSize: '8px', fontWeight: '700', color: done ? '#4ADE80' : isCurrent ? accentColor : '#FFFFFF' }}>{done ? '✓' : isCurrent ? '→' : String(c.sequence).padStart(2,'0')}</span>
                               </div>
-                              <span style={{ fontSize: '11px', color: done ? '#555' : isCurrent ? '#F0EDE6' : '#888', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
+                              <span style={{ fontSize: '11px', color: done ? '#CCCCCC' : isCurrent ? '#FFFFFF' : '#FFFFFF', lineHeight: '1.4', textDecoration: done ? 'line-through' : 'none' }}>{c.title}</span>
                             </div>
                           )
                         })}
@@ -519,7 +519,7 @@ export default function CopilotPage() {
 
   // ── LOGIN PAGE ──
   return (
-    <div className="login-layout" style={{ minHeight: '100vh', background: '#050309', fontFamily: "'DM Sans', system-ui, sans-serif", display: 'flex' }}>
+    <div className="login-layout" style={{ minHeight: '100vh', background: '#16161E', fontFamily: "'DM Sans', system-ui, sans-serif", display: 'flex' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&display=swap');
         .serif{font-family:'Fraunces',Georgia,serif}
@@ -554,13 +554,13 @@ export default function CopilotPage() {
       <div className="login-left-wrap" style={{ flex: 1, overflowY: 'auto' }}>
 
         {/* Sticky top bar */}
-        <div className="sticky-bar" style={{ position: 'sticky', top: 0, zIndex: 10, padding: '18px 52px', background: 'rgba(5,3,9,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="sticky-bar" style={{ position: 'sticky', top: 0, zIndex: 10, padding: '18px 52px', background: 'rgba(22,22,30,0.95)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{ width: '26px', height: '26px', borderRadius: '7px', background: 'rgba(155,148,240,0.2)', border: '1px solid rgba(155,148,240,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#9B94F0' }} />
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6' }}>{copilotProfile.business_name} Co-Pilot</div>
-            <div className="mono" style={{ fontSize: '8px', color: '#555', textTransform: 'uppercase', letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF' }}>{copilotProfile.business_name} Co-Pilot</div>
+            <div className="mono" style={{ fontSize: '8px', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.16em' }}>Powered by LaunchPilot</div>
           </div>
         </div>
 
@@ -569,12 +569,12 @@ export default function CopilotPage() {
           {/* HERO */}
           <div style={{ marginBottom: '60px' }}>
             <div className="mono" style={{ fontSize: '9px', color: '#9B94F0', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '16px' }}>Your personalised roadmap</div>
-            <h1 className="serif hero-title" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#F0EDE6', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
+            <h1 className="serif hero-title" style={{ fontSize: 'clamp(34px, 3.5vw, 52px)', fontWeight: '900', color: '#FFFFFF', letterSpacing: '-0.03em', lineHeight: '1.08', marginBottom: '16px' }}>
               Hey {copilotProfile.founder_name},<br />
               <span style={{ color: '#9B94F0', fontStyle: 'italic' }}>your program is ready.</span>
             </h1>
-            <p style={{ fontSize: '15px', color: '#AAA', lineHeight: '1.8', maxWidth: '500px' }}>
-              Built specifically for <strong style={{ color: '#E8E6E0' }}>{copilotProfile.business_name}</strong> — your mentors, focus areas, sprints and milestones are all tailored to your stage and idea.
+            <p style={{ fontSize: '15px', color: '#FFFFFF', lineHeight: '1.8', maxWidth: '500px' }}>
+              Built specifically for <strong style={{ color: '#FFFFFF' }}>{copilotProfile.business_name}</strong> — your mentors, focus areas, sprints and milestones are all tailored to your stage and idea.
             </p>
           </div>
 
@@ -589,8 +589,8 @@ export default function CopilotPage() {
                     <span className="mono" style={{ fontSize: '10px', fontWeight: '700', color: '#9B94F0' }}>0{i + 1}</span>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#E8E6E0' }}>{t.name}</div>
-                    <div style={{ fontSize: '11px', color: '#888', marginTop: '3px', lineHeight: '1.4' }}>{content?.track_descriptions?.[i] || '8 custom concepts tailored to your business'}</div>
+                    <div style={{ fontSize: '14px', fontWeight: '600', color: '#FFFFFF' }}>{t.name}</div>
+                    <div style={{ fontSize: '11px', color: '#FFFFFF', marginTop: '3px', lineHeight: '1.4' }}>{content?.track_descriptions?.[i] || '8 custom concepts tailored to your business'}</div>
                   </div>
                 </div>
               ))}
@@ -614,9 +614,9 @@ export default function CopilotPage() {
                       )}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '1px' }}>{m.name}</div>
-                      <div style={{ fontSize: '11px', color: '#888', marginBottom: '4px' }}>{m.role} · {m.company}</div>
-                      <div style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.5' }}>{m.reason}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF', marginBottom: '1px' }}>{m.name}</div>
+                      <div style={{ fontSize: '11px', color: '#FFFFFF', marginBottom: '4px' }}>{m.role} · {m.company}</div>
+                      <div style={{ fontSize: '12px', color: '#FFFFFF', lineHeight: '1.5' }}>{m.reason}</div>
                     </div>
                   </div>
                 ))}
@@ -636,10 +636,10 @@ export default function CopilotPage() {
                       <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: i % 2 === 0 ? 'rgba(186,117,23,0.15)' : 'rgba(155,148,240,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <span className="mono" style={{ fontSize: '8px', fontWeight: '700', color: i % 2 === 0 ? '#BA7517' : '#9B94F0' }}>{String(i + 1).padStart(2, '0')}</span>
                       </div>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', lineHeight: '1.3' }}>{s.name.replace(/\s*\([^)]*\)/g, '').trim()}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF', lineHeight: '1.3' }}>{s.name.replace(/\s*\([^)]*\)/g, '').trim()}</div>
                     </div>
-                    <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.6', marginBottom: '8px' }}>{s.description}</div>
-                    <div style={{ fontSize: '11px', color: '#BA7517', lineHeight: '1.5', padding: '6px 10px', background: 'rgba(186,117,23,0.06)', borderRadius: '6px' }}>
+                    <div style={{ fontSize: '11px', color: '#FFFFFF', lineHeight: '1.6', marginBottom: '8px' }}>{s.description}</div>
+                    <div style={{ fontSize: '11px', color: '#D89A4A', lineHeight: '1.5', padding: '6px 10px', background: 'rgba(186,117,23,0.06)', borderRadius: '6px' }}>
                       For {copilotProfile.business_name}: {s.relevance}
                     </div>
                   </div>
@@ -660,8 +660,8 @@ export default function CopilotPage() {
                       <span className="mono" style={{ fontSize: '9px', fontWeight: '700', color: '#8B6FFF' }}>{String(i + 1).padStart(2, '0')}</span>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F0EDE6', marginBottom: '3px' }}>{s.theme.replace(/^[A-Za-z\s]+[:\-–—]\s*/g, '').trim()}</div>
-                      <div style={{ fontSize: '12px', color: '#888', lineHeight: '1.55', marginBottom: '4px' }}>{s.description}</div>
+                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF', marginBottom: '3px' }}>{s.theme.replace(/^[A-Za-z\s]+[:\-–—]\s*/g, '').trim()}</div>
+                      <div style={{ fontSize: '12px', color: '#FFFFFF', lineHeight: '1.55', marginBottom: '4px' }}>{s.description}</div>
                       <div style={{ fontSize: '11px', color: '#8B6FFF' }}>Why: {s.relevance}</div>
                     </div>
                   </div>
@@ -675,7 +675,7 @@ export default function CopilotPage() {
             <div className="section-label" style={{ color: '#60A5FA' }}>Tools & deals platform</div>
             <div className="section-title">500+ tools — free or heavily discounted for you</div>
             <div style={{ padding: '20px 22px', background: 'rgba(96,165,250,0.05)', border: '1px solid rgba(96,165,250,0.15)', borderRadius: '14px' }}>
-              <p style={{ fontSize: '13px', color: '#AAA', lineHeight: '1.7', marginBottom: '16px' }}>
+              <p style={{ fontSize: '13px', color: '#FFFFFF', lineHeight: '1.7', marginBottom: '16px' }}>
                 {content?.tools_highlight || `As a LaunchPilot member, you get access to 500+ tools, software deals and platforms at no cost or heavily discounted — everything ${copilotProfile.business_name} needs to launch and grow.`}
               </p>
               {content?.tools && content.tools.length > 0 && (
@@ -693,7 +693,7 @@ export default function CopilotPage() {
           {/* ── 6-MONTH NORTHSTAR ── */}
           {content?.timeline && (
             <div style={{ marginBottom: '56px' }}>
-              <div className="section-label" style={{ color: '#AAA' }}>Your 6-month northstar</div>
+              <div className="section-label" style={{ color: '#FFFFFF' }}>Your 6-month northstar</div>
               <div className="section-title">The journey for {copilotProfile.business_name}</div>
               <div className="timeline-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }}>
                 {content.timeline.map((t: any, i: number) => {
@@ -705,11 +705,11 @@ export default function CopilotPage() {
                     <div key={i} style={{ position: 'relative' }}>
                       {/* Arrow connector */}
                       {!isLast && !isEndOfRow && (
-                        <div style={{ position: 'absolute', right: '-1px', top: '24px', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.2)' }}>›</div>
+                        <div style={{ position: 'absolute', right: '-1px', top: '24px', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.3)' }}>›</div>
                       )}
                       {/* Down arrow at end of row 1 */}
                       {i === 2 && (
-                        <div style={{ position: 'absolute', bottom: '-18px', right: '50%', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.2)', transform: 'rotate(90deg)' }}>›</div>
+                        <div style={{ position: 'absolute', bottom: '-18px', right: '50%', zIndex: 2, fontSize: '14px', color: 'rgba(255,255,255,0.3)', transform: 'rotate(90deg)' }}>›</div>
                       )}
                       <div style={{ margin: '0 4px 8px', padding: '16px 14px', background: `${col}08`, border: `1px solid ${col}20`, borderRadius: '12px', borderTop: `2px solid ${col}` }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
@@ -718,8 +718,8 @@ export default function CopilotPage() {
                           </div>
                           <span className="mono" style={{ fontSize: '8px', color: col, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t.month}</span>
                         </div>
-                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#F0EDE6', marginBottom: '5px', lineHeight: '1.3' }}>{t.milestone}</div>
-                        <div style={{ fontSize: '11px', color: '#888', lineHeight: '1.55' }}>{t.description}</div>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#FFFFFF', marginBottom: '5px', lineHeight: '1.3' }}>{t.milestone}</div>
+                        <div style={{ fontSize: '11px', color: '#FFFFFF', lineHeight: '1.55' }}>{t.description}</div>
                       </div>
                     </div>
                   )
@@ -728,7 +728,7 @@ export default function CopilotPage() {
               {/* Journey arrow */}
               <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: 'rgba(29,158,117,0.05)', border: '1px solid rgba(29,158,117,0.15)', borderRadius: '8px' }}>
                 <span style={{ fontSize: '12px', color: '#1D9E75' }}>→</span>
-                <span style={{ fontSize: '12px', color: '#AAA' }}>Complete this journey and {copilotProfile.business_name} will have traction, revenue, and a clear path to scale.</span>
+                <span style={{ fontSize: '12px', color: '#FFFFFF' }}>Complete this journey and {copilotProfile.business_name} will have traction, revenue, and a clear path to scale.</span>
               </div>
             </div>
           )}
@@ -742,7 +742,7 @@ export default function CopilotPage() {
                 {content.critical_warnings.map((w: any, i: number) => (
                   <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'center', padding: '14px 18px', background: 'rgba(216,90,48,0.04)', border: '1px solid rgba(216,90,48,0.12)', borderRadius: '10px' }}>
                     <span style={{ fontSize: '16px', color: '#D85A30', flexShrink: 0 }}>?</span>
-                    <span style={{ fontSize: '14px', color: '#E8E6E0', fontWeight: '500', lineHeight: '1.4' }}>
+                    <span style={{ fontSize: '14px', color: '#FFFFFF', fontWeight: '500', lineHeight: '1.4' }}>
                       {w.question || w.title}
                     </span>
                   </div>
@@ -755,24 +755,24 @@ export default function CopilotPage() {
       </div>
 
       {/* RIGHT — sticky login */}
-      <div className="login-right" style={{ width: '380px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', background: '#07050F', borderLeft: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px 40px' }}>
+      <div className="login-right" style={{ width: '380px', flexShrink: 0, position: 'sticky', top: 0, height: '100vh', background: '#1C1A24', borderLeft: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '48px 40px' }}>
         <div style={{ marginBottom: '36px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#F0EDE6', letterSpacing: '-0.02em', marginBottom: '8px' }}>Sign in</h2>
-          <p style={{ fontSize: '13px', color: '#888', lineHeight: '1.6' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', letterSpacing: '-0.02em', marginBottom: '8px' }}>Sign in</h2>
+          <p style={{ fontSize: '13px', color: '#FFFFFF', lineHeight: '1.6' }}>
             Your personalised session for {copilotProfile.business_name} is ready.
           </p>
         </div>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '28px' }}>
           <div>
-            <label className="mono" style={{ display: 'block', fontSize: '10px', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Email</label>
+            <label className="mono" style={{ display: 'block', fontSize: '10px', color: '#FFFFFF', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Email</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" required
-              style={{ width: '100%', padding: '13px 14px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
+              style={{ width: '100%', padding: '13px 14px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#FFFFFF', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
           </div>
           <div>
-            <label className="mono" style={{ display: 'block', fontSize: '10px', color: '#666', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Password</label>
+            <label className="mono" style={{ display: 'block', fontSize: '10px', color: '#FFFFFF', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Password</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required
-              style={{ width: '100%', padding: '13px 14px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#F0EDE6', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
+              style={{ width: '100%', padding: '13px 14px', borderRadius: '9px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#FFFFFF', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' as const }} />
           </div>
           {loginError && (
             <div style={{ padding: '10px 14px', background: 'rgba(216,90,48,0.1)', border: '1px solid rgba(216,90,48,0.2)', borderRadius: '8px', fontSize: '13px', color: '#F97066' }}>
@@ -795,7 +795,7 @@ export default function CopilotPage() {
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginBottom: '7px' }}>
               <span style={{ color: '#9B94F0', fontSize: '10px', flexShrink: 0, marginTop: '2px' }}>✓</span>
-              <span style={{ fontSize: '12px', color: '#AAA', lineHeight: '1.5' }}>{item}</span>
+              <span style={{ fontSize: '12px', color: '#FFFFFF', lineHeight: '1.5' }}>{item}</span>
             </div>
           ))}
         </div>
@@ -807,7 +807,7 @@ export default function CopilotPage() {
           </button>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <div className="mono" style={{ fontSize: '10px', color: '#444', letterSpacing: '0.08em' }}>Private session · Not for sharing</div>
+          <div className="mono" style={{ fontSize: '10px', color: '#FFFFFF', letterSpacing: '0.08em' }}>Private session · Not for sharing</div>
         </div>
       </div>
     </div>
