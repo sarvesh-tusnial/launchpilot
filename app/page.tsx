@@ -602,7 +602,7 @@ export default function HomePage() {
             <span className="mono" style={{ fontSize: '10px', color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '0.16em' }}>10 pathways · idea to first revenue</span>
           </div>
           <h1 className="serif fade-up d2" style={{ fontSize: 'clamp(36px, 5.5vw, 68px)', fontWeight: '900', lineHeight: '1.04', letterSpacing: '-0.03em', marginBottom: '16px' }}>
-            Stop planning.<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>Start launching.</span>
+            Stop planning.<br /><span style={{ color: '#FF6A00', fontStyle: 'italic' }}>Start launching with a personal AI mentor.</span>
           </h1>
           <p className="fade-up d3" style={{ fontSize: '16px', color: '#777', lineHeight: '1.7', maxWidth: '480px', margin: '0 auto 24px', fontWeight: '400' }}>
             Answer 6 questions — Maya builds your personalised launch roadmap in seconds.
