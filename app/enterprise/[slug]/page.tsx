@@ -202,6 +202,83 @@ export default function EnterpriseCopilotPage() {
                 </button>
               </div>
             )}
+
+            {/* Coverage arc + activity */}
+            <div style={{ margin: '12px 0 8px', padding: '14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
+              <div className="ent-mono" style={{ fontSize: '7px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>Your Coverage</div>
+              {/* Circular arc */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                {(() => {
+                  const overallPct = totalConcepts > 0 ? Math.round((masteredCount / totalConcepts) * 100) : 0
+                  const trackConceptsForArc = concepts.filter((c: any) => c.competency_code === activeTrack?.code)
+                  const trackMasteredForArc = trackConceptsForArc.filter((c: any) => completedIds.has(c.id)).length
+                  const trackPct = trackConceptsForArc.length > 0 ? Math.round((trackMasteredForArc / trackConceptsForArc.length) * 100) : 0
+                  const r1 = 44, r2 = 34, cx = 56, cy = 56
+                  const arcPath = (r: number, pct: number) => {
+                    if (pct <= 0) return ''
+                    if (pct >= 100) return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r} Z`
+                    const angle = (pct / 100) * 360
+                    const rad = (angle - 90) * Math.PI / 180
+                    const x = cx + r * Math.cos(rad)
+                    const y = cy + r * Math.sin(rad)
+                    return `M ${cx} ${cy - r} A ${r} ${r} 0 ${angle > 180 ? 1 : 0} 1 ${x} ${y}`
+                  }
+                  return (
+                    <svg width="112" height="112" viewBox="0 0 112 112">
+                      <circle cx={cx} cy={cy} r={r1} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6"/>
+                      <circle cx={cx} cy={cy} r={r2} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="5"/>
+                      {overallPct > 0 && <path d={arcPath(r1, overallPct)} fill="none" stroke={ACCENT} strokeWidth="6" strokeLinecap="round"/>}
+                      {trackPct > 0  && <path d={arcPath(r2, trackPct)}   fill="none" stroke={TEAL} strokeWidth="5" strokeLinecap="round"/>}
+                      <text x={cx} y={cy - 6} textAnchor="middle" fill="#FFFFFF" fontSize="16" fontWeight="700" fontFamily="Space Grotesk, sans-serif">{overallPct}%</text>
+                      <text x={cx} y={cy + 10} textAnchor="middle" fill="#94A3B8" fontSize="8" fontFamily="IBM Plex Mono, monospace">org coverage</text>
+                    </svg>
+                  )
+                })()}
+              </div>
+              {/* Legend */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: ACCENT }} />
+                    <span style={{ fontSize: '10px', color: '#94A3B8' }}>Modules</span>
+                  </div>
+                  <span className="ent-mono" style={{ fontSize: '10px', color: ACCENT }}>{masteredCount}/{totalConcepts}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: TEAL }} />
+                    <span style={{ fontSize: '10px', color: '#94A3B8' }}>Tracks</span>
+                  </div>
+                  <span className="ent-mono" style={{ fontSize: '10px', color: TEAL }}>{tracks.length} total</span>
+                </div>
+              </div>
+              {/* Activity (enterprise framing: sessions, not gamified "streak") */}
+              {(() => {
+                const msgs = [...chatHistory].sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                const today = new Date()
+                const daySet = new Set(msgs.map((m: any) => new Date(m.created_at).toDateString()))
+                let streak = 0
+                const d = new Date()
+                while (daySet.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1) }
+                const lastActive = msgs.length > 0 ? new Date(msgs[0].created_at) : null
+                const diffDays = lastActive ? Math.floor((today.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24)) : null
+                return (
+                  <div style={{ padding: '10px 12px', background: streak > 0 ? 'rgba(37,99,235,0.08)' : 'rgba(255,255,255,0.03)', border: `1px solid ${streak > 0 ? 'rgba(37,99,235,0.2)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '14px' }}>{streak >= 7 ? '●' : streak >= 1 ? '◐' : '○'}</span>
+                      <div>
+                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#FFFFFF' }}>
+                          {streak > 0 ? `${streak} consecutive days active` : 'No sessions yet'}
+                        </div>
+                        <div className="ent-mono" style={{ fontSize: '8px', color: '#94A3B8', marginTop: '1px' }}>
+                          {diffDays === 0 ? 'Active today' : diffDays === 1 ? 'Last active yesterday' : lastActive ? `Last active ${diffDays}d ago` : 'Start your first session'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
+            </div>
           </div>
         </aside>
 
@@ -232,6 +309,50 @@ export default function EnterpriseCopilotPage() {
                     <div style={{ fontSize: '11px', color: '#94A3B8' }}>{stat.label}</div>
                   </div>
                 ))}
+              </div>
+
+              {/* Program overview */}
+              <div style={{ marginBottom: '24px', padding: '20px 24px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'center' }}>
+                  <div>
+                    <div className="ent-mono" style={{ fontSize: '9px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: '14px' }}>Program Overview</div>
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', color: '#94A3B8' }}>Modules completed</span>
+                        <span className="ent-mono" style={{ fontSize: '11px', fontWeight: '700', color: ACCENT }}>{masteredCount}/{totalConcepts}</span>
+                      </div>
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ width: `${totalConcepts > 0 ? Math.round((masteredCount/totalConcepts)*100) : 0}%`, height: '100%', background: ACCENT, borderRadius: '3px' }} />
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                        <span style={{ fontSize: '11px', color: '#94A3B8' }}>Tracks active</span>
+                        <span className="ent-mono" style={{ fontSize: '11px', fontWeight: '700', color: TEAL }}>1/{tracks.length}</span>
+                      </div>
+                      <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ width: `${tracks.length > 0 ? (1/tracks.length)*100 : 0}%`, height: '100%', background: TEAL, borderRadius: '3px' }} />
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' as const }}>
+                      {tracks.map((t: any, i: number) => {
+                        const isActive = t.code === activeTrack?.code
+                        return (
+                          <div key={t.code} style={{ padding: '3px 8px', borderRadius: '4px', background: isActive ? 'rgba(37,99,235,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${isActive ? 'rgba(37,99,235,0.3)' : 'rgba(255,255,255,0.08)'}` }}>
+                            <span className="ent-mono" style={{ fontSize: '8px', color: isActive ? ACCENT : '#FFFFFF' }}>{isActive ? '→ ' : String(i+1).padStart(2,'0') + ' '}{t.name}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div className="ent-display" style={{ fontSize: '48px', fontWeight: '700', color: ACCENT, letterSpacing: '-0.03em', lineHeight: '1' }}>
+                      {totalConcepts > 0 ? Math.round((masteredCount/totalConcepts)*100) : 0}%
+                    </div>
+                    <div className="ent-mono" style={{ fontSize: '9px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '6px' }}>of active track</div>
+                    <div style={{ fontSize: '11px', color: '#FFFFFF', marginTop: '6px' }}>{activeTrack?.name || 'No active track'}</div>
+                  </div>
+                </div>
               </div>
 
               {/* Competency matrix */}
