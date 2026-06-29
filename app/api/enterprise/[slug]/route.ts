@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/db/server'
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const { slug } = await params
     const supabase = await createAdminClient()
     const { data, error } = await supabase
       .from('copilot_enterprise_profiles')
       .select('*')
-      .eq('slug', params.slug)
+      .eq('slug', slug)
       .eq('is_active', true)
       .maybeSingle()
 
