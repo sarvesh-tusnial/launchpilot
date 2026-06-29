@@ -145,33 +145,36 @@ export async function POST(req: NextRequest) {
 
     // Seed competencies and concepts
     for (const track of tracks) {
-      await supabase.from('competencies').upsert({
+      const { error: compError } = await supabase.from('competencies').upsert({
         code: track.code, name: track.name,
         description: `${companyName} — ${track.name}`,
         order_index: 200 + tracks.indexOf(track),
       }, { onConflict: 'code' })
+      if (compError) return NextResponse.json({ error: `Failed to create track ${track.code}: ${compError.message}` }, { status: 500 })
 
       for (let i = 0; i < track.concepts.length; i++) {
-        await supabase.from('concepts').upsert({
+        const { error: conceptError } = await supabase.from('concepts').upsert({
           competency_code: track.code,
           title: track.concepts[i],
           sequence: i + 1,
         }, { onConflict: 'competency_code,sequence' })
+        if (conceptError) return NextResponse.json({ error: `Failed to create concept for ${track.code}: ${conceptError.message}` }, { status: 500 })
       }
     }
 
     // Assign all 6 tracks (first active, rest paused — same pattern as founder copilots)
     for (let i = 0; i < tracks.length; i++) {
-      await supabase.from('student_competencies').insert({
+      const { error: scError } = await supabase.from('student_competencies').insert({
         student_id: userId,
         competency_code: tracks[i].code,
         is_unlocked: true,
         status: i === 0 ? 'active' : 'paused',
       })
+      if (scError) return NextResponse.json({ error: `Failed to assign track ${tracks[i].code}: ${scError.message}` }, { status: 500 })
     }
 
     // Create enterprise copilot profile
-    await supabase.from('copilot_enterprise_profiles').insert({
+    const { error: insertError } = await supabase.from('copilot_enterprise_profiles').insert({
       user_id: userId, slug,
       company_name: companyName, industry, company_description: companyDescription,
       contact_name: contactName || null,
@@ -180,6 +183,7 @@ export async function POST(req: NextRequest) {
       track_4_code: tracks[3].code, track_5_code: tracks[4].code, track_6_code: tracks[5].code,
       personalised_content: landingContent,
     })
+    if (insertError) return NextResponse.json({ error: `Failed to create enterprise profile: ${insertError.message}` }, { status: 500 })
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://launchpilot-phi.vercel.app'
 
