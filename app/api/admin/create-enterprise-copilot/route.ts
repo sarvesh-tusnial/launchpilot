@@ -120,32 +120,27 @@ async function generateAIAudit(
   industry: string,
   companyDescription: string,
 ): Promise<any> {
-  const prompt = `You are a senior AI transformation consultant identifying quick-hit AI opportunities for ${companyName}, to show their leadership team in a short visual audit. This is NOT a report — it's a scannable list of opportunities. Brevity matters more than completeness.
+  const prompt = `You are identifying quick-hit AI opportunities for ${companyName}, to show their leadership team in a short scannable list. This is NOT a report — brevity is the entire point. If you write more than one short sentence per opportunity, you have failed this task.
 
 COMPANY: ${companyName}
 INDUSTRY: ${industry}
 DESCRIPTION: ${companyDescription}
 
-Identify exactly 4 specific opportunities where AI could improve this company's operations, grounded in details from the description above — never generic AI platitudes.
+Identify exactly 4 specific opportunities where AI could improve this company's operations, grounded in details from the description above.
 
-For each opportunity, write:
-- A short title (3-6 words, names the function/workflow, not a sentence)
-- ONE short sentence (max 18 words) stating the real pain point — direct, specific, no hedging
-- 2-3 stat callouts: punchy, specific-sounding metrics an employee/leader would recognize as a real improvement (e.g. "40-50% faster resolution", "12hrs/week saved", "3x faster onboarding"). These should be plausible estimates based on common AI-implementation outcomes for this type of workflow, not invented precision — round numbers, not fake decimals.
+STRICT FORMAT — every field has a hard length limit:
+- "function": 2-4 words. A label, not a sentence. Example: "Inventory Forecasting", "Customer Support Triage"
+- "description": ONE short sentence, 12 words MAXIMUM. State the pain point only — no explanation of the fix, no "AI-powered X could Y" reasoning. Example: "Manual demand forecasting causes seasonal overstock across regions."
+- "stats": exactly 3 short stat strings, each under 6 words, plausible round-number estimates. Example: ["35% less overstock", "12hrs/week saved", "2x faster restocking"]
 
 Return ONLY valid JSON, no markdown:
 {
-  "readinessScore": <number 1-100, your honest estimate of this company's current AI maturity based on the description>,
+  "readinessScore": <number 1-100>,
   "gaps": [
-    {
-      "function": "short title, 3-6 words",
-      "description": "ONE sentence, max 18 words, the real pain point",
-      "stats": ["stat 1", "stat 2", "stat 3"],
-      "priority": "high" | "medium" | "low"
-    }
+    { "function": "2-4 words", "description": "max 12 words, pain point only", "stats": ["stat", "stat", "stat"], "priority": "high" | "medium" | "low" }
   ]
 }
-The gaps array must have exactly 4 items.`
+Exactly 4 items in gaps. Re-read your description fields before responding — if any exceeds 12 words, shorten it.`
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5',
@@ -155,7 +150,19 @@ The gaps array must have exactly 4 items.`
 
   const text2 = response.content[0].type === 'text' ? response.content[0].text : ''
   const clean2 = text2.replace(/```json|```/g, '').trim()
-  return JSON.parse(clean2)
+  const parsed = JSON.parse(clean2)
+  // Safety net: truncate to ~12 words even if the model ignores the instruction.
+  if (parsed.gaps) {
+    parsed.gaps = parsed.gaps.map((g: any) => {
+      const words = (g.description || '').split(/\s+/)
+      return {
+        ...g,
+        description: words.length > 12 ? words.slice(0, 12).join(' ') + '…' : g.description,
+        stats: Array.isArray(g.stats) ? g.stats.slice(0, 3) : [],
+      }
+    })
+  }
+  return parsed
 }
 
 export async function POST(req: NextRequest) {

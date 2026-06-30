@@ -577,10 +577,10 @@ export default function EnterpriseCopilotPage() {
             </div>
           )}
 
-          {/* PLATFORM MOCKUP — proof of what employees actually see */}
+          {/* PLATFORM MOCKUP — shows the actual product: conversational coaching, not a stats screen */}
           <div style={{ marginBottom: '52px' }}>
             <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Inside the platform</div>
-            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>What your employees will actually see, from day one</div>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Every module is a live conversation, not a video to sit through</div>
 
             <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)' }}>
               {/* Browser chrome */}
@@ -593,37 +593,55 @@ export default function EnterpriseCopilotPage() {
                 <div className="ent-mono" style={{ fontSize: '10px', color: '#64748B', marginLeft: '8px' }}>launchpilot.com/enterprise/{slug}</div>
               </div>
 
-              {/* Mini dashboard replica */}
-              <div style={{ background: '#0F172A', padding: '24px 28px' }}>
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF', marginBottom: '2px' }}>Skills coverage overview</div>
-                  <div className="ent-mono" style={{ fontSize: '9px', color: '#64748B' }}>{company.company_name} · {company.industry} · 6 active tracks</div>
+              {/* Mini chat replica */}
+              <div style={{ background: '#0F172A', display: 'flex', height: '320px' }}>
+                {/* Mini sidebar */}
+                <div style={{ width: '160px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.08)', padding: '16px 12px' }}>
+                  <div className="ent-mono" style={{ fontSize: '7px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Current module</div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#FFFFFF', marginBottom: '10px', lineHeight: '1.3' }}>{tracks[0]?.name || 'Track 01'}</div>
+                  <div style={{ display: 'flex', gap: '2px' }}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <div key={j} style={{ flex: 1, height: '3px', borderRadius: '1px', background: j < 2 ? ACCENT : 'rgba(255,255,255,0.08)' }} />
+                    ))}
+                  </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '16px' }}>
-                  {[
-                    { value: '6', label: 'Tracks deployed', color: ACCENT },
-                    { value: '14', label: 'Modules completed', color: TEAL },
-                    { value: '34', label: 'Modules remaining', color: '#F59E0B' },
-                    { value: '29%', label: 'Org coverage', color: '#60A5FA' },
-                  ].map((s, i) => (
-                    <div key={i} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
-                      <div className="ent-display" style={{ fontSize: '18px', fontWeight: '700', color: s.color, marginBottom: '2px' }}>{s.value}</div>
-                      <div style={{ fontSize: '8px', color: '#64748B' }}>{s.label}</div>
+
+                {/* Chat */}
+                <div style={{ flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
+                  {/* Maya intro */}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
                     </div>
-                  ))}
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
-                  {(tracks.length > 0 ? tracks : [{ name: 'Track One' }, { name: 'Track Two' }, { name: 'Track Three' }]).slice(0, 3).map((t: any, i: number) => (
-                    <div key={i} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', borderTop: `2px solid ${ACCENT}` }}>
-                      <div className="ent-mono" style={{ fontSize: '8px', color: ACCENT, marginBottom: '6px' }}>TRACK-{String(i+1).padStart(2,'0')}</div>
-                      <div style={{ fontSize: '11px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>{t.name}</div>
-                      <div style={{ display: 'flex', gap: '2px' }}>
-                        {Array.from({ length: 8 }).map((_, j) => (
-                          <div key={j} style={{ flex: 1, height: '3px', borderRadius: '1px', background: j < 2 + i ? ACCENT : 'rgba(255,255,255,0.08)' }} />
-                        ))}
+                    <div style={{ maxWidth: '78%', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                      <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>
+                        Welcome back. We're on <strong style={{ color: '#FFFFFF' }}>"{tracks[0]?.name || 'your first track'}"</strong> for {company.company_name || 'your team'}. Want to start with a real example from your workflow?
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Employee reply */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ maxWidth: '70%', padding: '10px 14px', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.3)', borderRadius: '10px' }}>
+                      <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>Yeah, let's use this week's actual numbers.</div>
+                    </div>
+                  </div>
+
+                  {/* Maya follow-up, typing state */}
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
+                    </div>
+                    <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}>
+                      {[0,1,2].map(i => <div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#64748B' }} />)}
+                    </div>
+                  </div>
+
+                  {/* Input bar */}
+                  <div style={{ marginTop: 'auto', display: 'flex', gap: '8px', alignItems: 'center', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                    <div style={{ flex: 1, fontSize: '11px', color: '#64748B' }}>Type your response...</div>
+                    <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: ACCENT, flexShrink: 0 }} />
+                  </div>
                 </div>
               </div>
             </div>
