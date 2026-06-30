@@ -517,40 +517,6 @@ export default function EnterpriseCopilotPage() {
             </p>
           </div>
 
-          {/* AI AUDIT */}
-          {content?.audit && (
-            <div style={{ marginBottom: '52px' }}>
-              <div className="ent-mono" style={{ fontSize: '10px', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>AI Readiness Audit</div>
-              <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Where AI can move the needle at {company.company_name}</div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '16px', alignItems: 'start' }}>
-                {/* Readiness score */}
-                <div style={{ padding: '20px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '12px', textAlign: 'center' }}>
-                  <div className="ent-display" style={{ fontSize: '36px', fontWeight: '700', color: '#F59E0B', letterSpacing: '-0.02em', lineHeight: '1' }}>
-                    {content.audit.readinessScore ?? '—'}
-                  </div>
-                  <div className="ent-mono" style={{ fontSize: '8px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>AI readiness<br/>score / 100</div>
-                </div>
-
-                {/* Gaps */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {(content.audit.gaps || []).map((gap: any, i: number) => {
-                    const priorityColor = gap.priority === 'high' ? '#EF4444' : gap.priority === 'medium' ? '#F59E0B' : '#94A3B8'
-                    return (
-                      <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '14px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
-                        <span style={{ fontSize: '9px', fontFamily: 'IBM Plex Mono, monospace', fontWeight: '700', color: priorityColor, textTransform: 'uppercase', flexShrink: 0, marginTop: '3px', letterSpacing: '0.06em' }}>{gap.priority}</span>
-                        <div>
-                          <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '4px' }}>{gap.function}</div>
-                          <div style={{ fontSize: '13px', color: '#CBD5E1', lineHeight: '1.6' }}>{gap.description}</div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* COMPETENCY MATRIX */}
           <div style={{ marginBottom: '52px' }}>
             <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Capability map</div>
@@ -572,6 +538,94 @@ export default function EnterpriseCopilotPage() {
                   <div className="ent-mono" style={{ fontSize: '9px', color: '#94A3B8' }}>8 modules · ready to deploy</div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* AI AUDIT — moved after track matrix, compact opportunity cards */}
+          {content?.audit && (
+            <div style={{ marginBottom: '52px' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap' as const, gap: '12px' }}>
+                <div>
+                  <div className="ent-mono" style={{ fontSize: '10px', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>AI Opportunities</div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF' }}>Where AI moves the needle at {company.company_name}</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 14px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '8px', flexShrink: 0 }}>
+                  <span className="ent-display" style={{ fontSize: '22px', fontWeight: '700', color: '#F59E0B', letterSpacing: '-0.02em' }}>{content.audit.readinessScore ?? '—'}</span>
+                  <span className="ent-mono" style={{ fontSize: '8px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: '1.3' }}>AI readiness<br/>score / 100</span>
+                </div>
+              </div>
+
+              <div className="ent-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '10px' }}>
+                {(content.audit.gaps || []).slice(0, 4).map((gap: any, i: number) => {
+                  const priorityColor = gap.priority === 'high' ? '#EF4444' : gap.priority === 'medium' ? '#F59E0B' : '#94A3B8'
+                  return (
+                    <div key={i} style={{ padding: '16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF' }}>{gap.function}</span>
+                        <span style={{ fontSize: '8px', fontFamily: 'IBM Plex Mono, monospace', fontWeight: '700', color: priorityColor, textTransform: 'uppercase', letterSpacing: '0.06em', flexShrink: 0 }}>{gap.priority}</span>
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#CBD5E1', lineHeight: '1.5', marginBottom: '10px' }}>{gap.description}</div>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const }}>
+                        {(gap.stats || []).map((stat: string, j: number) => (
+                          <span key={j} className="ent-mono" style={{ fontSize: '9px', color: TEAL, background: 'rgba(13,148,136,0.1)', border: '1px solid rgba(13,148,136,0.25)', padding: '3px 8px', borderRadius: '4px' }}>{stat}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* PLATFORM MOCKUP — proof of what employees actually see */}
+          <div style={{ marginBottom: '52px' }}>
+            <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Inside the platform</div>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>What your employees will actually see, from day one</div>
+
+            <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)' }}>
+              {/* Browser chrome */}
+              <div style={{ background: '#1C2433', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
+                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
+                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
+                </div>
+                <div className="ent-mono" style={{ fontSize: '10px', color: '#64748B', marginLeft: '8px' }}>launchpilot.com/enterprise/{slug}</div>
+              </div>
+
+              {/* Mini dashboard replica */}
+              <div style={{ background: '#0F172A', padding: '24px 28px' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF', marginBottom: '2px' }}>Skills coverage overview</div>
+                  <div className="ent-mono" style={{ fontSize: '9px', color: '#64748B' }}>{company.company_name} · {company.industry} · 6 active tracks</div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '16px' }}>
+                  {[
+                    { value: '6', label: 'Tracks deployed', color: ACCENT },
+                    { value: '14', label: 'Modules completed', color: TEAL },
+                    { value: '34', label: 'Modules remaining', color: '#F59E0B' },
+                    { value: '29%', label: 'Org coverage', color: '#60A5FA' },
+                  ].map((s, i) => (
+                    <div key={i} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
+                      <div className="ent-display" style={{ fontSize: '18px', fontWeight: '700', color: s.color, marginBottom: '2px' }}>{s.value}</div>
+                      <div style={{ fontSize: '8px', color: '#64748B' }}>{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px' }}>
+                  {(tracks.length > 0 ? tracks : [{ name: 'Track One' }, { name: 'Track Two' }, { name: 'Track Three' }]).slice(0, 3).map((t: any, i: number) => (
+                    <div key={i} style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', borderTop: `2px solid ${ACCENT}` }}>
+                      <div className="ent-mono" style={{ fontSize: '8px', color: ACCENT, marginBottom: '6px' }}>TRACK-{String(i+1).padStart(2,'0')}</div>
+                      <div style={{ fontSize: '11px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>{t.name}</div>
+                      <div style={{ display: 'flex', gap: '2px' }}>
+                        {Array.from({ length: 8 }).map((_, j) => (
+                          <div key={j} style={{ flex: 1, height: '3px', borderRadius: '1px', background: j < 2 + i ? ACCENT : 'rgba(255,255,255,0.08)' }} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 

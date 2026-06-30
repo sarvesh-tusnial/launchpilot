@@ -114,27 +114,38 @@ Return ONLY valid JSON, no markdown, no explanation:
   return JSON.parse(clean)
 }
 
-// Generates 3-4 AI-specific areas for improvement, grounded in this company's actual operations.
+// Generates exactly 4 AI opportunities, each short and stat-led — not paragraphs.
 async function generateAIAudit(
   companyName: string,
   industry: string,
   companyDescription: string,
 ): Promise<any> {
-  const prompt = `You are a senior AI transformation consultant producing a short internal AI readiness audit for ${companyName}, to be shown to their leadership team alongside an upskilling program proposal.
+  const prompt = `You are a senior AI transformation consultant identifying quick-hit AI opportunities for ${companyName}, to show their leadership team in a short visual audit. This is NOT a report — it's a scannable list of opportunities. Brevity matters more than completeness.
 
 COMPANY: ${companyName}
 INDUSTRY: ${industry}
 DESCRIPTION: ${companyDescription}
 
-Identify 3-4 specific areas where AI could improve this company's operations, based on what's described above. Write in full sentences, second person ("Your team..." / "You're currently..."), grounded in details from the description — never generic AI platitudes. Each gap should name a real function or workflow at this company and describe both the current friction and the AI-specific fix.
+Identify exactly 4 specific opportunities where AI could improve this company's operations, grounded in details from the description above — never generic AI platitudes.
+
+For each opportunity, write:
+- A short title (3-6 words, names the function/workflow, not a sentence)
+- ONE short sentence (max 18 words) stating the real pain point — direct, specific, no hedging
+- 2-3 stat callouts: punchy, specific-sounding metrics an employee/leader would recognize as a real improvement (e.g. "40-50% faster resolution", "12hrs/week saved", "3x faster onboarding"). These should be plausible estimates based on common AI-implementation outcomes for this type of workflow, not invented precision — round numbers, not fake decimals.
 
 Return ONLY valid JSON, no markdown:
 {
   "readinessScore": <number 1-100, your honest estimate of this company's current AI maturity based on the description>,
   "gaps": [
-    { "function": "the business function/team this applies to", "description": "1-2 full sentences: the specific problem AND the AI-specific fix, grounded in this company's actual operations", "priority": "high" | "medium" | "low" }
+    {
+      "function": "short title, 3-6 words",
+      "description": "ONE sentence, max 18 words, the real pain point",
+      "stats": ["stat 1", "stat 2", "stat 3"],
+      "priority": "high" | "medium" | "low"
+    }
   ]
-}`
+}
+The gaps array must have exactly 4 items.`
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-5',
