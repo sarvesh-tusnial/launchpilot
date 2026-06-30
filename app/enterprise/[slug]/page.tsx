@@ -517,6 +517,40 @@ export default function EnterpriseCopilotPage() {
             </p>
           </div>
 
+          {/* AI AUDIT */}
+          {content?.audit && (
+            <div style={{ marginBottom: '52px' }}>
+              <div className="ent-mono" style={{ fontSize: '10px', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>AI Readiness Audit</div>
+              <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Where AI can move the needle at {company.company_name}</div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '16px', alignItems: 'start' }}>
+                {/* Readiness score */}
+                <div style={{ padding: '20px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '12px', textAlign: 'center' }}>
+                  <div className="ent-display" style={{ fontSize: '36px', fontWeight: '700', color: '#F59E0B', letterSpacing: '-0.02em', lineHeight: '1' }}>
+                    {content.audit.readinessScore ?? '—'}
+                  </div>
+                  <div className="ent-mono" style={{ fontSize: '8px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>AI readiness<br/>score / 100</div>
+                </div>
+
+                {/* Gaps */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {(content.audit.gaps || []).map((gap: any, i: number) => {
+                    const priorityColor = gap.priority === 'high' ? '#EF4444' : gap.priority === 'medium' ? '#F59E0B' : '#94A3B8'
+                    return (
+                      <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '14px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px' }}>
+                        <span style={{ fontSize: '9px', fontFamily: 'IBM Plex Mono, monospace', fontWeight: '700', color: priorityColor, textTransform: 'uppercase', flexShrink: 0, marginTop: '3px', letterSpacing: '0.06em' }}>{gap.priority}</span>
+                        <div>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '4px' }}>{gap.function}</div>
+                          <div style={{ fontSize: '13px', color: '#CBD5E1', lineHeight: '1.6' }}>{gap.description}</div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* COMPETENCY MATRIX */}
           <div style={{ marginBottom: '52px' }}>
             <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Capability map</div>
@@ -546,6 +580,58 @@ export default function EnterpriseCopilotPage() {
             <div style={{ marginBottom: '52px', padding: '20px 22px', background: 'rgba(13,148,136,0.06)', border: '1px solid rgba(13,148,136,0.2)', borderRadius: '12px' }}>
               <div className="ent-mono" style={{ fontSize: '9px', color: TEAL, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>Why this fits {company.company_name}</div>
               <p style={{ fontSize: '13px', color: '#CBD5E1', lineHeight: '1.7' }}>{content.company_context_summary}</p>
+            </div>
+          )}
+
+          {/* MENTORS */}
+          {content?.mentors && content.mentors.length > 0 && (
+            <div style={{ marginBottom: '52px' }}>
+              <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Your mentors</div>
+              <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '6px' }}>The people behind your team's transformation</div>
+              <div style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '18px' }}>Available for in-person live sessions with your team, on request.</div>
+              <div className="ent-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '24px' }}>
+                {content.mentors.map((m: any, i: number) => (
+                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {m.img ? (
+                        <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                      ) : (
+                        <span style={{ fontSize: '13px', fontWeight: '700', color: ACCENT }}>{m.name?.[0]}</span>
+                      )}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '1px' }}>{m.name}</div>
+                      <div style={{ fontSize: '10px', color: '#94A3B8', lineHeight: '1.4' }}>{m.role}{m.company ? ` · ${m.company}` : ''}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {content.aiExecutionTeam && content.aiExecutionTeam.length > 0 && (
+                <>
+                  <div className="ent-mono" style={{ fontSize: '9px', color: TEAL, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '6px' }}>AI execution team</div>
+                  <div style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '14px' }}>The team that works hands-on with your team to ship the implementation.</div>
+                  <div className="ent-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px' }}>
+                    {content.aiExecutionTeam.map((m: any, i: number) => (
+                      <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '14px', background: 'rgba(13,148,136,0.05)', border: '1px solid rgba(13,148,136,0.15)', borderRadius: '10px' }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, background: 'rgba(13,148,136,0.15)', border: '1px solid rgba(13,148,136,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {m.img ? (
+                            <img src={m.img} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                          ) : (
+                            <span style={{ fontSize: '13px', fontWeight: '700', color: TEAL }}>{m.name?.[0]}</span>
+                          )}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF', marginBottom: '1px' }}>{m.name}</div>
+                          <div style={{ fontSize: '10px', color: '#94A3B8' }}>{m.role}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           )}
 

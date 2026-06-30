@@ -4,6 +4,30 @@ import Anthropic from '@anthropic-ai/sdk'
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
 
+// Real mentor roster — fixed, not AI-generated. Same people across all enterprise demos.
+// They can deliver in-person live sessions if the client requests it.
+const ENTERPRISE_MENTORS = [
+  { name: 'Andrew Chow', role: 'Managing Partner, Co-founder', company: 'Asia Pro Ventures', img: '/images/mentors/andrew-chow.jpg' },
+  { name: 'Daniel Ling', role: 'ex-VP, Founder', company: 'DBS, Lazada', img: '/images/mentors/daniel-ling.jpg' },
+  { name: 'Vansh Chiripal', role: 'Promoter', company: 'Chiripal Group of Companies', img: '/images/mentors/vansh-chiripal.jpg' },
+  { name: 'Sarvesh Tusnial', role: 'Co-Founder & CEO', company: 'Mentogram', img: '/images/mentors/sarvesh-tusnial.jpg' },
+  { name: 'Siddharth Dangi', role: 'Co-Founder & COO', company: 'Mentogram', img: '/images/mentors/siddharth-dangi.jpg' },
+  { name: 'John Lim', role: 'Managing Partner', company: 'Meet Ventures', img: '/images/mentors/john-lim.jpg' },
+  { name: 'Yash Shah', role: 'Head of AI, Cloud', company: 'Amazon Web Services', img: '/images/mentors/yash-shah.jpg' },
+  { name: 'Toyoyuki Ushioda', role: 'CFO Director, ex-VP', company: 'MapleTree Investments · $80B AUM', img: '/images/mentors/toyoyuki-ushioda.jpg' },
+  { name: 'Dr. Hasit Dangi', role: 'School Director', company: 'Mentogram', img: '/images/mentors/hasit-dangi.jpg' },
+  { name: 'Sunil Kamath', role: 'Founder and Partner', company: 'Hustle Ventures', img: '/images/mentors/sunil-kamath.jpg' },
+  { name: 'Sudeep Bhatter', role: 'Engineering Manager', company: 'Microsoft', img: '/images/mentors/sudeep-bhatter.jpg' },
+  { name: 'Jason Kraus', role: 'Founder and VC', company: 'EQX Fund', img: '/images/mentors/jason-kraus.jpg' },
+]
+
+const AI_EXECUTION_TEAM = [
+  { name: 'Shivam Pal', role: 'AI Execution Specialist', img: '/images/students/shivam.jpg' },
+  { name: 'Reyo Augustine', role: 'AI Execution Specialist', img: '/images/students/reyo.jpg' },
+  { name: 'Samrudh R', role: 'AI Execution Specialist', img: '/images/students/samrudh.jpg' },
+  { name: 'Swarit Bharadwaj', role: 'AI Execution Specialist', img: '/images/students/swarit.jpg' },
+]
+
 function generatePassword(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'
   let p = ''
@@ -59,7 +83,9 @@ async function generateEnterpriseLandingContent(
   companyDescription: string,
   trackNames: string[],
 ): Promise<any> {
-  const prompt = `You are writing landing-page copy for an enterprise employee upskilling demo, to be shown to the company's leadership team for approval.
+  const prompt = `You are writing landing-page copy for an enterprise employee upskilling program, to be shown to the company's leadership team for approval.
+
+This is a workforce upskilling program, not a generic course platform. Every line should read like it's about building internal capability at this specific company — use language like "your team," "your workforce," "your employees," not generic edtech phrasing. Avoid words like "students," "course," or "class" — use "employees," "program," and "tracks" instead.
 
 COMPANY: ${companyName}
 INDUSTRY: ${industry}
@@ -68,13 +94,13 @@ TRACKS: ${trackNames.join(', ')}
 
 Return ONLY valid JSON, no markdown, no explanation:
 {
-  "headline": "1 short sentence pitching this program specifically to ${companyName}'s leadership — confident, no hype words",
+  "headline": "1 short sentence pitching this upskilling program specifically to ${companyName}'s leadership — confident, no hype words, framed around building internal capability",
   "subheadline": "1 sentence on what employees will be able to do after this program, specific to ${industry}",
   "track_outcomes": [
-    "1 sentence: what an employee in this track will be able to do at ${companyName} specifically",
+    "1 sentence: what an employee in this track will be able to do at ${companyName} specifically, after completing it",
     "...", "...", "...", "...", "..."
   ],
-  "company_context_summary": "2 sentences summarizing why this program fits ${companyName}'s specific operations, referencing details from the description"
+  "company_context_summary": "2 sentences summarizing why this upskilling program fits ${companyName}'s specific operations and workforce needs, referencing details from the description"
 }`
 
   const response = await anthropic.messages.create({
@@ -86,6 +112,39 @@ Return ONLY valid JSON, no markdown, no explanation:
   const text = response.content[0].type === 'text' ? response.content[0].text : ''
   const clean = text.replace(/```json|```/g, '').trim()
   return JSON.parse(clean)
+}
+
+// Generates 3-4 AI-specific areas for improvement, grounded in this company's actual operations.
+async function generateAIAudit(
+  companyName: string,
+  industry: string,
+  companyDescription: string,
+): Promise<any> {
+  const prompt = `You are a senior AI transformation consultant producing a short internal AI readiness audit for ${companyName}, to be shown to their leadership team alongside an upskilling program proposal.
+
+COMPANY: ${companyName}
+INDUSTRY: ${industry}
+DESCRIPTION: ${companyDescription}
+
+Identify 3-4 specific areas where AI could improve this company's operations, based on what's described above. Write in full sentences, second person ("Your team..." / "You're currently..."), grounded in details from the description — never generic AI platitudes. Each gap should name a real function or workflow at this company and describe both the current friction and the AI-specific fix.
+
+Return ONLY valid JSON, no markdown:
+{
+  "readinessScore": <number 1-100, your honest estimate of this company's current AI maturity based on the description>,
+  "gaps": [
+    { "function": "the business function/team this applies to", "description": "1-2 full sentences: the specific problem AND the AI-specific fix, grounded in this company's actual operations", "priority": "high" | "medium" | "low" }
+  ]
+}`
+
+  const response = await anthropic.messages.create({
+    model: 'claude-sonnet-4-5',
+    max_tokens: 1000,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  const text2 = response.content[0].type === 'text' ? response.content[0].text : ''
+  const clean2 = text2.replace(/```json|```/g, '').trim()
+  return JSON.parse(clean2)
 }
 
 export async function POST(req: NextRequest) {
@@ -119,10 +178,11 @@ export async function POST(req: NextRequest) {
       slug = `${baseSlug}-${attempt}`
     }
 
-    // Run both Claude calls in parallel
-    const [conceptResult, landingContent] = await Promise.all([
+    // Run all three Claude calls in parallel
+    const [conceptResult, landingContent, auditResult] = await Promise.all([
       generateEnterpriseConcepts(companyName, industry, companyDescription, trackNames, slug),
       generateEnterpriseLandingContent(companyName, industry, companyDescription, trackNames),
+      generateAIAudit(companyName, industry, companyDescription),
     ])
 
     const { tracks } = conceptResult
@@ -174,6 +234,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Create enterprise copilot profile
+    const fullPersonalisedContent = {
+      ...landingContent,
+      audit: auditResult,
+      mentors: ENTERPRISE_MENTORS,
+      aiExecutionTeam: AI_EXECUTION_TEAM,
+    }
+
     const { error: insertError } = await supabase.from('copilot_enterprise_profiles').insert({
       user_id: userId, slug,
       company_name: companyName, industry, company_description: companyDescription,
@@ -181,7 +248,7 @@ export async function POST(req: NextRequest) {
       email: email.trim().toLowerCase(), password_hint: password,
       track_1_code: tracks[0].code, track_2_code: tracks[1].code, track_3_code: tracks[2].code,
       track_4_code: tracks[3].code, track_5_code: tracks[4].code, track_6_code: tracks[5].code,
-      personalised_content: landingContent,
+      personalised_content: fullPersonalisedContent,
     })
     if (insertError) return NextResponse.json({ error: `Failed to create enterprise profile: ${insertError.message}` }, { status: 500 })
 
