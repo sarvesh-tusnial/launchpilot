@@ -35,6 +35,7 @@ export default function AdminEnterpriseCopilotsPage() {
   const [companyDescription, setCompanyDescription] = useState('')
   const [contactName, setContactName]                = useState('')
   const [email, setEmail]                           = useState('')
+  const [companyWebsite, setCompanyWebsite]         = useState('')
   const [trackNames, setTrackNames] = useState<string[]>([
     'Supply Chain', 'Product Management', 'Finance', 'Accounting', 'Marketing', 'Operations',
   ])
@@ -66,7 +67,7 @@ export default function AdminEnterpriseCopilotsPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        companyName, industry, companyDescription, contactName, email,
+        companyName, industry, companyDescription, contactName, email, companyWebsite,
         track1Name: trackNames[0], track2Name: trackNames[1], track3Name: trackNames[2],
         track4Name: trackNames[3], track5Name: trackNames[4], track6Name: trackNames[5],
       }),
@@ -85,7 +86,7 @@ export default function AdminEnterpriseCopilotsPage() {
 
   const resetForm = () => {
     setCompanyName(''); setIndustry(''); setCompanyDescription('')
-    setContactName(''); setEmail('')
+    setContactName(''); setEmail(''); setCompanyWebsite('')
     setTrackNames(['Supply Chain', 'Product Management', 'Finance', 'Accounting', 'Marketing', 'Operations'])
   }
 
@@ -185,6 +186,12 @@ export default function AdminEnterpriseCopilotsPage() {
               <label style={labelStyle}>Demo Login Email *</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="contact@company.com" style={inputStyle} />
             </div>
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={labelStyle}>Company Website (optional)</label>
+            <input value={companyWebsite} onChange={e => setCompanyWebsite(e.target.value)} placeholder="acme.com" style={inputStyle} />
+            <div style={{ fontSize: '11px', color: 'var(--text2)', marginTop: '6px' }}>If given, Claude scans the site for more specific, real-world grounding in the AI audit and benchmark sections. Skip if not available — everything else still generates fine without it.</div>
           </div>
 
           <div style={{ marginBottom: '20px' }}>

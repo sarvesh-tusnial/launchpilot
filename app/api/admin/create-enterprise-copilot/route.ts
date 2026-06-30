@@ -119,14 +119,19 @@ async function generateAIAudit(
   companyName: string,
   industry: string,
   companyDescription: string,
+  websiteContent: string,
 ): Promise<any> {
+  const websiteBlock = websiteContent
+    ? `\n\nACTUAL WEBSITE CONTENT (scanned from their site — use this for specific, real details, not just the description above):\n${websiteContent}`
+    : ''
+
   const prompt = `You are identifying quick-hit AI opportunities for ${companyName}, to show their leadership team in a short scannable list. This is NOT a report — brevity is the entire point. If you write more than one short sentence per opportunity, you have failed this task.
 
 COMPANY: ${companyName}
 INDUSTRY: ${industry}
-DESCRIPTION: ${companyDescription}
+DESCRIPTION: ${companyDescription}${websiteBlock}
 
-Identify exactly 4 specific opportunities where AI could improve this company's operations, grounded in details from the description above.
+Identify exactly 4 specific opportunities where AI could improve this company's operations, grounded in details from the description${websiteContent ? ' and website content' : ''} above.
 
 STRICT FORMAT — every field has a hard length limit:
 - "function": 2-4 words. A label, not a sentence. Example: "Inventory Forecasting", "Customer Support Triage"
@@ -171,12 +176,17 @@ async function generateBenchmarkAssessment(
   industry: string,
   companyDescription: string,
   trackNames: string[],
+  websiteContent: string,
 ): Promise<any> {
+  const websiteBlock = websiteContent
+    ? `\n\nACTUAL WEBSITE CONTENT (scanned from their site — use this for specific, real details):\n${websiteContent}`
+    : ''
+
   const prompt = `You are producing a short workforce-readiness benchmark for ${companyName}'s leadership, comparing them against typical ${industry} peers. This is a scannable scorecard, not a report — every field is short.
 
 COMPANY: ${companyName}
 INDUSTRY: ${industry}
-DESCRIPTION: ${companyDescription}
+DESCRIPTION: ${companyDescription}${websiteBlock}
 TRACKS BEING TRAINED: ${trackNames.join(', ')}
 
 STRICT FORMAT — short fields only:
@@ -211,10 +221,42 @@ criticalAreas must have exactly 3 items.`
   return parsed
 }
 
+// Best-effort fetch of a company's website to ground the audit/benchmark in real content.
+// Never throws — returns empty string on any failure, so a bad URL never blocks demo creation.
+async function fetchWebsiteContent(url: string): Promise<string> {
+  try {
+    let target = url.trim()
+    if (!/^https?:\/\//i.test(target)) target = `https://${target}`
+
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+
+    const res = await fetch(target, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LaunchPilotBot/1.0)' },
+    })
+    clearTimeout(timeout)
+    if (!res.ok) return ''
+
+    const html = await res.text()
+    // Strip tags/scripts/styles down to readable text, cap length to keep prompt size sane.
+    const text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    return text.slice(0, 6000)
+  } catch {
+    return '' // timeout, network error, invalid URL, etc. — fail silently, never block creation
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const {
-      companyName, industry, companyDescription, contactName, email,
+      companyName, industry, companyDescription, contactName, email, companyWebsite,
       track1Name, track2Name, track3Name, track4Name, track5Name, track6Name,
     } = await req.json()
 
@@ -242,12 +284,15 @@ export async function POST(req: NextRequest) {
       slug = `${baseSlug}-${attempt}`
     }
 
+    // Optional: scan the company website for richer audit/benchmark grounding. Never blocks creation if it fails.
+    const websiteContent = companyWebsite ? await fetchWebsiteContent(companyWebsite) : ''
+
     // Run all four Claude calls in parallel
     const [conceptResult, landingContent, auditResult, benchmarkResult] = await Promise.all([
       generateEnterpriseConcepts(companyName, industry, companyDescription, trackNames, slug),
       generateEnterpriseLandingContent(companyName, industry, companyDescription, trackNames),
-      generateAIAudit(companyName, industry, companyDescription),
-      generateBenchmarkAssessment(companyName, industry, companyDescription, trackNames),
+      generateAIAudit(companyName, industry, companyDescription, websiteContent),
+      generateBenchmarkAssessment(companyName, industry, companyDescription, trackNames, websiteContent),
     ])
 
     const { tracks } = conceptResult
