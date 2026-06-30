@@ -577,113 +577,9 @@ export default function EnterpriseCopilotPage() {
             </div>
           )}
 
-          {/* PLATFORM MOCKUP 1 — conversational coaching */}
-          <div style={{ marginBottom: '32px' }}>
-            <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Inside the platform</div>
-            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Every module is a live conversation, not a video to sit through</div>
-
-            <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)' }}>
-              <div style={{ background: '#1C2433', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
-                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
-                  <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
-                </div>
-                <div className="ent-mono" style={{ fontSize: '10px', color: '#64748B', marginLeft: '8px' }}>launchpilot.com/enterprise/{slug}</div>
-              </div>
-
-              <div style={{ background: '#0F172A', display: 'flex', height: '320px' }}>
-                <div style={{ width: '160px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.08)', padding: '16px 12px' }}>
-                  <div className="ent-mono" style={{ fontSize: '7px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Current module</div>
-                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#FFFFFF', marginBottom: '10px', lineHeight: '1.3' }}>{tracks[0]?.name || 'Track 01'}</div>
-                  <div style={{ display: 'flex', gap: '2px' }}>
-                    {Array.from({ length: 8 }).map((_, j) => (
-                      <div key={j} style={{ flex: 1, height: '3px', borderRadius: '1px', background: j < 2 ? ACCENT : 'rgba(255,255,255,0.08)' }} />
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
-                    </div>
-                    <div style={{ maxWidth: '78%', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
-                      <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>
-                        Welcome to {company.company_name || 'your team'}. I've been loaded with your <strong style={{ color: '#FFFFFF' }}>{tracks[0]?.name || 'first track'}</strong> playbook. Want to try a real scenario from your day-to-day?
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ maxWidth: '70%', padding: '10px 14px', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.3)', borderRadius: '10px' }}>
-                      <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>Yeah, let's use this week's actual numbers.</div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
-                    </div>
-                    <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', display: 'flex', gap: '4px', alignItems: 'center' }}>
-                      {[0,1,2].map(i => <div key={i} style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#64748B' }} />)}
-                    </div>
-                  </div>
-
-                  <div style={{ marginTop: 'auto', display: 'flex', gap: '8px', alignItems: 'center', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
-                    <div style={{ flex: 1, fontSize: '11px', color: '#64748B' }}>Type your response...</div>
-                    <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: ACCENT, flexShrink: 0 }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* PLATFORM MOCKUP 2 — manager-facing team progress view */}
-          <div style={{ marginBottom: '32px' }}>
-            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>L&D sees exactly who's on track and who needs support</div>
-            <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)', background: '#0F172A', padding: '24px 28px' }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '18px' }}>
-                <div>
-                  <div className="ent-display" style={{ fontSize: '17px', fontWeight: '700', color: '#FFFFFF' }}>{tracks[0]?.name || 'Onboarding'} · Cohort 01</div>
-                  <div className="ent-mono" style={{ fontSize: '9px', color: '#64748B', marginTop: '2px' }}>{Math.max(tracks.length, 1) * 2} employees · {tracks[0]?.name || 'onboarding'} module</div>
-                </div>
-                <span className="ent-mono" style={{ fontSize: '9px', color: TEAL, border: '1px solid rgba(13,148,136,0.3)', background: 'rgba(13,148,136,0.1)', padding: '4px 10px', borderRadius: '100px' }}>Live</span>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {[
-                  { name: 'J. Whitfield', role: 'Team Lead', modules: '5/8', score: 88, status: 'On track', color: TEAL },
-                  { name: 'P. Sharma', role: 'Associate', modules: '4/8', score: 76, status: 'On track', color: TEAL },
-                  { name: 'M. Lee', role: 'Associate', modules: '3/8', score: 91, status: 'Ahead', color: ACCENT },
-                  { name: 'S. Chen', role: 'Associate', modules: '2/8', score: 54, status: 'Needs support', color: '#EF4444' },
-                ].map((row, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span className="ent-mono" style={{ fontSize: '9px', color: '#94A3B8' }}>{row.name.split(' ').map(n => n[0]).join('')}</span>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF' }}>{row.name}</div>
-                        <div style={{ fontSize: '10px', color: '#64748B' }}>{row.role}</div>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                      <div style={{ textAlign: 'right' }}>
-                        <div className="ent-mono" style={{ fontSize: '10px', color: '#94A3B8' }}>{row.modules}</div>
-                        <div style={{ fontSize: '8px', color: '#64748B' }}>modules</div>
-                      </div>
-                      <div className="ent-display" style={{ fontSize: '15px', fontWeight: '700', color: row.color, width: '24px', textAlign: 'right' }}>{row.score}</div>
-                      <span style={{ fontSize: '9px', color: row.color, border: `1px solid ${row.color}40`, background: `${row.color}15`, padding: '3px 10px', borderRadius: '100px', whiteSpace: 'nowrap' as const }}>{row.status}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* PLATFORM MOCKUP 3 — leadership analytics report */}
+          {/* PLATFORM MOCKUP — leadership analytics report */}
           <div style={{ marginBottom: '52px' }}>
+            <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Inside the platform</div>
             <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Leadership gets a clear ROI picture every quarter</div>
             <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)', background: '#0F172A', padding: '24px 28px' }}>
               <div className="ent-display" style={{ fontSize: '16px', fontWeight: '700', color: '#FFFFFF', marginBottom: '2px' }}>{company.company_name || 'Your company'} · Training Analytics</div>
@@ -733,6 +629,53 @@ export default function EnterpriseCopilotPage() {
             <div style={{ marginBottom: '52px', padding: '20px 22px', background: 'rgba(13,148,136,0.06)', border: '1px solid rgba(13,148,136,0.2)', borderRadius: '12px' }}>
               <div className="ent-mono" style={{ fontSize: '9px', color: TEAL, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>Why this fits {company.company_name}</div>
               <p style={{ fontSize: '13px', color: '#CBD5E1', lineHeight: '1.7' }}>{content.company_context_summary}</p>
+            </div>
+          )}
+
+          {/* BENCHMARK ASSESSMENT */}
+          {content?.benchmark && (
+            <div style={{ marginBottom: '52px' }}>
+              <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Workforce readiness benchmark</div>
+              <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>How {company.company_name} compares, and what's costing you today</div>
+
+              {/* Score comparison + impact stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+                <div style={{ padding: '18px 20px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                  <div className="ent-mono" style={{ fontSize: '8px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>Skills readiness score</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px' }}>
+                    <div>
+                      <div className="ent-display" style={{ fontSize: '32px', fontWeight: '700', color: ACCENT, lineHeight: '1' }}>{content.benchmark.benchmarkScore ?? '—'}</div>
+                      <div style={{ fontSize: '9px', color: '#94A3B8', marginTop: '4px' }}>{company.company_name}</div>
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#64748B' }}>vs</div>
+                    <div>
+                      <div className="ent-display" style={{ fontSize: '32px', fontWeight: '700', color: '#64748B', lineHeight: '1' }}>{content.benchmark.industryAvgScore ?? '—'}</div>
+                      <div style={{ fontSize: '9px', color: '#94A3B8', marginTop: '4px' }}>{company.industry} avg</div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div style={{ padding: '18px 16px', background: 'rgba(13,148,136,0.06)', border: '1px solid rgba(13,148,136,0.2)', borderRadius: '10px' }}>
+                    <div className="ent-display" style={{ fontSize: '19px', fontWeight: '700', color: TEAL, marginBottom: '4px' }}>{content.benchmark.timeSavedPerWeek || '—'}</div>
+                    <div style={{ fontSize: '10px', color: '#94A3B8' }}>Potential time saved</div>
+                  </div>
+                  <div style={{ padding: '18px 16px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '10px' }}>
+                    <div className="ent-display" style={{ fontSize: '19px', fontWeight: '700', color: '#F59E0B', marginBottom: '4px' }}>{content.benchmark.costImpact || '—'}</div>
+                    <div style={{ fontSize: '10px', color: '#94A3B8' }}>Potential cost impact</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Critical areas */}
+              <div className="ent-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px' }}>
+                {(content.benchmark.criticalAreas || []).map((area: any, i: number) => (
+                  <div key={i} style={{ padding: '16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', borderTop: '2px solid #EF4444' }}>
+                    <div className="ent-mono" style={{ fontSize: '8px', color: '#EF4444', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Critical area {String(i+1).padStart(2,'0')}</div>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF', marginBottom: '6px' }}>{area.area}</div>
+                    <div style={{ fontSize: '11px', color: '#94A3B8', lineHeight: '1.5' }}>{area.gap}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

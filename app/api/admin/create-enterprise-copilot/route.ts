@@ -165,6 +165,52 @@ Exactly 4 items in gaps. Re-read your description fields before responding — i
   return parsed
 }
 
+// Generates a benchmark-style assessment: score vs industry peers, time/cost impact, and critical upskilling gaps.
+async function generateBenchmarkAssessment(
+  companyName: string,
+  industry: string,
+  companyDescription: string,
+  trackNames: string[],
+): Promise<any> {
+  const prompt = `You are producing a short workforce-readiness benchmark for ${companyName}'s leadership, comparing them against typical ${industry} peers. This is a scannable scorecard, not a report — every field is short.
+
+COMPANY: ${companyName}
+INDUSTRY: ${industry}
+DESCRIPTION: ${companyDescription}
+TRACKS BEING TRAINED: ${trackNames.join(', ')}
+
+STRICT FORMAT — short fields only:
+- "benchmarkScore": number 1-100, this company's estimated current skills-readiness vs industry peers
+- "industryAvgScore": number 1-100, a plausible typical score for ${industry} companies of similar scale (should usually be different from benchmarkScore, to show gap or lead)
+- "timeSavedPerWeek": short string, e.g. "6-8 hrs/employee/week"
+- "costImpact": short string, e.g. "$80K-120K/year"
+- "criticalAreas": exactly 3 items, each: { "area": "2-4 words, a skill/function name", "gap": "max 10 words, what's missing today" }
+
+Return ONLY valid JSON, no markdown:
+{
+  "benchmarkScore": <number>,
+  "industryAvgScore": <number>,
+  "timeSavedPerWeek": "short string",
+  "costImpact": "short string",
+  "criticalAreas": [
+    { "area": "2-4 words", "gap": "max 10 words" }
+  ]
+}
+criticalAreas must have exactly 3 items.`
+
+  const response = await anthropic.messages.create({
+    model: 'claude-sonnet-4-5',
+    max_tokens: 800,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  const text = response.content[0].type === 'text' ? response.content[0].text : ''
+  const clean = text.replace(/```json|```/g, '').trim()
+  const parsed = JSON.parse(clean)
+  if (parsed.criticalAreas) parsed.criticalAreas = parsed.criticalAreas.slice(0, 3)
+  return parsed
+}
+
 export async function POST(req: NextRequest) {
   try {
     const {
@@ -196,11 +242,12 @@ export async function POST(req: NextRequest) {
       slug = `${baseSlug}-${attempt}`
     }
 
-    // Run all three Claude calls in parallel
-    const [conceptResult, landingContent, auditResult] = await Promise.all([
+    // Run all four Claude calls in parallel
+    const [conceptResult, landingContent, auditResult, benchmarkResult] = await Promise.all([
       generateEnterpriseConcepts(companyName, industry, companyDescription, trackNames, slug),
       generateEnterpriseLandingContent(companyName, industry, companyDescription, trackNames),
       generateAIAudit(companyName, industry, companyDescription),
+      generateBenchmarkAssessment(companyName, industry, companyDescription, trackNames),
     ])
 
     const { tracks } = conceptResult
@@ -255,6 +302,7 @@ export async function POST(req: NextRequest) {
     const fullPersonalisedContent = {
       ...landingContent,
       audit: auditResult,
+      benchmark: benchmarkResult,
       mentors: ENTERPRISE_MENTORS,
       aiExecutionTeam: AI_EXECUTION_TEAM,
     }
