@@ -577,13 +577,12 @@ export default function EnterpriseCopilotPage() {
             </div>
           )}
 
-          {/* PLATFORM MOCKUP — shows the actual product: conversational coaching, not a stats screen */}
-          <div style={{ marginBottom: '52px' }}>
+          {/* PLATFORM MOCKUP 1 — conversational coaching */}
+          <div style={{ marginBottom: '32px' }}>
             <div className="ent-mono" style={{ fontSize: '10px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '8px' }}>Inside the platform</div>
             <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Every module is a live conversation, not a video to sit through</div>
 
             <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)' }}>
-              {/* Browser chrome */}
               <div style={{ background: '#1C2433', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#475569' }} />
@@ -593,9 +592,7 @@ export default function EnterpriseCopilotPage() {
                 <div className="ent-mono" style={{ fontSize: '10px', color: '#64748B', marginLeft: '8px' }}>launchpilot.com/enterprise/{slug}</div>
               </div>
 
-              {/* Mini chat replica */}
               <div style={{ background: '#0F172A', display: 'flex', height: '320px' }}>
-                {/* Mini sidebar */}
                 <div style={{ width: '160px', flexShrink: 0, borderRight: '1px solid rgba(255,255,255,0.08)', padding: '16px 12px' }}>
                   <div className="ent-mono" style={{ fontSize: '7px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Current module</div>
                   <div style={{ fontSize: '11px', fontWeight: '600', color: '#FFFFFF', marginBottom: '10px', lineHeight: '1.3' }}>{tracks[0]?.name || 'Track 01'}</div>
@@ -606,28 +603,24 @@ export default function EnterpriseCopilotPage() {
                   </div>
                 </div>
 
-                {/* Chat */}
                 <div style={{ flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
-                  {/* Maya intro */}
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
                     </div>
                     <div style={{ maxWidth: '78%', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
                       <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>
-                        Welcome back. We're on <strong style={{ color: '#FFFFFF' }}>"{tracks[0]?.name || 'your first track'}"</strong> for {company.company_name || 'your team'}. Want to start with a real example from your workflow?
+                        Welcome to {company.company_name || 'your team'}. I've been loaded with your <strong style={{ color: '#FFFFFF' }}>{tracks[0]?.name || 'first track'}</strong> playbook. Want to try a real scenario from your day-to-day?
                       </div>
                     </div>
                   </div>
 
-                  {/* Employee reply */}
                   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <div style={{ maxWidth: '70%', padding: '10px 14px', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.3)', borderRadius: '10px' }}>
                       <div style={{ fontSize: '12px', color: '#E2E8F0', lineHeight: '1.55' }}>Yeah, let's use this week's actual numbers.</div>
                     </div>
                   </div>
 
-                  {/* Maya follow-up, typing state */}
                   <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'rgba(37,99,235,0.18)', border: '1px solid rgba(37,99,235,0.35)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: ACCENT }} />
@@ -637,12 +630,100 @@ export default function EnterpriseCopilotPage() {
                     </div>
                   </div>
 
-                  {/* Input bar */}
                   <div style={{ marginTop: 'auto', display: 'flex', gap: '8px', alignItems: 'center', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px' }}>
                     <div style={{ flex: 1, fontSize: '11px', color: '#64748B' }}>Type your response...</div>
                     <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: ACCENT, flexShrink: 0 }} />
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* PLATFORM MOCKUP 2 — manager-facing team progress view */}
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>L&D sees exactly who's on track and who needs support</div>
+            <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)', background: '#0F172A', padding: '24px 28px' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '18px' }}>
+                <div>
+                  <div className="ent-display" style={{ fontSize: '17px', fontWeight: '700', color: '#FFFFFF' }}>{tracks[0]?.name || 'Onboarding'} · Cohort 01</div>
+                  <div className="ent-mono" style={{ fontSize: '9px', color: '#64748B', marginTop: '2px' }}>{Math.max(tracks.length, 1) * 2} employees · {tracks[0]?.name || 'onboarding'} module</div>
+                </div>
+                <span className="ent-mono" style={{ fontSize: '9px', color: TEAL, border: '1px solid rgba(13,148,136,0.3)', background: 'rgba(13,148,136,0.1)', padding: '4px 10px', borderRadius: '100px' }}>Live</span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {[
+                  { name: 'J. Whitfield', role: 'Team Lead', modules: '5/8', score: 88, status: 'On track', color: TEAL },
+                  { name: 'P. Sharma', role: 'Associate', modules: '4/8', score: 76, status: 'On track', color: TEAL },
+                  { name: 'M. Lee', role: 'Associate', modules: '3/8', score: 91, status: 'Ahead', color: ACCENT },
+                  { name: 'S. Chen', role: 'Associate', modules: '2/8', score: 54, status: 'Needs support', color: '#EF4444' },
+                ].map((row, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span className="ent-mono" style={{ fontSize: '9px', color: '#94A3B8' }}>{row.name.split(' ').map(n => n[0]).join('')}</span>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '12px', fontWeight: '600', color: '#FFFFFF' }}>{row.name}</div>
+                        <div style={{ fontSize: '10px', color: '#64748B' }}>{row.role}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                      <div style={{ textAlign: 'right' }}>
+                        <div className="ent-mono" style={{ fontSize: '10px', color: '#94A3B8' }}>{row.modules}</div>
+                        <div style={{ fontSize: '8px', color: '#64748B' }}>modules</div>
+                      </div>
+                      <div className="ent-display" style={{ fontSize: '15px', fontWeight: '700', color: row.color, width: '24px', textAlign: 'right' }}>{row.score}</div>
+                      <span style={{ fontSize: '9px', color: row.color, border: `1px solid ${row.color}40`, background: `${row.color}15`, padding: '3px 10px', borderRadius: '100px', whiteSpace: 'nowrap' as const }}>{row.status}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* PLATFORM MOCKUP 3 — leadership analytics report */}
+          <div style={{ marginBottom: '52px' }}>
+            <div style={{ fontSize: '15px', fontWeight: '600', color: '#FFFFFF', marginBottom: '18px' }}>Leadership gets a clear ROI picture every quarter</div>
+            <div style={{ borderRadius: '14px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 24px 60px rgba(0,0,0,0.4)', background: '#0F172A', padding: '24px 28px' }}>
+              <div className="ent-display" style={{ fontSize: '16px', fontWeight: '700', color: '#FFFFFF', marginBottom: '2px' }}>{company.company_name || 'Your company'} · Training Analytics</div>
+              <div className="ent-mono" style={{ fontSize: '9px', color: '#64748B', marginBottom: '18px' }}>Q1 · {tracks.length || 6} tracks deployed</div>
+
+              <div className="ent-matrix-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', marginBottom: '20px' }}>
+                {[
+                  { value: '23 days', label: 'Avg time to productivity', sub: '↓31% vs baseline', color: TEAL },
+                  { value: '84%', label: 'Avg competency score', sub: '↑12pts vs baseline', color: ACCENT },
+                  { value: '91%', label: 'Module completion rate', sub: 'vs 34% legacy LMS', color: '#8B6FFF' },
+                  { value: '$42K', label: 'Estimated cost saved', sub: 'vs external training', color: '#F59E0B' },
+                ].map((s, i) => (
+                  <div key={i} style={{ padding: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', borderTop: `2px solid ${s.color}` }}>
+                    <div className="ent-display" style={{ fontSize: '20px', fontWeight: '700', color: s.color, marginBottom: '4px' }}>{s.value}</div>
+                    <div style={{ fontSize: '10px', color: '#FFFFFF', fontWeight: '600', marginBottom: '2px' }}>{s.label}</div>
+                    <div style={{ fontSize: '8px', color: '#64748B' }}>{s.sub}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="ent-mono" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '0 0 8px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <span>Track</span><span>Avg score</span><span>Status</span>
+                </div>
+                {tracks.slice(0, 4).map((t: any, i: number) => {
+                  const statuses = [
+                    { label: 'Complete', color: TEAL },
+                    { label: 'Complete', color: TEAL },
+                    { label: 'In Progress', color: '#F59E0B' },
+                    { label: 'In Progress', color: '#F59E0B' },
+                  ]
+                  const scores = [84, 79, 71, 68]
+                  return (
+                    <div key={t.code} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                      <span style={{ fontSize: '12px', color: '#FFFFFF' }}>{t.name}</span>
+                      <span className="ent-display" style={{ fontSize: '13px', fontWeight: '700', color: ACCENT }}>{scores[i]}</span>
+                      <span style={{ fontSize: '9px', color: statuses[i].color, border: `1px solid ${statuses[i].color}40`, background: `${statuses[i].color}15`, padding: '3px 10px', borderRadius: '100px' }}>{statuses[i].label}</span>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
